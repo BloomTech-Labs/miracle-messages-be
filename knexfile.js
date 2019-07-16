@@ -11,11 +11,11 @@ module.exports = {
     useNullAsDefault: true,
 
     migrations: {
-      directory: './database/migrations'
+      directory: './database/development/migrations'
     },
 
     seeds: {
-      directory: './database/seeds'
+      directory: './database/development/seeds'
     }
   },
 
@@ -32,11 +32,11 @@ module.exports = {
     useNullAsDefault: true,
 
      migrations: {
-      directory: './database/migrations'
+      directory: './database/development/migrations'
     },
 
     seeds: {
-      directory: './database/seeds'
+      directory: './database/development/seeds'
     }
   },
 
@@ -67,10 +67,10 @@ module.exports = {
     useNullAsDefault: true,
 
     migrations: {
-      directory: './database/migrations'
+      directory: './database/development/migrations'
     },
     seeds: {
-      directory: './database/seeds'
+      directory: './database/development/seeds'
     }
   }
 
