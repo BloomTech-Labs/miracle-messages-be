@@ -40,6 +40,26 @@ module.exports = {
     }
   },
 
+  testing: {
+    client: 'pg',
+    connection: {
+      host: "localhost",
+      port: 5432,
+      user: "postgres",
+      password: process.env.POSTGRESS_DEV_PASSWORD,
+      database: "testing",
+    },
+
+    useNullAsDefault: true,
+
+     migrations: {
+      directory: './database/testing/migrations'
+    },
+    seeds: {
+      directory: './database/testing/seeds'
+    }
+  },
+
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
