@@ -10,7 +10,6 @@ router.get('/', (req, res) => {
       res.status(200).json(chapters);
     })
     .catch(error => {
-      console.log(error);
       res.status(500).json({ error: 'Error retrieving the chapters data' });
     });
 });

@@ -3,11 +3,11 @@ exports.up = function(knex, Promise) {
     tbl.increments();
     tbl.string('location', 128).notNullable();
     tbl.integer('numvolunteers').notNullable();
-    tbl.string('longitude', 48).notNullable();
-    tbl.string('latitude', 48).notNullable();
+    tbl.double('longitude').notNullable();
+    tbl.double('latitude').notNullable();
   });
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('users');
+  return knex.schema.dropTableIfExists('chapters');
 };
