@@ -1,7 +1,7 @@
 // Update with your config settings.
 const pg = require('pg');
 //pg.defaults.ssl=true;
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
   staging: {
@@ -22,16 +22,26 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      host: "localhost",
-      port: 5432,
-      user: "postgres",
+      host: process.env.POSTGRESS_DEV_HOST,
+      port: process.env.POSTGRESS_DEV_PORT,
+      user: process.env.POSTGRESS_DEV_USER,
       password: process.env.POSTGRESS_DEV_PASSWORD,
-      database: "postgres",
+      database: process.env.POSTGRESS_DEV_DATABASE
     },
+
+    // development: {
+    //   client: 'pg',
+    //   connection: {
+    //     host: "localhost",
+    //     port: 5432,
+    //     user: "postgres",
+    //     password: process.env.POSTGRESS_DEV_PASSWORD,
+    //     database: "postgres",
+    //   },
 
     useNullAsDefault: true,
 
-     migrations: {
+    migrations: {
       directory: './database/development/migrations'
     },
 
@@ -43,16 +53,16 @@ module.exports = {
   testing: {
     client: 'pg',
     connection: {
-      host: "localhost",
+      host: 'localhost',
       port: 5432,
-      user: "postgres",
+      user: 'postgres',
       password: process.env.POSTGRESS_DEV_PASSWORD,
-      database: "testing",
+      database: 'testing'
     },
 
     useNullAsDefault: true,
 
-     migrations: {
+    migrations: {
       directory: './database/testing/migrations'
     },
     seeds: {
@@ -73,5 +83,4 @@ module.exports = {
       directory: './database/development/seeds'
     }
   }
-
 };

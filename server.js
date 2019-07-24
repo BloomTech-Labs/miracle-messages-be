@@ -2,6 +2,8 @@ const express = require('express');
 const server = express();
 server.use(express.json());
 
+const chaptersRouter = require('./api/chapterRouter.js');
+
 const cors = require('cors');
 server.use(cors());
 
@@ -20,5 +22,7 @@ server.get('/users', (req, res) => {
     .then(user => res.status(200).json(user))
     .catch(err => res.status(500).json({ errorMessage: err }));
 });
+
+server.use('/api/chapter', chaptersRouter);
 
 module.exports = server;
