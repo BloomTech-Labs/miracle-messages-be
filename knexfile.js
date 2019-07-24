@@ -1,6 +1,6 @@
 // Update with your config settings.
 const pg = require('pg');
-//pg.defaults.ssl=true;
+pg.defaults.ssl=true;
 require('dotenv').config();
 
 module.exports = {
