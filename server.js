@@ -5,6 +5,7 @@ server.use(express.json());
 const chaptersRouter = require('./api/chapterRouter.js');
 
 const cors = require('cors');
+
 server.use(cors());
 
 server.get('/', (req, res) => {
