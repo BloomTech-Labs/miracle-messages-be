@@ -11,7 +11,7 @@ exports.up = function(knex, Promise) {
     tbl.string('city', 64).notNullable();
     tbl.string('state', 32).notNullable();
     tbl.string('country', 32).notNullable();
-    tbl.string('comment', 1024);
+    tbl.text('comment');
   });
 };
 
