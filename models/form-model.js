@@ -1,7 +1,9 @@
 const db = require('../config/dbConfig.js');
 
 module.exports = {
-  find
+  find,
+  findByEmail,
+  findByPhone
 };
 
 function find(query) {
@@ -14,4 +16,12 @@ function find(query) {
     .offset(offset);
 
   return rows;
+}
+
+function findByEmail(email) {
+  return db('volunteers').where({ email });
+}
+
+function findByPhone(phone) {
+  return db('volunteers').where({ phone });
 }
