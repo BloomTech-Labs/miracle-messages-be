@@ -2,12 +2,15 @@ const db = require('../config/dbConfig.js');
 
 module.exports = {
   find,
+  findById,
   findByEmail,
   findByPhone,
   findByName,
   findByCity,
   findByState,
-  findByCountry
+  findByCountry,
+  addVolunteer,
+  addInterests
 };
 
 function find(query) {
@@ -21,6 +24,12 @@ function find(query) {
     .offset(offset);
 
   return list;
+}
+
+function findById(id) {
+  return db('volunteers')
+    .where({ id })
+    .first();
 }
 
 function findByEmail(email) {
@@ -57,4 +66,21 @@ function findByCountry(country) {
   return db('volunteers')
     .innerJoin('interests', 'volunteers.id', 'interests.volunteersid')
     .where({ country });
+}
+
+////// insert //////////
+
+async function addInterests(interests) {
+  const interestid = await db('interests').insert(interests);
+  return interestid;
+}
+
+function addVolunteer(volunteer) {
+  //   const id = await db('volunteers').insert(volunteer);
+  //   interests.volunteersid = id;
+  //   console.log(interests.volunteersid);
+
+  //   await addInterests(interests);
+  //   return findById(id);
+  return db('volunteers').insert(volunteer, 'id');
 }

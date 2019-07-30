@@ -13,7 +13,8 @@ exports.up = function(knex, Promise) {
       tbl.string('state', 32).notNullable();
       tbl.string('country', 32).notNullable();
       tbl.text('comment');
-      tbl.timestamps(true, true);
+      //   tbl.timestamp('created_at', { precision: 4 });
+      tbl.datetime('some_time', { precision: 4 }).defaultTo(knex.fn.now(0));
     })
 
     .createTable('interests', tbl => {
@@ -24,7 +25,7 @@ exports.up = function(knex, Promise) {
         .notNullable()
         .references('id')
         .inTable('volunteers')
-        .onDelete('RESTRICT')
+        .onDelete('CASCADE')
         .onUpdate('CASCADE');
       tbl.boolean('volunteering').defaultTo(false);
       tbl.boolean('donating').defaultTo(false);
