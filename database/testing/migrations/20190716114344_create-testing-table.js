@@ -9,5 +9,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('chapters');
+  return knex.schema.dropTableIfExists('users');
 };

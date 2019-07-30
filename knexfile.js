@@ -7,10 +7,13 @@ module.exports = {
   staging: {
     client: 'pg',
     connection: process.env.HEROKU_POSTGRESQL_BLACK_URL,
+
     useNullAsDefault: true,
-  migrations: {
+
+    migrations: {
       directory: './database/development/migrations'
     },
+
     seeds: {
       directory: './database/development/seeds'
     }
@@ -50,22 +53,12 @@ module.exports = {
   testing: {
     client: 'pg',
     connection: {
-      host: process.env.POSTGRESS_TEST_ORANGE_HOST,
-      port: process.env.POSTGRESS_TEST_ORANGE_PORT,
-      user: process.env.POSTGRES_TEST_ORANGE_USER,
-      password: process.env.POSTGRES_TEST_ORANGE_PASSWORD,
-      database: process.env.POSTGRES_TEST_ORANGE_DATABASE
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: process.env.POSTGRESS_DEV_PASSWORD,
+      database: 'testing'
     },
-
-  // testing: {
-  //   client: 'pg',
-  //   connection: {
-  //     host: 'localhost',
-  //     port: 5432,
-  //     user: 'postgres',
-  //     password: process.env.POSTGRESS_DEV_PASSWORD,
-  //     database: 'testing'
-  //   },
 
     useNullAsDefault: true,
 
@@ -80,7 +73,9 @@ module.exports = {
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
+
     useNullAsDefault: true,
+
     migrations: {
       directory: './database/development/migrations'
     },
@@ -88,5 +83,4 @@ module.exports = {
       directory: './database/development/seeds'
     }
   }
-
 };
