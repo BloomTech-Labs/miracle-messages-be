@@ -3,6 +3,7 @@ const server = express();
 server.use(express.json());
 
 const chaptersRouter = require('./api/chapterRouter.js');
+const formRouter = require('./api/formRouter.js');
 
 const cors = require('cors');
 
@@ -25,5 +26,6 @@ server.get('/users', (req, res) => {
 });
 
 server.use('/api/chapter', chaptersRouter);
+server.use('/api/form', formRouter);
 
 module.exports = server;
