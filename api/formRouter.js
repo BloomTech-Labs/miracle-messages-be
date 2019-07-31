@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
       res.status(200).json(volunteers);
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       res.status(500).json({ error: 'Error retrieving the volunteers data' });
     });
 });
@@ -99,9 +99,16 @@ router.post('/', (req, res) => {
   formDB
     .addVolunteer(req.body)
     .then(volunteer => {
-      res.status(201).json(volunteer);
+      console.log(volunteer);
+      var [id] = volunteer;
+      console.log(id);
+      // res.status(201).json(volunteer);
+    })
+    .then(test => {
+      console.log(`and ${test}`);
     })
     .catch(error => {
+      console.log(error);
       res.status(500).json({ error: ' Error adding the volunteer' });
     });
 });
