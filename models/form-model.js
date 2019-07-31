@@ -73,14 +73,15 @@ function findByCountry(country) {
 async function addInterests(interests) {
   const interestid = await db('interests').insert(interests);
   return interestid;
+  // return db('interests').insert(interests, 'id');
 }
 
-function addVolunteer(volunteer) {
-  //   const id = await db('volunteers').insert(volunteer);
-  //   interests.volunteersid = id;
-  //   console.log(interests.volunteersid);
+function addVolunteer(volunteer, interests) {
+  // const id = await db('volunteers').insert(volunteer);
+  // interests.volunteersid = id;
+  // console.log(interests.volunteersid);
 
-  //   await addInterests(interests);
-  //   return findById(id);
+  // await addInterests(interests);
+  // return findById(id);
   return db('volunteers').insert(volunteer, 'id');
 }

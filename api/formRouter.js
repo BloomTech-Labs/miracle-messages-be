@@ -94,3 +94,34 @@ router.get('/findbycountry', (req, res) => {
 });
 
 module.exports = router;
+
+////////// addding /////////////
+
+router.post('/', (req, res) => {
+  const { newVolunteer, newInterests } = req.body;
+  formDB
+    .addVolunteer(newVolunteer)
+    .then(volunteerId => {
+      // console.log(` andddddddddddddd ${volunteer[0]}`);
+      return volunteerId[0];
+    })
+    .then(id => {
+      console.log(`${newInterests} and ${id}`);
+      newInterests.volunteersid = id;
+
+      formDB.addInterests(newInterests);
+      res.sendStatus(201);
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({ error: ' Error adding the volunteer' });
+    });
+});
+
+// try {
+//     const data = await formDB.addVolunteer(req.body);
+//     res.status(201).json(data);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: ' Error adding the volunteer' });
+//   }
