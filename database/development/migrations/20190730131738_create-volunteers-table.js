@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
       tbl.string('country', 32).notNullable();
       tbl.text('comment');
       //   tbl.timestamp('created_at', { precision: 4 });
-      tbl.datetime('some_time', { precision: 4 }).defaultTo(knex.fn.now(0));
+      tbl.datetime('date', { precision: 4 }).defaultTo(knex.fn.now(0));
     })
 
     .createTable('interests', tbl => {
