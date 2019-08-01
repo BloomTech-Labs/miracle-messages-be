@@ -10,7 +10,9 @@ module.exports = {
   findByState,
   findByCountry,
   addVolunteer,
-  addInterests
+  addInterests,
+  deleteVolunteer,
+  deleteInterests
 };
 
 function find(query) {
@@ -73,15 +75,22 @@ function findByCountry(country) {
 async function addInterests(interests) {
   const interestid = await db('interests').insert(interests);
   return interestid;
-  // return db('interests').insert(interests, 'id');
 }
 
 function addVolunteer(volunteer, interests) {
-  // const id = await db('volunteers').insert(volunteer);
-  // interests.volunteersid = id;
-  // console.log(interests.volunteersid);
-
-  // await addInterests(interests);
-  // return findById(id);
   return db('volunteers').insert(volunteer, 'id');
+}
+
+/////delete////////////
+
+function deleteVolunteer(id) {
+  return db('volunteers')
+    .where({ id })
+    .del();
+}
+
+function deleteInterests(volunteerId) {
+  return db('interests')
+    .where({ volunteersid: volunteerId })
+    .del();
 }
