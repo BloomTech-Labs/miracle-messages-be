@@ -12,7 +12,9 @@ module.exports = {
   addVolunteer,
   addInterests,
   deleteVolunteer,
-  deleteInterests
+  deleteInterests,
+  updateVolunteer,
+  updateInterest
 };
 
 function find(query) {
@@ -93,4 +95,18 @@ function deleteInterests(volunteerId) {
   return db('interests')
     .where({ volunteersid: volunteerId })
     .del();
+}
+
+///////////update///////////////
+
+function updateVolunteer(id, change) {
+  return db('volunteers')
+    .where({ id })
+    .update(change, '*');
+}
+
+function updateInterest(volunteerId, change) {
+  return db('interests')
+    .where({ volunteersid: volunteerId })
+    .update(change, '*');
 }
