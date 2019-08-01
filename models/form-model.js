@@ -32,6 +32,7 @@ function find(query) {
 
 function findById(id) {
   return db('volunteers')
+    .innerJoin('interests', 'volunteers.id', 'interests.volunteersid')
     .where({ id })
     .first();
 }
@@ -99,10 +100,12 @@ function deleteInterests(volunteerId) {
 
 ///////////update///////////////
 
-function updateVolunteer(id, change) {
-  return db('volunteers')
+async function updateVolunteer(id, change) {
+  await db('volunteers')
     .where({ id })
     .update(change, '*');
+
+  return findById(id);
 }
 
 function updateInterest(volunteerId, change) {

@@ -152,7 +152,7 @@ router.put('/:id', async (req, res) => {
       req.body.volunteer
     );
     if (volunteer && interests) {
-      res.status(200).json({ volunteer, interests });
+      res.status(200).json(volunteer);
     } else {
       res.status(404).json({ message: 'The volunteer could not be found' });
     }
