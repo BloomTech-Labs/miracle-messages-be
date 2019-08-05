@@ -23,11 +23,14 @@
   },
   "homepage": "https://github.com/labs-14-miracle-messages/Back-End#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "knex": "^0.19.0",
-    "pg": "^7.11.0"
+    "helmet": "^3.20.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.19.1",
+    "pg": "^7.12.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
