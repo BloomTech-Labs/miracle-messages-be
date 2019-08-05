@@ -1,22 +1,18 @@
-const express = require('express');
+const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../config/secrets");
 const Users = require("../models/users-model.js");
-const restricted = require('../auth/restricted-middleware.js');
+const restricted = require("../auth/restricted-middleware.js");
 const router = express.Router();
 
-
-
-
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
   res.send("It's alive!");
 });
 
 router.post("/register", (req, res) => {
-  
   let user = req.body;
-  const hash = bcrypt.hashSync(user.password, 10); 
+  const hash = bcrypt.hashSync(user.password, 10);
   user.password = hash;
 
   Users.add(user)
@@ -25,13 +21,13 @@ router.post("/register", (req, res) => {
     })
     .catch(error => {
       console.log(error);
-      
+
       res.status(500).json(error);
     });
-    console.log(user);
+  console.log(user);
 });
 
-router.post('/login', (req, res) => {
+router.post("/login", (req, res) => {
   let { username, password } = req.body;
 
   Users.findBy({ username })
@@ -52,20 +48,18 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.get('/users', restricted, (req, res) => {
+router.get("/users", (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
     })
     .catch(err => console.log(err));
-    
 });
 
 function generateToken(user) {
   const payload = {
     subject: user.id,
     username: user.username
-    
   };
 
   const options = {
