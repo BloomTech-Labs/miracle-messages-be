@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const formDB = require('../models/form-model.js');
+const formDB = require("../models/form-model.js");
 
 ////////Fetching all volunteers//////
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
   formDB
     .find(req.query)
     .then(volunteers => {
@@ -12,12 +12,12 @@ router.get('/', (req, res) => {
     })
     .catch(error => {
       // console.log(error);
-      res.status(500).json({ error: 'Error retrieving the volunteers data' });
+      res.status(500).json({ error: "Error retrieving the volunteers data" });
     });
 });
 
 ///////////Fetching a volunteer by email address/////////////
-router.get('/findbyemail', (req, res) => {
+router.get("/findbyemail", (req, res) => {
   const { email } = req.body;
 
   formDB
@@ -26,12 +26,12 @@ router.get('/findbyemail', (req, res) => {
       res.status(200).json(volunteer);
     })
     .catch(error => {
-      res.status(500).json({ error: 'Error retrieving the volunteer data' });
+      res.status(500).json({ error: "Error retrieving the volunteer data" });
     });
 });
 
 //////////Fetching volunteers by phone number//////////
-router.get('/findbyphone', (req, res) => {
+router.get("/findbyphone", (req, res) => {
   const { phone } = req.body;
 
   formDB
@@ -40,12 +40,12 @@ router.get('/findbyphone', (req, res) => {
       res.status(200).json(volunteer);
     })
     .catch(error => {
-      res.status(500).json({ error: 'Error retrieving the volunteer data' });
+      res.status(500).json({ error: "Error retrieving the volunteer data" });
     });
 });
 
 //////////Fetching  volunteers by Full name////////////////
-router.get('/findbyname', (req, res) => {
+router.get("/findbyname", (req, res) => {
   const { fname, lname } = req.body;
 
   formDB
@@ -54,12 +54,12 @@ router.get('/findbyname', (req, res) => {
       res.status(200).json(volunteer);
     })
     .catch(error => {
-      res.status(500).json({ error: 'Error retrieving the volunteer data' });
+      res.status(500).json({ error: "Error retrieving the volunteer data" });
     });
 });
 
 //////////Fetching volunteers by city////////////////
-router.get('/findbycity', (req, res) => {
+router.get("/findbycity", (req, res) => {
   const { city, state, country } = req.body;
 
   formDB
@@ -68,12 +68,12 @@ router.get('/findbycity', (req, res) => {
       res.status(200).json(volunteers);
     })
     .catch(error => {
-      res.status(500).json({ error: 'Error retrieving the volunteers data' });
+      res.status(500).json({ error: "Error retrieving the volunteers data" });
     });
 });
 
 /////////Fetching volunteers by state//////////////
-router.get('/findbystate', (req, res) => {
+router.get("/findbystate", (req, res) => {
   const { state } = req.body;
 
   formDB
@@ -82,12 +82,12 @@ router.get('/findbystate', (req, res) => {
       res.status(200).json(volunteers);
     })
     .catch(error => {
-      res.status(500).json({ error: 'Error retrieving the volunteers data' });
+      res.status(500).json({ error: "Error retrieving the volunteers data" });
     });
 });
 
 ///////// Fetchng volunteeers by country/////////////
-router.get('/findbycountry', (req, res) => {
+router.get("/findbycountry", (req, res) => {
   const { country } = req.body;
 
   formDB
@@ -96,13 +96,13 @@ router.get('/findbycountry', (req, res) => {
       res.status(200).json(volunteers);
     })
     .catch(error => {
-      res.status(500).json({ error: 'Error retrieving the volunteers data' });
+      res.status(500).json({ error: "Error retrieving the volunteers data" });
     });
 });
 
 ////////// addding a new volunteer  /////////////
 
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const { newVolunteer, newInterests } = req.body;
   formDB
     .addVolunteer(newVolunteer)
@@ -116,32 +116,32 @@ router.post('/', (req, res) => {
       res.sendStatus(201);
     })
     .catch(error => {
-      res.status(500).json({ error: ' Error adding the volunteer' });
+      res.status(500).json({ error: " Error adding the volunteer" });
     });
 });
 
 ///////// deleting volunteer by id ///////////////
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const count = await formDB.deleteInterests(req.params.id);
     const count2 = await formDB.deleteVolunteer(req.params.id);
 
     if (count2 > 0 && count > 0) {
-      res.status(200).json({ message: 'The volunteer has been removed' });
+      res.status(200).json({ message: "The volunteer has been removed" });
     } else {
-      res.status(404).json({ message: 'The volunteer could not be found' });
+      res.status(404).json({ message: "The volunteer could not be found" });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'Error removing the hub'
+      message: "Error removing the hub"
     });
   }
 });
 
 ///////// updating a volunteer //////////////////
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const interests = await formDB.updateInterest(
       req.params.id,
@@ -154,14 +154,16 @@ router.put('/:id', async (req, res) => {
     if (volunteer && interests) {
       res.status(200).json(volunteer);
     } else {
-      res.status(404).json({ message: 'The volunteer could not be found' });
+      res.status(404).json({ message: "The volunteer could not be found" });
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'Error updating the volunteer'
+      message: "Error updating the volunteer"
     });
   }
 });
 
 module.exports = router;
+
+//test

@@ -1,13 +1,18 @@
 const express = require('express');
 const server = express();
-server.use(express.json());
+
+const cors = require('cors');
+const helmet = require('helmet');
 
 const chaptersRouter = require('./api/chapterRouter.js');
 const formRouter = require('./api/formRouter.js');
+const userRouter = require('./api/usersRouter');
 
-const cors = require('cors');
 
+server.use(helmet());
 server.use(cors());
+server.use(express.json());
+
 
 server.get('/', (req, res) => {
   res.status(200).json({ hello: 'World!' });
@@ -15,5 +20,13 @@ server.get('/', (req, res) => {
 
 server.use('/api/chapter', chaptersRouter);
 server.use('/api/form', formRouter);
+server.use('/api/user', logger, userRouter);
+
+function logger(req, res, next) {
+  const now = new Date().toISOString();
+    req.now = now
+  console.log(`A ${req.method} request to '${req.url}'at ${req.now}`);
+next();
+};
 
 module.exports = server;
