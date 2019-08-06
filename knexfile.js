@@ -1,4 +1,3 @@
-// Update with your config settings.
 const pg = require('pg');
 // pg.defaults.ssl=true;
 require('dotenv').config();
@@ -29,16 +28,6 @@ module.exports = {
       database: process.env.POSTGRESS_DEV_DATABASE
     },
 
-    // development: {
-    //   client: 'pg',
-    //   connection: {
-    //     host: "localhost",
-    //     port: 5432,
-    //     user: "postgres",
-    //     password: process.env.POSTGRESS_DEV_PASSWORD,
-    //     database: "postgres",
-    //   },
-
     useNullAsDefault: true,
 
     migrations: {
@@ -53,11 +42,11 @@ module.exports = {
   testing: {
     client: 'pg',
     connection: {
-      host: 'localhost',
-      port: 5432,
-      user: 'postgres',
+      host: process.env.POSTGRESS_DEV_HOST,
+      port: process.env.POSTGRESS_DEV_PORT,
+      user: process.env.POSTGRESS_DEV_USER,
       password: process.env.POSTGRESS_DEV_PASSWORD,
-      database: 'testing'
+      database: process.env.POSTGRESS_TESTING_DATABASE
     },
 
     useNullAsDefault: true,
