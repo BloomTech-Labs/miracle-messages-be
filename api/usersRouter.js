@@ -6,11 +6,13 @@ const Users = require("../models/users-model.js");
 const restricted = require("../auth/restricted-middleware.js");
 const router = express.Router();
 
+
 router.get("/", (req, res) => {
   res.send("It's alive!");
 });
 
 router.post("/register", (req, res) => {
+  console.log(`ljljlkjljljlj ${req.body.username}`)
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10);
   user.password = hash;
@@ -27,7 +29,7 @@ router.post("/register", (req, res) => {
   console.log(user);
 });
 
-router.post("/login", (req, res) => {
+router.post("/login",  (req, res) => {
   let { username, password } = req.body;
 
   Users.findBy({ username })
@@ -44,11 +46,12 @@ router.post("/login", (req, res) => {
       }
     })
     .catch(error => {
+      console.log(error);
       res.status(500).json(error);
     });
 });
 
-router.get("/users", (req, res) => {
+router.get("/users", restricted, (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
