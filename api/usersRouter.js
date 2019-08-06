@@ -1,35 +1,47 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const secrets = require("../config/secrets");
-const Users = require("../models/users-model.js");
-const restricted = require("../auth/restricted-middleware.js");
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const secrets = require('../config/secrets');
+const Users = require('../models/users-model.js');
+const restricted = require('../auth/restricted-middleware.js');
 const router = express.Router();
 
-
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   res.send("It's alive!");
 });
 
-router.post("/register", (req, res) => {
-  console.log(`ljljlkjljljlj ${req.body.username}`)
-  let user = req.body;
-  const hash = bcrypt.hashSync(user.password, 10);
-  user.password = hash;
+router.post('/register', async (req, res) => {
+  try {
+    let user = req.body;
+    const hash = bcrypt.hashSync(user.password, 10);
+    user.password = hash;
 
-  Users.add(user)
-    .then(saved => {
-      res.status(201).json(saved);
-    })
-    .catch(error => {
-      console.log(error);
-
-      res.status(500).json(error);
-    });
-  console.log(user);
+    const newUser = await Users.add(user);
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Somethign went worng, Please try again' });
+  }
 });
 
-router.post("/login",  (req, res) => {
+// router.post('/register', (req, res) => {
+//   let user = req.body;
+//   const hash = bcrypt.hashSync(user.password, 10);
+//   user.password = hash;
+
+//   Users.add(user)
+//     .then(saved => {
+//       res.status(201).json(saved);
+//     })
+//     .catch(error => {
+//       console.log(error);
+
+//       res.status(500).json(error);
+//     });
+//   console.log(user);
+// });
+
+router.post('/login', (req, res) => {
   let { username, password } = req.body;
 
   Users.findBy({ username })
@@ -42,7 +54,7 @@ router.post("/login",  (req, res) => {
           token
         });
       } else {
-        res.status(401).json({ message: "Invalid Credentials" });
+        res.status(401).json({ message: 'Invalid Credentials' });
       }
     })
     .catch(error => {
@@ -51,7 +63,7 @@ router.post("/login",  (req, res) => {
     });
 });
 
-router.get("/users", restricted, (req, res) => {
+router.get('/users', restricted, (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
@@ -66,7 +78,7 @@ function generateToken(user) {
   };
 
   const options = {
-    expiresIn: "1d"
+    expiresIn: '1d'
   };
   return jwt.sign(payload, secrets.jwtSecret, options);
 }
