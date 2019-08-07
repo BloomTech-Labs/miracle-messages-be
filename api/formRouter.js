@@ -3,7 +3,9 @@ const router = express.Router();
 
 const formDB = require("../models/form-model.js");
 
-////////Fetching all volunteers//////
+//path: api/form
+
+////////Fetching all volunteers//////"co"
 router.get("/", (req, res) => {
   formDB
     .find(req.query)
@@ -103,11 +105,14 @@ router.get("/findbycountry", (req, res) => {
 
 ////////// addding a new volunteer  /////////////
 
-router.post("/", (req, res) => {
-  const { newVolunteer, newInterests } = req.body;
+router.post("/", validateBody, validateEmail, validatePhone, (req, res) => {
+  const { newVolunteer, newInterests } =  req.body;
+  console.log(req.body)
+  
   formDB
     .addVolunteer(newVolunteer)
     .then(volunteerId => {
+      console.log('hi')
       return volunteerId[0];
     })
     .then(id => {
@@ -120,6 +125,35 @@ router.post("/", (req, res) => {
       res.status(500).json({ error: " Error adding the volunteer" });
     });
 });
+
+
+// middleware to validate form inputs
+async function validateBody(req, res, next) {
+  const { newVolunteer } =  await req.body;
+  if (newVolunteer.fname && newVolunteer.lname && newVolunteer.email && newVolunteer.city && newVolunteer.state && newVolunteer.country) {
+    next();
+  } else {
+    res.status(400).json({ message: 'Incomplete form. Please provide inputs for all required fields' });
+  }
+}
+
+async function validatePhone(req, res, next) {
+  const { newVolunteer } =  await req.body;
+  if (newVolunteer.phone && Number.isInteger(newVolunteer.phone) ) {
+    next();
+  } else {
+    res.status(400).json({ message: 'Please provide phone number in the right format' });
+  }
+}
+
+async function validateEmail(req, res, next) {
+  const { email } = await req.body.newVolunteer
+  if ( /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)  ) {
+    next();
+  } else {
+    res.status(400).json({ message: 'invalid email format' });
+  }
+}
 
 ///////// deleting volunteer by id ///////////////
 
