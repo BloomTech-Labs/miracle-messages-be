@@ -1,7 +1,7 @@
 const pg = require('pg');
 
 //uncomment the line below if you are workign on heroku servers
-pg.defaults.ssl=true;
+// pg.defaults.ssl=true;
 
 require('dotenv').config();
 
@@ -45,11 +45,11 @@ module.exports = {
   testing: {
     client: 'pg',
     connection: {
-      host: process.env.POSTGRESS_DEV_HOST,
-      port: process.env.POSTGRESS_DEV_PORT,
-      user: process.env.POSTGRESS_DEV_USER,
-      password: process.env.POSTGRESS_DEV_PASSWORD,
-      database: process.env.POSTGRESS_TESTING_DATABASE
+      host: process.env.POSTGRESS_TEST_HOST,
+      port: process.env.POSTGRESS_TEST_PORT,
+      user: process.env.POSTGRESS_TEST_USER,
+      password: process.env.POSTGRESS_TEST_PASSWORD,
+      database: process.env.POSTGRESS_TEST_DATABASE
     },
 
     useNullAsDefault: true,
