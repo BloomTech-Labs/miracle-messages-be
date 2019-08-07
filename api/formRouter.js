@@ -19,11 +19,11 @@ router.get("/", (req, res) => {
 });
 
 ///////////Fetching a volunteer by email address/////////////
-router.get("/findbyemail", (req, res) => {
-  const { email } = req.body;
+router.get("/findbyemail/", (req, res) => {
+  const { email } = req.query;
 
   formDB
-    .findByEmail(email)
+    .findBy({email})
     .then(volunteer => {
       res.status(200).json(volunteer);
     })
@@ -33,11 +33,11 @@ router.get("/findbyemail", (req, res) => {
 });
 
 //////////Fetching volunteers by phone number//////////
-router.get("/findbyphone", (req, res) => {
-  const { phone } = req.body;
+router.get("/findbyphone/", (req, res) => {
+  const { phone } = req.query;
 
   formDB
-    .findByPhone(phone)
+    .findBy({phone})
     .then(volunteer => {
       res.status(200).json(volunteer);
     })
@@ -47,25 +47,25 @@ router.get("/findbyphone", (req, res) => {
 });
 
 //////////Fetching  volunteers by Full name////////////////
-router.get("/findbyname", (req, res) => {
-  const { fname, lname } = req.body;
+router.get("/findbyname/", (req, res) => {
+  const { fname, lname } = req.query;
 
   formDB
-    .findByName(fname, lname)
+    .findBy({fname, lname})
     .then(volunteer => {
       res.status(200).json(volunteer);
     })
     .catch(error => {
-      res.status(500).json({ error: "Error retrieving the volunteer data" });
+      res.status(500).json({ error: "Error retrieving the volunteer name data" });
     });
 });
 
 //////////Fetching volunteers by city////////////////
 router.get("/findbycity", (req, res) => {
-  const { city, state, country } = req.body;
+  const { city, state, country } = req.query;
 
   formDB
-    .findByCity(city, state, country)
+    .findBy({city, state, country})
     .then(volunteers => {
       res.status(200).json(volunteers);
     })
@@ -76,10 +76,10 @@ router.get("/findbycity", (req, res) => {
 
 /////////Fetching volunteers by state//////////////
 router.get("/findbystate", (req, res) => {
-  const { state } = req.body;
+  const { state } = req.query;
 
   formDB
-    .findByState(state)
+    .findBy({state})
     .then(volunteers => {
       res.status(200).json(volunteers);
     })
@@ -90,10 +90,11 @@ router.get("/findbystate", (req, res) => {
 
 ///////// Fetchng volunteeers by country/////////////
 router.get("/findbycountry", (req, res) => {
-  const { country } = req.body;
+  const { country } = req.query;
+  console.log('country:' ,{country})
 
   formDB
-    .findByCountry(country)
+    .findBy({country})
     .then(volunteers => {
       res.status(200).json(volunteers);
     })
@@ -181,6 +182,7 @@ router.put("/:id", async (req, res) => {
       req.params.id,
       req.body.interests
     );
+
     const volunteer = await formDB.updateVolunteer(
       req.params.id,
       req.body.volunteer
@@ -191,7 +193,6 @@ router.put("/:id", async (req, res) => {
       res.status(404).json({ message: "The volunteer could not be found" });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       message: "Error updating the volunteer"
     });
@@ -200,4 +201,4 @@ router.put("/:id", async (req, res) => {
 
 module.exports = router;
 
-//test
+
