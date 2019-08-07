@@ -1,7 +1,7 @@
 const pg = require('pg');
 
 //uncomment the line below if you are workign on heroku servers
-// pg.defaults.ssl=true;
+pg.defaults.ssl=true;
 
 require('dotenv').config();
 

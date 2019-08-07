@@ -81,6 +81,7 @@ async function addInterests(interests) {
 }
 
 function addVolunteer(volunteer, interests) {
+  console.log(volunteer)
   return db('volunteers').insert(volunteer, 'id');
 }
 
