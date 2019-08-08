@@ -6,7 +6,7 @@ const Chapters = require("../../models/chapters-model.js");
 
 describe("chapter model", () => {
   beforeEach(async () => {
-    await db("chapters").truncate();
+    await db("chapters").del();
   });
 
   describe("GET /", () => {
