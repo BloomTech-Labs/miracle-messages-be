@@ -6,11 +6,14 @@ const Users = require('../models/users-model.js');
 const restricted = require('../auth/restricted-middleware.js');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send("It's alive!");
-});
 
-router.post('/register', async (req, res) => {
+/****************************************************************************/
+/*                    New  user registration by an admin                    */
+/****************************************************************************/
+
+router.post('/register', restricted,  async (req, res) => {
+
+
   try {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 10);
@@ -18,29 +21,16 @@ router.post('/register', async (req, res) => {
 
     const newUser = await Users.add(user);
     res.status(201).json(newUser);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: 'Somethign went worng, Please try again' });
+  } 
+  catch (error) {
+    res.status(500).json({ error: 'Something went wrong, Please try again' });
   }
 });
 
-// router.post('/register', (req, res) => {
-//   let user = req.body;
-//   const hash = bcrypt.hashSync(user.password, 10);
-//   user.password = hash;
 
-//   Users.add(user)
-//     .then(saved => {
-//       res.status(201).json(saved);
-//     })
-//     .catch(error => {
-//       console.log(error);
-
-//       res.status(500).json(error);
-//     });
-//   console.log(user);
-// });
-
+/****************************************************************************/
+/*                              Admin login                                 */
+/****************************************************************************/
 router.post('/login', (req, res) => {
   let { username, password } = req.body;
 
@@ -63,6 +53,10 @@ router.post('/login', (req, res) => {
     });
 });
 
+/****************************************************************************/
+/*                              Get all Admins                              */
+/****************************************************************************/
+
 router.get('/users', restricted, (req, res) => {
   Users.find()
     .then(users => {
@@ -70,6 +64,11 @@ router.get('/users', restricted, (req, res) => {
     })
     .catch(err => console.log(err));
 });
+
+
+/****************************************************************************/
+/*                              Generate token                              */
+/****************************************************************************/
 
 function generateToken(user) {
   const payload = {
