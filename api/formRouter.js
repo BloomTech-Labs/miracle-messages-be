@@ -18,88 +18,18 @@ router.get("/", (req, res) => {
     });
 });
 
-///////////Fetching a volunteer by email address/////////////
-router.get("/findbyemail/", (req, res) => {
-  const { email } = req.query;
+///////////Fetching a volunteer by custom search/////////////
+router.get("/findby/", (req, res) => {
 
+  const searchParam = req.query;
+  
   formDB
-    .findBy({email})
+    .findBy(searchParam)
     .then(volunteer => {
       res.status(200).json(volunteer);
     })
     .catch(error => {
       res.status(500).json({ error: "Error retrieving the volunteer data" });
-    });
-});
-
-//////////Fetching volunteers by phone number//////////
-router.get("/findbyphone/", (req, res) => {
-  const { phone } = req.query;
-
-  formDB
-    .findBy({phone})
-    .then(volunteer => {
-      res.status(200).json(volunteer);
-    })
-    .catch(error => {
-      res.status(500).json({ error: "Error retrieving the volunteer data" });
-    });
-});
-
-//////////Fetching  volunteers by Full name////////////////
-router.get("/findbyname/", (req, res) => {
-  const { fname, lname } = req.query;
-
-  formDB
-    .findBy({fname, lname})
-    .then(volunteer => {
-      res.status(200).json(volunteer);
-    })
-    .catch(error => {
-      res.status(500).json({ error: "Error retrieving the volunteer name data" });
-    });
-});
-
-//////////Fetching volunteers by city////////////////
-router.get("/findbycity", (req, res) => {
-  const { city, state, country } = req.query;
-
-  formDB
-    .findBy({city, state, country})
-    .then(volunteers => {
-      res.status(200).json(volunteers);
-    })
-    .catch(error => {
-      res.status(500).json({ error: "Error retrieving the volunteers data" });
-    });
-});
-
-/////////Fetching volunteers by state//////////////
-router.get("/findbystate", (req, res) => {
-  const { state } = req.query;
-
-  formDB
-    .findBy({state})
-    .then(volunteers => {
-      res.status(200).json(volunteers);
-    })
-    .catch(error => {
-      res.status(500).json({ error: "Error retrieving the volunteers data" });
-    });
-});
-
-///////// Fetchng volunteeers by country/////////////
-router.get("/findbycountry", (req, res) => {
-  const { country } = req.query;
-  console.log('country:' ,{country})
-
-  formDB
-    .findBy({country})
-    .then(volunteers => {
-      res.status(200).json(volunteers);
-    })
-    .catch(error => {
-      res.status(500).json({ error: "Error retrieving the volunteers data" });
     });
 });
 
