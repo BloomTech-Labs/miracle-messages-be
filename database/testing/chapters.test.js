@@ -32,7 +32,6 @@ describe("chapter model", () => {
 
       const chapters = await db('chapters')
 
-     
        expect(chapters).toHaveLength(2);
        expect(chapters[0].location).toBe('San Antonio, TX');
    });
