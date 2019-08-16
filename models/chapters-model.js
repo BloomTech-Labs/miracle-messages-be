@@ -1,4 +1,4 @@
-const db = require('../config/dbConfig.js');
+const db = require("../config/dbConfig.js");
 
 module.exports = {
   find,
@@ -6,9 +6,10 @@ module.exports = {
 };
 
 function find() {
-  return db('chapters');
+  return db("chapters");
 }
 
 function addChapter(chapter) {
-  return db('chapters').insert(chapter, 'id');
+  console.log("hi");
+  return db("chapters").insert(chapter, "id");
 }
