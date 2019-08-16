@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const chaptersRouter = require('./api/chapterRouter.js');
 const formRouter = require('./api/formRouter.js');
 const userRouter = require('./api/usersRouter');
+const partnerRouter = require('./api/partnerRouter')
 
 
 server.use(helmet());
@@ -21,6 +22,7 @@ server.get('/', (req, res) => {
 server.use('/api/chapter', chaptersRouter);
 server.use('/api/form', formRouter);
 server.use('/api/user', logger, userRouter);
+server.use('/api/partner', partnerRouter);
 
 function logger(req, res, next) {
   const now = new Date().toISOString();
