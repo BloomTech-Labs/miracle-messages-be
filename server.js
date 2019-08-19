@@ -18,7 +18,7 @@ const partnerRouter = require('./api/partnerRouter')
 
 server.use(helmet());
 server.use(morgan("dev"));
-server.use(cors());
+// server.use(cors());
 server.use(fileupload());
 server.use(express.json());
 
