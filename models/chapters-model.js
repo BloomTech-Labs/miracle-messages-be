@@ -15,7 +15,7 @@ function findChapters() {
 function findBy(id) {
   console.log("hi");
   const chapter = db("chapters")
-    .where(id)
+    .where({ id })
     .first();
 
   console.log(chapter);
