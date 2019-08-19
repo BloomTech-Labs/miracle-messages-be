@@ -1,13 +1,26 @@
 const db = require("../config/dbConfig.js");
 
 module.exports = {
-  find,
+  findBy,
+  findChapters,
   addChapter,
-  updateChapter
+  updateChapter,
+  removeChapter
 };
 
-function find() {
+function findChapters() {
   return db("chapters");
+}
+
+function findBy(id) {
+  console.log("hi");
+  const chapter = db("chapters")
+    .where(id)
+    .first();
+
+  console.log(chapter);
+
+  return chapter;
 }
 
 function addChapter(chapter) {
@@ -20,4 +33,10 @@ function updateChapter(id, changes) {
   return db("chapters")
     .where({ id })
     .update(changes);
+}
+
+function removeChapter(id) {
+  return db("chapters")
+    .where({ id })
+    .del();
 }
