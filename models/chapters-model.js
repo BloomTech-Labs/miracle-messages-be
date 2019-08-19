@@ -1,14 +1,23 @@
-const db = require('../config/dbConfig.js');
+const db = require("../config/dbConfig.js");
 
 module.exports = {
   find,
-  addChapter
+  addChapter,
+  updateChapter
 };
 
 function find() {
-  return db('chapters');
+  return db("chapters");
 }
 
 function addChapter(chapter) {
-  return db('chapters').insert(chapter, 'id');
+  const value = db("chapters").insert(chapter, "id");
+  // console.log(value);
+  return value;
+}
+
+function updateChapter(id, changes) {
+  return db("chapters")
+    .where({ id })
+    .update(changes);
 }

@@ -20,9 +20,8 @@ router.get("/", (req, res) => {
 
 ///////////Fetching a volunteer by custom search/////////////
 router.get("/findby/", (req, res) => {
-
   const searchParam = req.query;
-  
+
   formDB
     .findBy(searchParam)
     .then(volunteer => {
@@ -36,13 +35,11 @@ router.get("/findby/", (req, res) => {
 ////////// addding a new volunteer  /////////////
 
 router.post("/", validateBody, validateEmail, validatePhone, (req, res) => {
-  const { newVolunteer, newInterests } =  req.body;
-  console.log(req.body)
-  
+  const { newVolunteer, newInterests } = req.body;
+
   formDB
     .addVolunteer(newVolunteer)
     .then(volunteerId => {
-      console.log('hi')
       return volunteerId[0];
     })
     .then(id => {
@@ -56,32 +53,45 @@ router.post("/", validateBody, validateEmail, validatePhone, (req, res) => {
     });
 });
 
-
 // middleware to validate form inputs
 async function validateBody(req, res, next) {
-  const { newVolunteer } =  await req.body;
-  if (newVolunteer.fname && newVolunteer.lname && newVolunteer.email && newVolunteer.city && newVolunteer.state && newVolunteer.country) {
+  const { newVolunteer } = await req.body;
+  if (
+    newVolunteer.fname &&
+    newVolunteer.lname &&
+    newVolunteer.email &&
+    newVolunteer.city &&
+    newVolunteer.state &&
+    newVolunteer.country
+  ) {
     next();
   } else {
-    res.status(400).json({ message: 'Incomplete form. Please provide inputs for all required fields' });
+    res
+      .status(400)
+      .json({
+        message:
+          "Incomplete form. Please provide inputs for all required fields"
+      });
   }
 }
 
 async function validatePhone(req, res, next) {
-  const { newVolunteer } =  await req.body;
-  if (newVolunteer.phone && Number.isInteger(newVolunteer.phone) ) {
+  const { newVolunteer } = await req.body;
+  if (newVolunteer.phone && Number.isInteger(newVolunteer.phone)) {
     next();
   } else {
-    res.status(400).json({ message: 'Please provide phone number in the right format' });
+    res
+      .status(400)
+      .json({ message: "Please provide phone number in the right format" });
   }
 }
 
 async function validateEmail(req, res, next) {
-  const { email } = await req.body.newVolunteer
-  if ( /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)  ) {
+  const { email } = await req.body.newVolunteer;
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     next();
   } else {
-    res.status(400).json({ message: 'invalid email format' });
+    res.status(400).json({ message: "invalid email format" });
   }
 }
 
@@ -130,5 +140,3 @@ router.put("/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-
