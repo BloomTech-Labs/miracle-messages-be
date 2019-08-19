@@ -35,11 +35,12 @@ router.post("/", async (req, res) => {
     const encodedChapterImgName = encodeURI(chapterImgName);
     newChapter.chapter_img_url = aws_link + encodedChapterImgName;
 
-    // storing the chapter image url in the newChapter object
+    // storing the reunion image url in the newChapter object
     const reunionImgName = await req.files.reunion_img.name;
     const encodedReunionImgName = encodeURI(reunionImgName);
     newChapter.reunion_img_url = aws_link + encodedReunionImgName;
 
+    //adding the newChapter object to the database
     const chapter = await chapterDB.addChapter(newChapter);
 
     console.log(newChapter);
