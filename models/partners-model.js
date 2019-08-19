@@ -1,13 +1,19 @@
 const db = require('../config/dbConfig.js');
 
-module. exports = {
-    find
+module.exports = {
+    find,
+    remove,
 }
 
-function find(chapterId) {
-    console.log("in Model");
+function find(id) {
     return db.select('partners.name', 'partners.site_url', 'partners.icon_url')
         .from ('chapters_partners')
         .innerJoin('partners', 'chapters_partners.partnersid', 'partners.id')
-        .where({ "chapters_partners.chaptersid": chapterId})
+        .where({id})
+}
+
+function remove(id) {
+    return db('partners')
+        .where({id})
+        .del();
 }
