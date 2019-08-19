@@ -1,10 +1,10 @@
 const express = require("express");
 const server = express();
 
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const fileupload = require("express-fileupload");
 
-const cors = require("cors");
+// const cors = require("cors");
 const helmet = require("helmet");
 
 const chaptersRouter = require("./api/chapterRouter.js");
@@ -14,7 +14,7 @@ const partnerRouter = require("./api/partnerRouter");
 const uploadRouter = require("./api/uploadRouter");
 
 server.use(helmet());
-server.use(morgan("dev"));
+// server.use(morgan("dev"));
 // server.use(cors());
 server.use(fileupload());
 server.use(express.json());
