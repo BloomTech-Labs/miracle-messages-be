@@ -1,8 +1,8 @@
 const express = require("express");
 const server = express();
 
-// const morgan = require("morgan");
-// const fileupload = require("express-fileupload");
+const morgan = require("morgan");
+const fileupload = require("express-fileupload");
 
 const cors = require("cors");
 const helmet = require("helmet");
@@ -15,8 +15,8 @@ const uploadRouter = require("./api/uploadRouter");
 
 server.use(helmet());
 server.use(cors());
-// server.use(morgan("dev"));
-// server.use(fileupload());
+server.use(morgan("dev"));
+server.use(fileupload());
 server.use(express.json());
 
 server.get("/", (req, res) => {
