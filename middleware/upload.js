@@ -31,11 +31,11 @@ const uploadToS3 = (file, res, id) => {
         console.log(err);
       }
       console.log("success");
+      console.log(res.data);
 
       res.status(200).json(data);
-      console.log(res.data);
     });
   });
 };
 
-module.exports = uploadToS3;
+

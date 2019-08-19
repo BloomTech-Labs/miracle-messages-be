@@ -12,7 +12,7 @@ function find() {
 
 function addChapter(chapter) {
   const value = db("chapters").insert(chapter, "id");
-  console.log(value);
+  // console.log(value);
   return value;
 }
 

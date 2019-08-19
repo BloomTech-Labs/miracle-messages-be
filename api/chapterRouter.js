@@ -21,26 +21,34 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
-    newChapter.longitude = 2;
-    newChapter.latitude = 4;
+
+    //uploading and storing chapter image to aws:
+    const { chapter_img } = await req.files;
+    uploadToS3(chapter_img, res);
+
+    //uploading and storing the reunion image to aws:
+    const { reunion_img } = await req.files;
+    uploadToS3(reunion_img, res);
+
+    // storing the chapter image url i database
+    const chapterImgName = await req.files.chapter_img.name;
+    const encodedChapterImgName = encodeURI(chapterImgName);
+    newChapter.chapter_img_url = aws_link + encodedChapterImgName;
+
+    // storing the chapter image url in the newChapter object
+    const reunionImgName = await req.files.reunion_img.name;
+    const encodedReunionImgName = encodeURI(reunionImgName);
+    newChapter.reunion_img_url = aws_link + encodedReunionImgName;
+
     const chapter = await chapterDB.addChapter(newChapter);
 
-    res.status(200).json(chapter);
+    console.log(newChapter);
+
+    res.status(201).json(chapter);
   } catch (error) {
-    res.status(500).json({ error: "Error adding the chapter" });
+    res.status(500).json({ error: "Something went wrong, Please try again" });
   }
 });
-
-// router.post ("/", async (req, res)=> {
-// try {
-
-// }
-
-// catch {
-
-// }
-
-// }
 
 // router.post("/", async (req, res) => {
 //   try {

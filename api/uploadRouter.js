@@ -4,11 +4,12 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const AWS = require("aws-sdk");
 
 //api/upload
-router.post("/", async (req, res, next) => {
-  // console.log(res);
+router.post("/", async (req, res) => {
   const file = req.files.name;
-  uploadToS3(file, res, next);
-  // res.status(200).json(data);
+
+  console.log(filename);
+
+  uploadToS3(filename, res);
 });
 
 module.exports = router;
