@@ -1,15 +1,20 @@
 const express = require("express");
 const server = express();
 
-const cors = require("cors");
-const helmet = require("helmet");
+
+
+
 const morgan = require("morgan");
 const fileupload = require("express-fileupload");
 
-const chaptersRouter = require("./api/chapterRouter.js");
-const formRouter = require("./api/formRouter.js");
-const userRouter = require("./api/usersRouter");
-const uploadRouter = require("./api/uploadRouter");
+const cors = require('cors');
+const helmet = require('helmet');
+
+const chaptersRouter = require('./api/chapterRouter.js');
+const formRouter = require('./api/formRouter.js');
+const userRouter = require('./api/usersRouter');
+const partnerRouter = require('./api/partnerRouter')
+
 
 server.use(helmet());
 server.use(morgan("dev"));
@@ -21,10 +26,12 @@ server.get("/", (req, res) => {
   res.status(200).json({ hello: "World!" });
 });
 
-server.use("/api/chapter", chaptersRouter);
-server.use("/api/form", formRouter);
-server.use("/api/user", logger, userRouter);
+
 server.use("/api/upload", uploadRouter);
+server.use('/api/chapter', chaptersRouter);
+server.use('/api/form', formRouter);
+server.use('/api/user', logger, userRouter);
+server.use('/api/partner', partnerRouter);
 
 function logger(req, res, next) {
   const now = new Date().toISOString();

@@ -26,15 +26,16 @@ describe("chapter model", () => {
       longitude: -80.843124,
       latitude: 35.227085}));
       await Chapters.addChapter({ location: 'Norfolk, VA',
-      numvolunteers: 13,
+      numvolunteers: 52,
       longitude: -80.843124,
       latitude: 35.227085});
 
       const chapters = await db('chapters')
 
-     
        expect(chapters).toHaveLength(2);
        expect(chapters[0].location).toBe('San Antonio, TX');
+       expect(chapters[1].location).toBe('Norfolk, VA');
+       expect(chapters[1].numvolunteers).toBe(52)
    });
   
   });
