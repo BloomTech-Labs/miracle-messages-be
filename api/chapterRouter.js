@@ -51,7 +51,12 @@ router.post("/", async (req, res) => {
     if (req.files && req.files.chapter_img) {
       //uploading and storing chapter image to aws:
       const { chapter_img } = await req.files;
-      uploadToS3(chapter_img, res);
+
+      try {
+        uploadToS3(chapter_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the chapter image url i database
       const chapterImgName = await req.files.chapter_img.name;
@@ -62,7 +67,12 @@ router.post("/", async (req, res) => {
     if (req.files && req.files.reunion_img) {
       //uploading and storing the reunion image to aws:
       const { reunion_img } = await req.files;
-      uploadToS3(reunion_img, res);
+
+      try {
+        uploadToS3(reunion_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
@@ -88,7 +98,11 @@ router.put("/:id", async (req, res) => {
     if (req.files && req.files.chapter_img) {
       //uploading and storing chapter image to aws:
       const { chapter_img } = await req.files;
-      uploadToS3(chapter_img, res);
+      try {
+        uploadToS3(chapter_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the chapter image url i database
       const chapterImgName = await req.files.chapter_img.name;
@@ -99,7 +113,11 @@ router.put("/:id", async (req, res) => {
     if (req.files && req.files.reunion_img) {
       //uploading and storing the reunion image to aws:
       const { reunion_img } = await req.files;
-      uploadToS3(reunion_img, res);
+      try {
+        uploadToS3(reunion_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
