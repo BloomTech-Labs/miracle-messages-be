@@ -30,14 +30,13 @@ const uploadToS3 = (file, res) => {
       if (err) {
         console.log("error in callback");
         console.log(err);
+        return err;
       }
       console.log("success");
 
       return data;
       // res.status(200).json(data);
     });
-
-    
   });
 };
 
