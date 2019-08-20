@@ -35,15 +35,13 @@ router.get("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
-  let numPartners;
+  let numPartners = 0;
 
   //Need to validate that chapter id exists.//////////////////////////
 
   // First, we delete all chapter-partner relationships from chapters_partners
   try {
-    const numPartners = await chaptersPartnersDb.removeChapterPartner(
-      chapterId
-    );
+    numPartners = await chaptersPartnersDb.removeChapterPartner(chapterId);
   } catch {
     res.status(500).json({
       "error message":
