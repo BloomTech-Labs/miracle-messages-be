@@ -12,6 +12,7 @@ const partnerRouter = require('./api/partnerRouter')
 
 server.use(helmet());
 server.use(cors());
+server.use(logger)
 server.use(express.json());
 
 
@@ -21,14 +22,17 @@ server.get('/', (req, res) => {
 
 server.use('/api/chapter', chaptersRouter);
 server.use('/api/form', formRouter);
-server.use('/api/user', logger, userRouter);
+server.use('/api/user', userRouter);
 server.use('/api/partner', partnerRouter);
 
+
+/**************************************/
+/*      Custom Middleware             */
+/**************************************/
 function logger(req, res, next) {
   const now = new Date().toISOString();
-    req.now = now
-  console.log(`A ${req.method} request to '${req.url}'at ${req.now}`);
-next();
+  console.log(`A ${req.method} request to '${req.url}'at ${now}`);
+  next();
 };
 
 module.exports = server;
