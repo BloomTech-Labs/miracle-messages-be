@@ -9,3 +9,4 @@ function removeChapterPartner(id) {
         .where({"partnersid": id})
         .del()
 }
+

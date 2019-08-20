@@ -5,9 +5,11 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('partners').insert([
-        {name: 'SFPD', site_url:'https://sfpd.com', icon_url: 'https://sfpd.com/image' },
-        {name: 'goodWill', site_url:'https://goodwill.com', icon_url: 'https://goodwill.com/image'},
-        {name: 'glide', site_url: 'https://glide.com', icon_url: 'https://glide.com/image' }
+        {name: 'SFPD', site_url:'https://www.sanfranciscopolice.org/', icon_url: 'https://pbs.twimg.com/profile_images/880890495651545088/LcAV6z-c_400x400.jpg' },
+        {name: 'goodWill', site_url:'https://www.goodwill.org/', icon_url: 'https://www.goodwill.org/wp-content/uploads/2019/06/cropped-Goodwill-Industries-International-Logo-1.jpg'},
+        {name: 'glide', site_url: 'https://www.glide.org/', icon_url: 'https://unm5i3x3smv2e4zlycj53ret-wpengine.netdna-ssl.com/wp-content/uploads/2018/10/logo.svg' },
+        {name: 'National Charity League, LA', site_url: 'https://www.nclla.org', icon_url: 'https://www.nclla.org/wp-content/uploads/ncl-la-logo_2.svg' },
+        {name: 'Christian Appalachian Project, LA', site_url: 'https://www.charities.org/charities/christian-appalachian-projec', icon_url: 'https://www.charities.org/sites/default/files/styles/logo/public/One-Color%20Standard%20Logo%20Blue.png?itok=T81vTIl5'}, 
       ]);
     });
 };
