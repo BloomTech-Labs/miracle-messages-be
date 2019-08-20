@@ -13,6 +13,7 @@ function find(id) {
 }
 
 function remove(id) {
+    console.log('in model')
     return db('partners')
         .where({id})
         .del();
