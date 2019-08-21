@@ -13,7 +13,6 @@ function findChapters() {
 }
 
 function findBy(id) {
-  console.log("triggering the model");
   const chapter = db("chapters")
     .where({ id })
     .first();
@@ -23,7 +22,6 @@ function findBy(id) {
 
 function addChapter(chapter) {
   const value = db("chapters").insert(chapter, "id");
-  // console.log(value);
   return value;
 }
 
