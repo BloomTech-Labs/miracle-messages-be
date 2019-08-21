@@ -20,6 +20,8 @@ function findBy(id) {
   return chapter;
 }
 
+
+
 function addChapter(chapter) {
   const value = db("chapters").insert(chapter, "id");
   return value;
