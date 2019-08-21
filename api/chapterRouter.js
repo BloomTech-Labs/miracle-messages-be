@@ -33,6 +33,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//**** THIS IS FOR DELETING A CHAPTER TO THE DATABASE */
 router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
@@ -63,7 +64,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// add a chapter to the database
+// **** THIS IS FOR ADDING A CHAPTER TO THE DATABASE
 router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
@@ -71,10 +72,12 @@ router.post("/", async (req, res) => {
     if (req.files && req.files.chapter_img) {
       //uploading and storing chapter image to aws:
       const { chapter_img } = await req.files;
-      const boo = await uploadToS3(chapter_img, res);
 
-      console.log(await boo);
-      console.log("hi");
+      try {
+        uploadToS3(chapter_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the chapter image url i database
       const chapterImgName = await req.files.chapter_img.name;
@@ -85,7 +88,12 @@ router.post("/", async (req, res) => {
     if (req.files && req.files.reunion_img) {
       //uploading and storing the reunion image to aws:
       const { reunion_img } = await req.files;
-      uploadToS3(reunion_img, res);
+
+      try {
+        uploadToS3(reunion_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
@@ -104,6 +112,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//***** THIS IS FOR UPDATING THE INFO FOR A CHAPTER  */
 router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
@@ -111,7 +120,11 @@ router.put("/:id", async (req, res) => {
     if (req.files && req.files.chapter_img) {
       //uploading and storing chapter image to aws:
       const { chapter_img } = await req.files;
-      uploadToS3(chapter_img, res);
+      try {
+        uploadToS3(chapter_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the chapter image url i database
       const chapterImgName = await req.files.chapter_img.name;
@@ -122,7 +135,11 @@ router.put("/:id", async (req, res) => {
     if (req.files && req.files.reunion_img) {
       //uploading and storing the reunion image to aws:
       const { reunion_img } = await req.files;
-      uploadToS3(reunion_img, res);
+      try {
+        uploadToS3(reunion_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
 
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
@@ -140,6 +157,24 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({
       message: "Error updating the chapter"
     });
+  }
+});
+
+//****** THIS POSTING A PARTNER TO A CHAPTER DOESNT WORK NEED TO DEBUG WHY */
+router.post("/:id", async (req, res) => {
+  try {
+    console.log(await req.body.partnerId);
+    console.log(await req.params.id);
+    const id = await chaptersPartnersDb.addChapterPartner(
+      req.body.partnerId,
+      req.params.id
+    );
+
+    res.status(200).json(id);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error adding zee dang partner to the chapter" });
   }
 });
 

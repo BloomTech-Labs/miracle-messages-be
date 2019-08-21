@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "cypress:open": "cypress open",
     "test": "cross-env DB_ENV=testing jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js"
@@ -33,8 +34,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.1",
     "morgan": "^1.9.1",
-    "pg": "^7.12.0",
-    "pg-native": "^3.0.0"
+    "pg": "^7.12.1"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

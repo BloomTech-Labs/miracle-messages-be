@@ -13,12 +13,10 @@ function findChapters() {
 }
 
 function findBy(id) {
-  console.log("hi");
+  console.log("triggering the model");
   const chapter = db("chapters")
     .where({ id })
     .first();
-
-  console.log(chapter);
 
   return chapter;
 }
