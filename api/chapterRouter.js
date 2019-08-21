@@ -3,10 +3,12 @@ const router = express.Router();
 const uploadToS3 = require("../middleware/uploadToS3.js");
 
 const chapterDB = require("../models/chapters-model.js");
-const chaptersPartnersDb = require("../models/chapters-partners-model.js");
+const chaptersPartnersDB = require("../models/chapters-partners-model.js");
 
 const aws_link =
   "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+
+//THIS GETS ALL CHAPTERS:
 
 router.get("/", (req, res) => {
   chapterDB
@@ -19,6 +21,7 @@ router.get("/", (req, res) => {
     });
 });
 
+// THIS IS FOR GETTING A SPECIFIC CHAPTER BY ID
 router.get("/:id", async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
@@ -33,7 +36,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//**** THIS IS FOR DELETING A CHAPTER TO THE DATABASE */
+// THIS IS FOR GETTING ALL PARTNERS FOR A SPECIFIC CHAPTER
+router.get("/:id/partners", async (req, res) => {
+  try {
+    const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
+
+    res.status(200).json(chapter);
+  } catch (error) {
+    // log error to server
+    // console.log(error);
+    res.status(500).json({
+      message: "Error getting the chapter"
+    });
+  }
+});
+
+// THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
@@ -42,7 +60,7 @@ router.delete("/:id", async (req, res) => {
 
   // First, we delete all chapter-partner relationships from chapters_partners
   try {
-    numPartners = await chaptersPartnersDb.removeChapterPartner(chapterId);
+    numPartners = await chaptersPartnersDB.removeChapterPartner(chapterId);
   } catch {
     res.status(500).json({
       "error message":
@@ -64,7 +82,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// **** THIS IS FOR ADDING A CHAPTER TO THE DATABASE
+// THIS IS FOR ADDING A CHAPTER TO THE DATABASE
 router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
@@ -112,7 +130,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-//***** THIS IS FOR UPDATING THE INFO FOR A CHAPTER  */
+// THIS IS FOR UPDATING THE INFO FOR A CHAPTER  */
 router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
@@ -160,12 +178,11 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-//****** THIS POSTING A PARTNER TO A CHAPTER DOESNT WORK NEED TO DEBUG WHY */
-router.post("/:id", async (req, res) => {
+//****** THIS IS FOR POSTING A PARTNER TO A CHAPTER */
+
+router.post("/:id/partners", async (req, res) => {
   try {
-    console.log(await req.body.partnerId);
-    console.log(await req.params.id);
-    const id = await chaptersPartnersDb.addChapterPartner(
+    const id = await chaptersPartnersDB.addChapterPartner(
       req.body.partnerId,
       req.params.id
     );
@@ -174,7 +191,23 @@ router.post("/:id", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error adding zee dang partner to the chapter" });
+      .json({ error: "error assigning zee dang partner to the chapter" });
+  }
+});
+
+// this is for unassigning a specific partner from a chapter
+router.delete("/:id/partners/", async (req, res) => {
+  try {
+    const count = await chaptersPartnersDB.unassignChapterPartner(
+      req.body.partnerId,
+      req.params.id
+    );
+
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error unassigning zee dang partner from the chapter" });
   }
 });
 
