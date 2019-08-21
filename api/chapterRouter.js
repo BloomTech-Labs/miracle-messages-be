@@ -5,18 +5,7 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const chapterDB = require("../models/chapters-model.js");
 const partnerDB = require("../models/partners-model.js");
 
-const aws_link =
-  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
-
-// router.get("/", (req, res) => {
-//   chapterDB.findChapters()
-//     .then(chapters => {
-//       res.status(200).json(chapters);
-//     })
-//     .catch(error => {
-//       res.status(500).json({ error: "Error retrieving the chapters data" });
-//     });
-// });
+const aws_link = "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
 
 /****************************************************************************/
@@ -40,6 +29,9 @@ router.get('/', async (req,res) => {
     res.status(500).json({error: "there was a problem getting chapter or partner information"})
   }
 })
+
+/****************************************************************************/
+
 
 router.get("/:id", async (req, res) => {
   try {
