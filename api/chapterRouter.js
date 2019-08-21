@@ -9,16 +9,6 @@ const chaptersPartnersDb = require("../models/chapters-partners-model.js");
 const aws_link =
   "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
-// router.get("/", (req, res) => {
-//   chapterDB
-//     .findChapters()
-//     .then(chapters => {
-//       res.status(200).json(chapters);
-//     })
-//     .catch(error => {
-//       res.status(500).json({ error: "Error retrieving the chapters data" });
-//     });
-// });
 
 /****************************************************************************/
 /*               Find all chapters with all related partners                */
@@ -27,7 +17,7 @@ router.get('/', async (req,res) => {
 
   try {
     let chapters = await chapterDB.findChapters();
-      
+
     const promises = chapters.map( async (chapter) => {
       let partners = await partnerDB.findById(chapter.id);
       chapter.partners = partners;
