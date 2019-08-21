@@ -18,7 +18,6 @@ function find() {
 /*                        Find all partners of a chapter                    */
 /****************************************************************************/
 function findById(id) {
-  console.log(id);
   return db
     .select("partners.name", "partners.site_url", "partners.icon_url")
     .from("chapters_partners")
