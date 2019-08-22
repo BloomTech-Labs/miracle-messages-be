@@ -5,13 +5,14 @@ module.exports = {
   findById,
   remove,
   addPartner,
-  update,
+  updatePartner
 };
 
 /****************************************************************************/
 /*                        Find all partners                    */
 /****************************************************************************/
 function find() {
+  console.log("in zee modeeel");
   return db("partners");
 }
 
@@ -46,12 +47,11 @@ function addPartner(partner) {
 }
 
 /****************************************************************************/
-/*                              Update a partner                            */
+/*                              update a partner                            */
 /****************************************************************************/
 
-function update(id, changes) {
-    return db('partners')
-        .where({id})
-        .update(changes)
-
+function updatePartner(id, changes) {
+  return db("partners")
+    .where({ id })
+    .update(changes);
 }
