@@ -4,7 +4,8 @@ module.exports = {
   find,
   findById,
   remove,
-  addPartner
+  addPartner,
+  update,
 };
 
 /****************************************************************************/
@@ -42,4 +43,15 @@ function addPartner(partner) {
   const value = db("partners").insert(partner, "id");
 
   return value;
+}
+
+/****************************************************************************/
+/*                              Update a partner                            */
+/****************************************************************************/
+
+function update(id, changes) {
+    return db('partners')
+        .where({id})
+        .update(changes)
+
 }
