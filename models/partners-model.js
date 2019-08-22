@@ -21,7 +21,7 @@ function find() {
 /****************************************************************************/
 function findById(id) {
   return db
-    .select("partners.name", "partners.site_url", "partners.icon_url")
+    .select("category", "partners.name", "partners.site_url", "partners.icon_url")
     .from("chapters_partners")
     .innerJoin("partners", "chapters_partners.partnersid", "partners.id")
     .where({ "chapters_partners.chaptersid": id });
