@@ -4,13 +4,15 @@ module.exports = {
   find,
   findById,
   remove,
-  addPartner
+  addPartner,
+  updatePartner
 };
 
 /****************************************************************************/
 /*                        Find all partners                    */
 /****************************************************************************/
 function find() {
+  console.log("in zee modeeel");
   return db("partners");
 }
 
@@ -42,4 +44,13 @@ function addPartner(partner) {
   const value = db("partners").insert(partner, "id");
 
   return value;
+}
+/****************************************************************************/
+/*                              update a partner                            */
+/****************************************************************************/
+
+function updatePartner(id, changes) {
+  return db("partners")
+    .where({ id })
+    .update(changes);
 }

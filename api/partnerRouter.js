@@ -72,10 +72,9 @@ router.post("/", async (req, res) => {
   try {
     const newPartner = await req.body;
 
-    console.log(newPartner);
-
     if (req.files && req.files.partner_icon) {
       //grabbing the partner icon from req.files
+
       const { partner_icon } = await req.files;
 
       //first we upload the icon to AWS and make sure it succeeds:
@@ -94,7 +93,6 @@ router.post("/", async (req, res) => {
 
       //add the icon url to the newPartner object:
       newPartner.icon_url = aws_link + encodedpartnerIconName;
-      console.log(newPartner);
     }
 
     //finally, we add the newPartner object to the database:
@@ -103,6 +101,46 @@ router.post("/", async (req, res) => {
     res.status(201).json(partnerId);
   } catch (error) {
     res.status(500).json({ error: "error adding to the database" });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const changes = await req.body;
+    const id = req.params.id;
+
+    if (req.files && req.files.partner_icon) {
+      //grabbing the partner icon from req.files
+      const { partner_icon } = await req.files;
+
+      //first we upload the icon to AWS and make sure it succeeds:
+      try {
+        uploadToS3(partner_icon, res);
+      } catch (error) {
+        res
+          .status(500)
+          .json({ error: "error uploading the partner_icon to AWS" });
+      }
+
+      // next we build the partner icon url that will get stored in the database:
+      const partnerIconName = await req.files.partner_icon.name;
+
+      // remove & replace special characters to make it URL compatible:
+      const encodedpartnerIconName = encodeURI(partnerIconName);
+
+      //add the icon url to the newPartner object:
+      changes.icon_url = aws_link + encodedpartnerIconName;
+    }
+
+    //finally, we add the newPartner object to the database:
+
+    const partner = await partnersDb.updatePartner(id, changes);
+
+    res.status(201).json(partner);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error updating the new partner to the database" });
   }
 });
 
