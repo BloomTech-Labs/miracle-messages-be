@@ -46,7 +46,8 @@ router.delete("/:id", async (req, res) => {
 
   // Delete all chapter relationships with this partner
   try {
-    numChapters = await chaptersPartnersDb.removeChapterPartner(partnerId);
+    numChapters = await chaptersPartnersDb.removePartnerChapter(partnerId);
+    console.log(numChapters);
   } catch {
     res.status(500).json({
       "error message":
