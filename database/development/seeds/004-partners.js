@@ -13,7 +13,6 @@ exports.seed = function(knex) {
         {category: 'sponsor', name: 'San Francisco Fire', site_url: 'https://sf-fire.org/', icon_url: 'https://upload.wikimedia.org/wikipedia/commons/1/19/San_Francisco_Fire_Department_Seal.png'},
         {category: 'sponsor', name: 'LGBT', site_url: 'https://www.sfcenter.org/', icon_url: 'https://pbs.twimg.com/profile_images/1019981834896097280/quGA-HOi.jpg'},
         {category: 'sponsor', name: 'Coalition on homelessness', site_url: 'http://www.cohsf.org/', icon_url: 'https://i2.wp.com/www.cohsf.org/wp-content/uploads/2017/03/coh_logo.png?fit=60%2C60'},
-
       ]);
     });
 };

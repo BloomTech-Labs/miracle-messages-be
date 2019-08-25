@@ -196,7 +196,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-//****** THIS IS FOR POSTING A PARTNER TO A CHAPTER */
+//****** THIS IS FOR ASSIGNING A PARTNER TO A CHAPTER */
 
 router.post("/:id/partners", async (req, res) => {
   try {
