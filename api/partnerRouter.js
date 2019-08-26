@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const chapterId = req.params.id;
   try {
-    const partners = await partnersDb.find(chapterId);
+    const partners = await partnersDb.findById(chapterId);
     res.status(200).json(partners);
   } catch {
     res
