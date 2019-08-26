@@ -33,6 +33,9 @@ function removeChapterPartner(chapterId) {
 
 // assign a Partner to a Chapter
 function assignChapterPartner(partnerId, chapterId) {
+  console.log("in the model");
+  console.log(partnerId);
+  console.log(chapterId);
   return db("chapters_partners").insert(
     {
       partnersid: partnerId,
