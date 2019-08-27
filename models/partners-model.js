@@ -12,7 +12,6 @@ module.exports = {
 /*                        Find all partners                    */
 /****************************************************************************/
 function find() {
-  console.log("in zee modeeel");
   return db("partners");
 }
 
