@@ -11,12 +11,3 @@ describe('server.js', () => {
   });
 });
 
-// describe('server.js', () => {
-//   describe('get', () => {
-//     it('should return status 200', async () => {
-//       const user = await supertest(server)
-//         .get('/users')
-//         .expect(200);
-//     });
-//   });
-// });
