@@ -209,10 +209,10 @@ router.post("/:id/partners", async (req, res) => {
 });
 
 // this is for unassigning a specific partner from a chapter
-router.delete("/:id/partners/", async (req, res) => {
+router.delete("/:id/partners/:partnerid", async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
-      req.body.partnerId,
+      req.params.partnerid,
       req.params.id
     );
 
