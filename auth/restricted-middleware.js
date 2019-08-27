@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
   if (token) {
     jwt.verify(token, secrets.jwtSecret, (err, decodedToken)=> {
       if (err) {
-        res.status(401).json({ message: "Invalid Credentials" })
+        res.status(401).json({ message: "Invalid Credentials in middleware" })
       } else {
         req.decodedJwt = decodedToken;
         next();
@@ -16,6 +16,6 @@ module.exports = (req, res, next) => {
     });
     
   } else {
-    res.status(401).json({ message: "Invalid Credentials" });
+    res.status(401).json({ message: "Invalid Credentials in middleware" });
   }
 };
