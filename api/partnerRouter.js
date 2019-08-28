@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const uploadToS3 = require("../middleware/uploadToS3.js");
+const MW = require("../middleware/partnersMW")
 const partnersDb = require("../models/partners-model.js");
 const chaptersPartnersDb = require("../models/chapters-partners-model.js");
 
-const aws_link =
-  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+
+const aws_link = "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
 /****************************************************************************/
 /*                 Get all partners 
@@ -21,7 +22,7 @@ router.get("/", async (req, res) => {
   }
 });
 /****************************************************************************/
-/*                 Get all partners of a specific chapter                   */
+/*                 Get all partners of one specific chapter                 */
 /****************************************************************************/
 router.get("/:id", async (req, res) => {
   const chapterId = req.params.id;
@@ -38,16 +39,13 @@ router.get("/:id", async (req, res) => {
 /****************************************************************************/
 /*      Delete a partner - will also also delete it from each chapter       */
 /****************************************************************************/
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",  MW.validatePartnerId, async (req, res) => {
   const partnerId = req.params.id;
   let numChapters;
-
-  //Need to validate that partner id exists.//////////////////////////
 
   // Delete all chapter relationships with this partner
   try {
     numChapters = await chaptersPartnersDb.removePartnerChapter(partnerId);
-    console.log(numChapters);
   } catch {
     res.status(500).json({
       "error message":
@@ -68,6 +66,8 @@ router.delete("/:id", async (req, res) => {
       .json({ "error message": "There is a problem removing this partner" });
   }
 });
+
+/****************************************************************************/
 
 router.post("/", async (req, res) => {
   try {
