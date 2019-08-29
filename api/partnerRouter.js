@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const uploadToS3 = require("../middleware/uploadToS3.js");
-const MW = require("../middleware/partnersMW")
+const MW = require("../middleware/partnersMW");
 const partnersDb = require("../models/partners-model.js");
 const chaptersPartnersDb = require("../models/chapters-partners-model.js");
 
+// this link below is to specify the AWS S3 BUCKET where our images will live:
 
-const aws_link = "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+const aws_link =
+  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
 /****************************************************************************/
 /*                 Get all partners 
@@ -39,7 +41,7 @@ router.get("/:id", async (req, res) => {
 /****************************************************************************/
 /*      Delete a partner - will also also delete it from each chapter       */
 /****************************************************************************/
-router.delete("/:id",  MW.validatePartnerId, async (req, res) => {
+router.delete("/:id", MW.validatePartnerId, async (req, res) => {
   const partnerId = req.params.id;
   let numChapters;
 
@@ -67,6 +69,8 @@ router.delete("/:id",  MW.validatePartnerId, async (req, res) => {
   }
 });
 
+/****************************************************************************/
+/*      ADD A PARNTER ORGANIZATION TO THE DATABASE
 /****************************************************************************/
 
 router.post("/", MW.verifyPartnerData, async (req, res) => {
@@ -104,6 +108,10 @@ router.post("/", MW.verifyPartnerData, async (req, res) => {
   
 
 });
+
+/****************************************************************************/
+/*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
+/****************************************************************************/
 
 router.put("/:id", async (req, res) => {
   try {
