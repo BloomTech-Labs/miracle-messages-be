@@ -74,13 +74,12 @@ async function verifyPartnerImgFilename(req, res, next) {
     if(req.files && req.files.partner_icon) {
         try {
             const iconURL = aws_link + encodeURI(req.files.partner_icon.name);
-            console.log("iconURL: ", iconURL)
             const found = await db('partners')
                 .select('icon_url')
                 .where({id})
                 .first();
-            console.log(found.icon_url)
-            if(found.icon_url !== iconURL) {
+            
+                if(found.icon_url !== iconURL) {
                 next()
             }
             else {
