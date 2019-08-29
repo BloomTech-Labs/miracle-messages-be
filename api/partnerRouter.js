@@ -69,40 +69,40 @@ router.delete("/:id",  MW.validatePartnerId, async (req, res) => {
 
 /****************************************************************************/
 
-router.post("/", async (req, res) => {
+router.post("/", MW.verifyPartnerData, async (req, res) => {
+  
+  const newPartner = req.body;
+  const { partner_icon } = req.files;
+
+  //first we upload the icon to AWS and make sure it succeeds:
   try {
-    const newPartner = await req.body;
+    uploadToS3(partner_icon, res);
+  } 
+  catch (error) {
+    res
+      .status(500)
+      .json({ error: "error uploading the partner_icon to AWS" });
+  }
 
-    if (req.files && req.files.partner_icon) {
-      //grabbing the partner icon from req.files
+  // next we build the partner icon url that will get stored in the database:
+  const partnerIconName = req.files.partner_icon.name;
+  // remove & replace special characters to make it URL compatible:
+  const encodedpartnerIconName = encodeURI(partnerIconName);
 
-      const { partner_icon } = await req.files;
+  //add the icon url to the newPartner object:
+  newPartner.icon_url = aws_link + encodedpartnerIconName;
 
-      //first we upload the icon to AWS and make sure it succeeds:
-      try {
-        uploadToS3(partner_icon, res);
-      } catch (error) {
-        res
-          .status(500)
-          .json({ error: "error uploading the partner_icon to AWS" });
-      }
 
-      // next we build the partner icon url that will get stored in the database:
-      const partnerIconName = await req.files.partner_icon.name;
-      // remove & replace special characters to make it URL compatible:
-      const encodedpartnerIconName = encodeURI(partnerIconName);
-
-      //add the icon url to the newPartner object:
-      newPartner.icon_url = aws_link + encodedpartnerIconName;
-    }
-
-    //finally, we add the newPartner object to the database:
-
+  //finally, we add the newPartner object to the database:
+  try {
     const partnerId = await partnersDb.addPartner(newPartner);
     res.status(201).json(partnerId);
-  } catch (error) {
-    res.status(500).json({ error: "error adding to the database" });
   }
+  catch {
+    res.status(500).json({errorMessage: "There was a problem adding partner to database"})
+  }
+  
+
 });
 
 router.put("/:id", async (req, res) => {
