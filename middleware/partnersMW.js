@@ -57,46 +57,4 @@ async function verifyPartnerData(req, res, next) {
     else {
         res.status(400).json({errorMessage: "All partner fields are required"});
     }
-
-    // if(!category || !name || !site_url) {
-    //     res.status(400).json({errorMessage: "All partner fields are required"});
-    // }
-    // console.log(!req.files);
-
-    // try {
-    //     if(!req.files.partner_icon)
-    //         res.status(400).json({errorMessage: "no partner_icon property in image file"})
-    // }
-    // catch {
-    //     res.status(400).json({errorMessage: "no image file"});
-    // }
-
-    // // if (req.files) {
-
-    // //     try {
-    // //         if(!req.file.partner_icon)
-    // //             res.status(400).json({errorMessage: "no partner_icon property in image file"});
-    // //     }
-    // //     catch {
-
-    // //     }
-    // // else {
-    // //     res.status(400).json({errorMessage: "no image file"});
-    // // }
-
-    // const iconURL = aws_link + encodeURI(req.files.partner_icon.name);
-
-    // try {
-    //     const found = await db('partners').where({icon_url:iconURL});
-    //     if(found.length == 0) {
-    //         next()
-    //     }
-    //     else {
-    //         res.status(409).json({errorMessage: "An icon image with this filename already exists"});
-    //     }
-    // }
-    // catch {
-    //     res.status(500).json({errorMessage: " There is a problem checking if icon url exists in database"});
-    // }
-
 }
