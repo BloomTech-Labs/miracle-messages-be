@@ -105,7 +105,7 @@ router.post("/", MW.verifyPartnerData, async (req, res) => {
 
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
   try {
     const changes = await req.body;
     const id = req.params.id;
