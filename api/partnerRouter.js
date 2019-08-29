@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const uploadToS3 = require("../middleware/uploadToS3.js");
-const MW = require("../middleware/partnersMW")
+const MW = require("../middleware/partnersMW");
 const partnersDb = require("../models/partners-model.js");
 const chaptersPartnersDb = require("../models/chapters-partners-model.js");
 
+// this link below is to specify the AWS S3 BUCKET where our images will live:
 
-const aws_link = "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+const aws_link =
+  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
 /****************************************************************************/
 /*                 Get all partners 
@@ -39,7 +41,7 @@ router.get("/:id", async (req, res) => {
 /****************************************************************************/
 /*      Delete a partner - will also also delete it from each chapter       */
 /****************************************************************************/
-router.delete("/:id",  MW.validatePartnerId, async (req, res) => {
+router.delete("/:id", MW.validatePartnerId, async (req, res) => {
   const partnerId = req.params.id;
   let numChapters;
 
@@ -68,44 +70,54 @@ router.delete("/:id",  MW.validatePartnerId, async (req, res) => {
 });
 
 /****************************************************************************/
+/*      ADD A PARNTER ORGANIZATION TO THE DATABASE
+/****************************************************************************/
 
-router.post("/", async (req, res) => {
+router.post("/", MW.verifyPartnerData, async (req, res) => {
+  
+  const newPartner = req.body;
+  const { partner_icon } = req.files;
+
+  //first we upload the icon to AWS and make sure it succeeds:
   try {
-    const newPartner = await req.body;
+    uploadToS3(partner_icon, res);
+  } 
+  catch (error) {
+    res
+      .status(500)
+      .json({ error: "error uploading the partner_icon to AWS" });
+  }
 
-    if (req.files && req.files.partner_icon) {
-      //grabbing the partner icon from req.files
+  // next we build the partner icon url that will get stored in the database:
+  const partnerIconName = req.files.partner_icon.name;
+  // remove & replace special characters to make it URL compatible:
+  const encodedpartnerIconName = encodeURI(partnerIconName);
 
-      const { partner_icon } = await req.files;
+  //add the icon url to the newPartner object:
+  newPartner.icon_url = aws_link + encodedpartnerIconName;
 
-      //first we upload the icon to AWS and make sure it succeeds:
-      try {
-        uploadToS3(partner_icon, res);
-      } catch (error) {
-        res
-          .status(500)
-          .json({ error: "error uploading the partner_icon to AWS" });
-      }
 
-      // next we build the partner icon url that will get stored in the database:
-      const partnerIconName = await req.files.partner_icon.name;
-      // remove & replace special characters to make it URL compatible:
-      const encodedpartnerIconName = encodeURI(partnerIconName);
-
-      //add the icon url to the newPartner object:
-      newPartner.icon_url = aws_link + encodedpartnerIconName;
-    }
-
-    //finally, we add the newPartner object to the database:
-
+  //finally, we add the newPartner object to the database:
+  try {
     const partnerId = await partnersDb.addPartner(newPartner);
     res.status(201).json(partnerId);
-  } catch (error) {
-    res.status(500).json({ error: "error adding to the database" });
   }
+  catch {
+    res.status(500).json({errorMessage: "There was a problem adding partner to database"})
+  }
+  
+
 });
 
-router.put("/:id", async (req, res) => {
+
+
+
+/****************************************************************************/
+/*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
+/****************************************************************************/
+router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
+
+
   try {
     const changes = await req.body;
     const id = req.params.id;
