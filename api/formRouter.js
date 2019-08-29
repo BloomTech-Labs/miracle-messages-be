@@ -4,7 +4,11 @@ const router = express.Router();
 const formDB = require("../models/form-model.js");
 
 //path: api/form
-
+//**************************************************
+//NOTE: THESE ARE THE ENDPOINTS FOR THE VOLUNTEER SIGN UP FORM
+//IT IS AN  INCOMPLETE PART OF THE PROJECT THAT WAS DEPRIORITIZED
+// FUNCTIONALITY NEEDS TO BE VERIFIED
+//**************************************************
 ////////Fetching all volunteers//////"co"
 router.get("/", (req, res) => {
   formDB
@@ -66,12 +70,9 @@ async function validateBody(req, res, next) {
   ) {
     next();
   } else {
-    res
-      .status(400)
-      .json({
-        message:
-          "Incomplete form. Please provide inputs for all required fields"
-      });
+    res.status(400).json({
+      message: "Incomplete form. Please provide inputs for all required fields"
+    });
   }
 }
 
