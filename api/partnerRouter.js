@@ -109,11 +109,15 @@ router.post("/", MW.verifyPartnerData, async (req, res) => {
 
 });
 
+
+
+
 /****************************************************************************/
 /*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
 /****************************************************************************/
+router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
 
-router.put("/:id", async (req, res) => {
+
   try {
     const changes = await req.body;
     const id = req.params.id;
