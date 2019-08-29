@@ -95,7 +95,9 @@ router.post("/", async (req, res) => {
       // 3) we store the chapter image url in the database:
       //a) first get the name of the file
       const chapterImgName = await req.files.chapter_img.name;
-      //b) then we encode the name so it can be appended to the s3 bucket link
+      
+      //b) then we encode the name i.e replace spaces etc with special characters to make it URL compatible 
+      //so it can be appended to the s3 bucket link:
       const encodedChapterImgName = encodeURI(chapterImgName);
       //c) we append the encoded name to the s3 bucket link to get the location of the
       newChapter.chapter_img_url = aws_link + encodedChapterImgName;
