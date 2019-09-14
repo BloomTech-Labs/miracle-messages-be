@@ -1,4 +1,4 @@
-const db = require("../config/dbConfig.js");
+const db = require('../config/dbConfig.js');
 
 module.exports = {
   findBy,
@@ -10,13 +10,13 @@ module.exports = {
 
 //**** GET ALL CHAPTERS ******
 function findChapters() {
-  return db("chapters");
+  return db('chapters');
 }
 
 //**** FIND SPECIFIC CHAPTER BY CHAPTER ID ******
 
 function findBy(id) {
-  const chapter = db("chapters")
+  const chapter = db('chapters')
     .where({ id })
     .first();
 
@@ -25,20 +25,20 @@ function findBy(id) {
 
 //**** ADD A CHAPTER  ******
 function addChapter(chapter) {
-  const value = db("chapters").insert(chapter, "id");
+  const value = db('chapters').insert(chapter, 'id');
   return value;
 }
 
 //**** UPDATE CHAPTER ******
 function updateChapter(id, changes) {
-  return db("chapters")
+  return db('chapters')
     .where({ id })
     .update(changes);
 }
 
 //**** REMOVE CHAPTER ******
 function removeChapter(id) {
-  return db("chapters")
+  return db('chapters')
     .where({ id })
     .del();
 }

@@ -1,29 +1,28 @@
-const pg = require("pg");
+const pg = require('pg');
 
 //uncomment the line below if you are workign on heroku servers
 //pg.defaults.ssl = true;
 
-require("dotenv").config();
+require('dotenv').config();
 
 module.exports = {
   staging: {
-    client: "pg",
+    client: 'pg',
     useNullAsDefault: true,
     connection: process.env.HEROKU_POSTGRESQL_BLACK_URL,
 
     migrations: {
-      directory: "./database/development/migrations"
+      directory: './database/development/migrations'
     },
 
     seeds: {
-      directory: "./database/development/seeds"
+      directory: './database/development/seeds'
     }
   },
 
   development: {
-    client: "pg",
+    client: 'pg',
     useNullAsDefault: true,
-
     connection: {
       host: process.env.POSTGRESS_DEV_HOST,
       port: process.env.POSTGRESS_DEV_PORT,
@@ -33,16 +32,16 @@ module.exports = {
     },
 
     migrations: {
-      directory: "./database/development/migrations"
+      directory: './database/development/migrations'
     },
 
     seeds: {
-      directory: "./database/development/seeds"
+      directory: './database/development/seeds'
     }
   },
 
   testing: {
-    client: "pg",
+    client: 'pg',
     connection: {
       host: process.env.POSTGRESS_TEST_HOST,
       port: process.env.POSTGRESS_TEST_PORT,
@@ -54,24 +53,24 @@ module.exports = {
     useNullAsDefault: true,
 
     migrations: {
-      directory: "./database/testing/migrations"
+      directory: './database/testing/migrations'
     },
     seeds: {
-      directory: "./database/testing/seeds"
+      directory: './database/testing/seeds'
     }
   },
 
   production: {
-    client: "pg",
+    client: 'pg',
     useNullAsDefault: true,
 
     connection: process.env.DATABASE_URL,
 
     migrations: {
-      directory: "./database/development/migrations"
+      directory: './database/development/migrations'
     },
     seeds: {
-      directory: "./database/development/seeds"
+      directory: './database/development/seeds'
     }
   }
 };
