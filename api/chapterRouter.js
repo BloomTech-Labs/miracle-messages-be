@@ -1,12 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const uploadToS3 = require("../middleware/uploadToS3.js");
-const chapterDB = require("../models/chapters-model.js");
-const chaptersPartnersDB = require("../models/chapters-partners-model.js");
-const partnerDB = require("../models/partners-model");
+const uploadToS3 = require('../middleware/uploadToS3.js');
+const chapterDB = require('../models/chapters-model.js');
+const chaptersPartnersDB = require('../models/chapters-partners-model.js');
+const partnerDB = require('../models/partners-model');
 
 const aws_link =
-  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+  'https://labs14-miracle-messages-image-upload.s3.amazonaws.com/';
 
 /******************/
 // ** ALL THE GETS **
@@ -15,7 +15,7 @@ const aws_link =
 /****************************************************************************/
 /*               GET all chapters with all related partners                */
 /****************************************************************************/
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(chapters);
   } catch {
     res.status(500).json({
-      error: "there was a problem getting chapter or partner information"
+      error: 'there was a problem getting chapter or partner information'
     });
   }
 });
@@ -38,14 +38,17 @@ router.get("/", async (req, res) => {
 // THIS IS FOR GETTING A SPECIFIC CHAPTER BY ID
 /****************************************************************************/
 
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
 
+    let partners = await partnerDB.findById(chapter.id);
+
+    chapter.partners = partners;
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: 'Error getting the chapter'
     });
   }
 });
@@ -53,14 +56,14 @@ router.get("/:id", async (req, res) => {
 //************************************************************
 //THIS IS FOR GETTING ALL PARTNER ORGANIZATIONS FOR A SPECIFIC CHAPTER
 //************************************************************
-router.get("/:id/partners", async (req, res) => {
+router.get('/:id/partners', async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
 
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: 'Error getting the chapter'
     });
   }
 });
@@ -73,7 +76,7 @@ router.get("/:id/partners", async (req, res) => {
 //********* ADDING A CHAPTER TO THE DATABASE  *************/
 //**********************************************************************
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const newChapter = await req.body;
 
@@ -89,14 +92,14 @@ router.post("/", async (req, res) => {
       } catch (error) {
         res
           .status(500)
-          .json({ error: "error uploading the chapter_img to AWS" });
+          .json({ error: 'error uploading the chapter_img to AWS' });
       }
 
       // 3) we store the chapter image url in the database:
       //a) first get the name of the file
       const chapterImgName = await req.files.chapter_img.name;
-      
-      //b) then we encode the name i.e replace spaces etc with special characters to make it URL compatible 
+
+      //b) then we encode the name i.e replace spaces etc with special characters to make it URL compatible
       //so it can be appended to the s3 bucket link:
       const encodedChapterImgName = encodeURI(chapterImgName);
       //c) we append the encoded name to the s3 bucket link to get the location of the
@@ -110,7 +113,7 @@ router.post("/", async (req, res) => {
       try {
         uploadToS3(reunion_img, res);
       } catch (error) {
-        res.status(500).json({ error: "error uploading the image to AWS" });
+        res.status(500).json({ error: 'error uploading the image to AWS' });
       }
 
       // storing the reunion image url in the newChapter object:
@@ -124,7 +127,7 @@ router.post("/", async (req, res) => {
 
     res.status(201).json(chapter);
   } catch (error) {
-    res.status(500).json({ error: "Something went wrong, Please try again" });
+    res.status(500).json({ error: 'Something went wrong, Please try again' });
   }
 });
 
@@ -132,9 +135,9 @@ router.post("/", async (req, res) => {
 //********* ASSIGNING A PARTNER ORGANIZATION TO A CHAPTER   *************/
 //**********************************************************************
 
-router.post("/:id/partners", async (req, res) => {
+router.post('/:id/partners', async (req, res) => {
   try {
-    console.log("in the router");
+    console.log('in the router');
     console.log(req.body.partnerId);
     console.log(req.params.id);
 
@@ -147,7 +150,7 @@ router.post("/:id/partners", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning zee dang partner to the chapter" });
+      .json({ error: 'error assigning zee dang partner to the chapter' });
   }
 });
 
@@ -158,7 +161,7 @@ router.post("/:id/partners", async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const updatedChapter = await req.body;
 
@@ -168,7 +171,7 @@ router.put("/:id", async (req, res) => {
       try {
         uploadToS3(chapter_img, res);
       } catch (error) {
-        res.status(500).json({ error: "error uploading the image to AWS" });
+        res.status(500).json({ error: 'error uploading the image to AWS' });
       }
 
       // storing the chapter image url i database
@@ -183,7 +186,7 @@ router.put("/:id", async (req, res) => {
       try {
         uploadToS3(reunion_img, res);
       } catch (error) {
-        res.status(500).json({ error: "error uploading the image to AWS" });
+        res.status(500).json({ error: 'error uploading the image to AWS' });
       }
 
       // storing the reunion image url in the newChapter object:
@@ -200,7 +203,7 @@ router.put("/:id", async (req, res) => {
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error updating the chapter"
+      message: 'Error updating the chapter'
     });
   }
 });
@@ -212,7 +215,7 @@ router.put("/:id", async (req, res) => {
 //************************************************************
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
 
@@ -223,8 +226,8 @@ router.delete("/:id", async (req, res) => {
     numPartners = await chaptersPartnersDB.removeChapterPartner(chapterId);
   } catch {
     res.status(500).json({
-      "error message":
-        "There is a problem removing all chapter-partner relationships for this chapter"
+      'error message':
+        'There is a problem removing all chapter-partner relationships for this chapter'
     });
   }
 
@@ -237,7 +240,7 @@ router.delete("/:id", async (req, res) => {
     });
   } catch {
     res.status(500).json({
-      "error message": "There is a problem removing this partner"
+      'error message': 'There is a problem removing this partner'
     });
   }
 });
@@ -247,7 +250,7 @@ router.delete("/:id", async (req, res) => {
 //***************************************************************
 
 //
-router.delete("/:id/partners/:partnerid", async (req, res) => {
+router.delete('/:id/partners/:partnerid', async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
       req.params.partnerid,
@@ -258,7 +261,7 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error unassigning zee dang partner from the chapter" });
+      .json({ error: 'error unassigning zee dang partner from the chapter' });
   }
 });
 
