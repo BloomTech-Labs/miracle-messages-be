@@ -37,7 +37,7 @@
     "pg": "^7.12.1"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
+    "cross-env": "^6.0.3",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2"
