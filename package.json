@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/labs-14-miracle-messages/Back-End#readme",
   "dependencies": {
-    "aws-sdk": "^2.510.0",
+    "aws-sdk": "^2.562.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
