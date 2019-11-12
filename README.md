@@ -4,6 +4,11 @@
     1. "npm install OR yarn install"
 
  *MUST HAVE PostgreSQL installed and working
+ 
+ **If you dont have postgres follow this link:
+ https://www.codementor.io/engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb
+
+
 Create dev and test databases
 -  In terminal run the following commands:
     1. "psql" -- To get into postgreSQL utility
