@@ -23,7 +23,7 @@ module.exports = {
   development: {
     client: 'pg',
     useNullAsDefault: true,
-    connection:"postgres://localhost/miracle-be",
+    connection:"postgres://localhost/miracle_be",
 
 
     migrations: {
@@ -37,7 +37,7 @@ module.exports = {
 
   testing: {
     client: 'pg',
-    connection:"postgres://localhost/miracle-be-test",
+    connection:"postgres://localhost/miracle_be_test",
 
     useNullAsDefault: true,
 
@@ -45,7 +45,7 @@ module.exports = {
       directory: './database/testing/migrations'
     },
     seeds: {
-      directory: './database/testing/seeds'
+      directory: './database/development/seeds'
     }
   },
 
