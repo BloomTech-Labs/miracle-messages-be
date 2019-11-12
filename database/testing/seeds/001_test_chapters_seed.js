@@ -6,131 +6,70 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('chapters').insert([
         {
-          location: 'Dallas, TX',
-          numvolunteers: 26,
-          longitude: -97.040443,
-          latitude: 32.89748
-        },
-        {
-          location: 'Los Angeles, CA',
-          numvolunteers: 52,
-          longitude: -118.243683,
-          latitude: 34.052235
-        },
-        {
-          location: 'San Diego, CA',
-          numvolunteers: 22,
-          longitude: -117.161087,
-          latitude: 32.715736
-        },
-        {
-          location: 'Charlotte, NC',
-          numvolunteers: 13,
-          longitude: -80.843124,
-          latitude: 35.227085
-        },
-        {
-          location: 'Vancouver, BC',
-          numvolunteers: 38,
-          longitude: -123.116226,
-          latitude: 49.246292
-        },
-        {
-          location: 'Boston, MA',
-          numvolunteers: 6,
-          longitude: -71.057083,
-          latitude: 42.361145
-        },
-        {
-          location: 'St Louis, MO',
-          numvolunteers: 18,
-          longitude: -90.199402,
-          latitude: 38.627003
-        },
-        {
-          location: 'Calgary, AB',
-          numvolunteers: 15,
-          longitude: -114.062019,
-          latitude: 51.04427
-        },
-        {
-          location: 'New York, NY',
-          numvolunteers: 64,
-          longitude: -73.935242,
-          latitude: 40.73061
-        },
-        {
-          location: 'Memphis, TN',
-          numvolunteers: 3,
-          longitude: -89.971107,
-          latitude: 35.1175
-        },
-        {
-          location: 'Grand Rapids, MI',
-          numvolunteers: 11,
-          longitude: -85.670006,
-          latitude: 42.963795
-        },
-        {
-          location: 'Washington, DC',
-          numvolunteers: 21,
-          longitude: -77.009003,
-          latitude: 38.889931
-        },
-        {
-          location: 'Hampton Roads, VA',
-          numvolunteers: 15,
-          longitude: -76.380557,
-          latitude: 36.949074
-        },
-        {
-          location: 'London, UK',
-          numvolunteers: 85,
-          longitude: -0.118092,
-          latitude: 51.509865
-        },
-        {
-          location: 'Grants Pass, OR',
-          numvolunteers: 31,
-          longitude: -123.30439,
-          latitude: 42.436386
-        },
-        {
-          location: 'Ottawa, ON',
-          numvolunteers: 15,
-          longitude: -75.692482,
-          latitude: 45.425533
-        },
-        {
-          location: 'San Francisco, CA',
-          numvolunteers: 77,
+          city: 'San Francisco',
+          title: 'San Francisco',          
+          state: 'CA',
+          numvolunteers: 50,
+          numreunions: 150,
+          msg_recorded: 0,
+          msg_delivered: 0,
+          chapter_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/BrianBevCropped.jpg",
+          reunion_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/wayne%20jasmine.jpg",
+          established_date: 'December 2014',
+          description: "We host weekly volunteer sessions at DSCS! Learn more at miraclemessages.org/events",
+          story: "Wayne reunited with his beloved niece Jasmine and the rest of his family after years disconnected. Today, Wayne is off-the-streets thanks to his reunion!",
           longitude: -122.431297,
           latitude: 37.773972
         },
         {
-          location: 'Sydney, Australia',
-          numvolunteers: 22,
-          longitude: 151.2099,
-          latitude: -33.865143
+          city: 'Los Angeles',
+          title: 'Los Angeles',
+          state: 'CA',
+          numvolunteers: 30,
+          numreunions: 17,
+          msg_recorded: 0,
+          msg_delivered: 0,
+          chapter_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
+          reunion_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/Perry-and-Joe-Miracle-Messages-LA.jpg",
+          established_date: 'September 2017',
+          description: "This chapter operates in partnership with the University of Southern California. USC students visit sites on a weekly basis to offer Miracle Messages, then work with other Miracle Messages volunteers to solve their cases.",
+          story: "Jose Jr. was searching for his father Jose Sr. with the help of Miracle Messages. The father and son had not parted on good terms, but Jose Jr. felt as though enough time had passed and that he wanted to reconnect and get to know more of his family, specifically his brother and sister whom he has not met. A messenger searched for Jose Sr.'s on White Pages and Facebook but was unable to find any current information. After finding an inactive Facebook profile for Jose Sr., a messenger reached out to some of Jose Sr.'s Facebook friends with the same last name.  One of Jose Sr.'s sons relayed the message to Jose Sr., who then called our messenger. He spoke spanish, so with the help of a translator, Jose Jr. was able to deliver his message.  Jose Sr. wanted to reconnect, so after getting back in touch with Jose Jr. via a letter in the mail, a phone call was facilitated between the father and son. The two talked for a long while and decided to keep talking and see one another. Soon after Jose Sr. drove to San Diego from Tijuana to have lunch with Jose Jr. seen in the attached picture. Jose Jr. has reunited with his father after nearly 25 years of separation.",
+
+          longitude: -118.243683,
+          latitude: 34.052235
         },
         {
-          location: 'South Bay, CA',
-          numvolunteers: 26,
-          longitude: -118.3813,
-          latitude: 33.8798
+          city: 'Riverside',
+          title: 'Riverside',
+          state: 'CA',
+          numvolunteers: 3,
+          numreunions: 1,
+          msg_recorded: 0,
+          msg_delivered: 0,
+          chapter_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/kevin_riverside_chapter.jpg",
+          reunion_img_url: "",
+          established_date: 'February 2019',
+          description: "This chapter works with the City of Riverside, Mt. Rubidoux Church, and Path of life ministries. ",
+          story: "Paula was searching for her sister Shela when she found Miracle Messages. A messengers was able to find Shela’s contact information via Whitepages and contacted her on behalf of Paula. Shela was more than willing to reconnect with her sister. The two sisters have been reunited after months of separation.",
+          longitude: -80.141126,
+          latitude: 26.105631,
         },
         {
-          location: 'Ann Arbor, MI',
-          numvolunteers: 32,
-          longitude: -83.732124,
-          latitude: 42.279594
+          city: 'Fort Lauderdale',
+          title: 'South Florida',
+          state: 'FL',
+          numvolunteers: 1,
+          numreunions: 8,
+          msg_recorded: 0,
+          msg_delivered: 0,
+          chapter_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+          reunion_img_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+          established_date: 'July 2019',
+          description: "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
+          story: "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
+          longitude: -117.161087,
+          latitude: 32.715736
         },
-        {
-          location: 'Philadelphia, PA',
-          numvolunteers: 59,
-          longitude: -75.165222,
-          latitude: 39.952583
-        }
       ]);
     });
 };
