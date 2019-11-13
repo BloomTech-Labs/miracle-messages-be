@@ -5,7 +5,7 @@
 
  *MUST HAVE PostgreSQL installed and working
  
- **If you dont have postgres follow this link
+ **If you dont have postgres follow this link MACS ONLY
  (Follow directions until you're able to get into psql utility after the 1st command on step 3 "psql postgres"):
  https://www.codementor.io/engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb
 
@@ -13,8 +13,8 @@
 Create dev and test databases
 -  In terminal run the following commands:
     1. "psql" -- To get into postgreSQL utility
-    2. "CREATE DATABASE miracle-be;" -- Creates development server
-    3. "CREATE DATABASE miracle-be-test;" -- Creates testing server
+    2. "CREATE DATABASE miracle_be;" -- Creates development server
+    3. "CREATE DATABASE miracle_be_test;" -- Creates testing server
 
 - CD into your miracle-messages-be repo
     1. "npx knex migrate:latest --env development" -- Adds tables into postgres db
