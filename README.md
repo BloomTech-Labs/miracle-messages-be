@@ -6,7 +6,7 @@
  *MUST HAVE PostgreSQL installed and working
  
  **If you dont have postgres follow this link
- (Follow directions until you're able to get into psql utility):
+ (Follow directions until you're able to get into psql utility after the 1st command on step 3 "psql postgres"):
  https://www.codementor.io/engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb
 
 
