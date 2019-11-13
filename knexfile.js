@@ -23,13 +23,8 @@ module.exports = {
   development: {
     client: 'pg',
     useNullAsDefault: true,
-    connection: {
-      host: process.env.POSTGRESS_DEV_HOST,
-      port: process.env.POSTGRESS_DEV_PORT,
-      user: process.env.POSTGRESS_DEV_USER,
-      password: process.env.POSTGRESS_DEV_PASSWORD,
-      database: process.env.POSTGRESS_DEV_DATABASE
-    },
+    connection:"postgres://localhost/miracle_be",
+
 
     migrations: {
       directory: './database/development/migrations'
@@ -42,13 +37,7 @@ module.exports = {
 
   testing: {
     client: 'pg',
-    connection: {
-      host: process.env.POSTGRESS_TEST_HOST,
-      port: process.env.POSTGRESS_TEST_PORT,
-      user: process.env.POSTGRESS_TEST_USER,
-      password: process.env.POSTGRESS_TEST_PASSWORD,
-      database: process.env.POSTGRESS_TEST_DATABASE
-    },
+    connection:"postgres://localhost/miracle_be_test",
 
     useNullAsDefault: true,
 
@@ -56,7 +45,7 @@ module.exports = {
       directory: './database/testing/migrations'
     },
     seeds: {
-      directory: './database/testing/seeds'
+      directory: './database/development/seeds'
     }
   },
 
