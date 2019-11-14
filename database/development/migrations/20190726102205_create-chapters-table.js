@@ -11,11 +11,12 @@ exports.up = function(knex, Promise) {
     tbl.integer('numreunions').notNullable();
     tbl.integer('msg_recorded').notNullable();
     tbl.integer('msg_delivered').notNullable();
-    tbl.string('chapter_img_url',128).notNullable();
-    tbl.string('reunion_img_url',128).notNullable();
-    tbl.string('established_date',128).notNullable();
+    tbl.string('chapter_img_url').notNullable();
+    tbl.string('reunion_img_url').notNullable();
+    tbl.string('established_date').notNullable();
     tbl.text('description').notNullable();
     tbl.text('story').notNullable();
+    tbl.string('email').notNullable();
     
   });
 };
