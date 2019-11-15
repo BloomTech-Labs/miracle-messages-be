@@ -16,7 +16,19 @@ In terminal run the following commands:
 "CREATE DATABASE miracle-be-test;" -- Creates testing server
 CD into your miracle-messages-be repo
 
-"npx knex migrate:latest --env development" -- Adds tables into postgres db
+- FOLLOW THIS STEP BY STEP
+- Migrations/Seeds for Development Environment
+  1. "npx knex migrate:up" -- Adds table into postgres db
+  2. "npx knex seed:run --specific=001-chapters.js" -- Adds seed into table
+  3. "npx knex migrate:up"
+  4. "npx knex seed:run --specific=002-volunteers.js"
+  5. "npx knex migrate:up"
+  6. "npx knex seed:run --specific=003-interests.js"
+  7. "npx knex migrate:up"
+  8. "npx knex seed:run --specific=004-partners.js"
+  9. "npx knex migrate:up"
+  10. "npx knex seed:run --specific=005-chapters-partners.js"
+
 "npx knex migrate:latest --env testing" -- Adds tables into postgres db testing
 "npx knex seed:run --env development" -- Adds seeds info into db
 "npx knex seed:run --env testing" -- Adds seeds info into testing db

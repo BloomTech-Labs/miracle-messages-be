@@ -9,6 +9,7 @@ exports.up = function(knex, Promise) {
       .inTable('volunteers')
       .onDelete('CASCADE')
       .onUpdate('CASCADE');
+      
     tbl.boolean('volunteering').defaultTo(false);
     tbl.boolean('donating').defaultTo(false);
     tbl.boolean('joinmm').defaultTo(false);
