@@ -29,6 +29,18 @@ CD into your miracle-messages-be repo
   9. "npx knex migrate:up"
   10. "npx knex seed:run --specific=005-chapters-partners.js"
 
+  - Migrations/Seeds for Testing Environment
+  1. "npx knex migrate:up --env testing" -- Adds table into postgres db
+  2. "npx knex seed:run --specific=001-chapters.js --env testing" -- Adds seed into table
+  3. "npx knex migrate:up --env testing"
+  4. "npx knex seed:run --specific=002-volunteers.js --env testing"
+  5. "npx knex migrate:up --env testing"
+  6. "npx knex seed:run --specific=003-interests.js --env testing"
+  7. "npx knex migrate:up --env testing"
+  8. "npx knex seed:run --specific=004-partners.js --env testing"
+  9. "npx knex migrate:up --env testing"
+  10. "npx knex seed:run --specific=005-chapters-partners.js --env testing"
+
 "npx knex migrate:latest --env testing" -- Adds tables into postgres db testing
 "npx knex seed:run --env development" -- Adds seeds info into db
 "npx knex seed:run --env testing" -- Adds seeds info into testing db
