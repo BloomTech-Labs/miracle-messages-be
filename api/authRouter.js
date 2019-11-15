@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+// const Users = require("../models/users-model.js"); 
 const Volunteer = require("../models/volunteer-model.js"); 
 
 router.post('/register', (req, res) => {

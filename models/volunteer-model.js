@@ -1,12 +1,27 @@
 const db = require('../config/dbConfig.js');
 
+const updateVolunteer = (id, volunteer) => {
+  return db("volunteers")
+    .update(volunteer)
+    .where("id", id) //* returns count of updated
+    .then(volunteer => {
+      return findById(id);
+    });
+};
+
+const deleteVolunteer = id => {
+  return db("volunteers")
+    .where("id", id)
+    .del(); //* returns count of deleted
+};
+
 module.exports = {
   add,
   find,
   findBy,
   findById,
-  update,
-  deleteVolunteer
+  deleteVolunteer,
+  updateVolunteer,
 };
 
 function find() {
@@ -29,17 +44,3 @@ function findById(id) {
     .first();
 }
 
-const update = (id, volunteer) => {
-  return db("volunteers")
-    .update(volunteer)
-    .where("id", id) //* returns count of updated
-    .then(volunteer => {
-      return findById(id);
-    });
-};
-
-const deleteVolunteer = id => {
-  return db("volunteers")
-    .where("id", id)
-    .del(); //* returns count of deleted
-};
