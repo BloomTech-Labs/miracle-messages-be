@@ -17,6 +17,7 @@ const deleteVolunteer = id => {
 
 module.exports = {
   add,
+  addId,
   find,
   findBy,
   findById,
@@ -37,6 +38,13 @@ async function add(volunteer) {
 
   return findById(id);
 }
+
+function addId(filter) {
+  return db("volunteers")
+  .first()
+  .where(filter)
+}
+
 
 function findById(id) {
   return db('volunteers')

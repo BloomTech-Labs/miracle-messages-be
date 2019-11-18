@@ -17,28 +17,28 @@ router.post('/register', (req, res) => {
       });
   });
   
-  router.post('/login', (req, res) => {
-    let { username, password } = req.body;
-  
-    Volunteer.findBy({ username })
-      .first()
-      .then(user => {
-        if (user && bcrypt.compareSync(password, user.password)) {
-          const token = authenticate.genToken(user);
-          res.status(200).json({
-            message: `Welcome ${user.username}!`,
-            token
-          });
+  router.post("/login", (req, res) => {
+    const email = req.body
+    const password = req.body
+
+    if(!email && !password) {
+      res.status(401).json({error: "Wrong email or password"})
+    } else {
+      Volunteer.addId({ email })
+      .then(volunteer => {
+        if(volunteer && bcrypt.compareSync(password, volunteer.password)) {
+          const token = generateToken(volunteer)
+
+          res.status(200).json({message: `Welcome ${volunteer.email}!!`, token, id: volunteer.id})
         } else {
-          res.status(401).json({ message: 'Invalid credentials' });
+          res.status(400).json({ error: "Please provide credentials" })
         }
       })
-      .catch(err => {
-        res.status(500).json({
-          message: 'Error with login: '+err,
-          err: err
-        });
-      });
-  });
+      .catch(error => {
+        console.log(error)
+        res.status(500).json({error: "Internal Server Error"})
+      })
+    }
+  })
   
   module.exports = router;
