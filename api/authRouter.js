@@ -18,6 +18,7 @@ router.post('/register', (req, res) => {
       });
   });
 
+  
   router.post('/login', (req, res) => { // localhost:9000/api/auth/login 
     // implement login
     const { email } = req.body
