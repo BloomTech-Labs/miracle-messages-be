@@ -18,11 +18,12 @@ router.post('/register', (req, res) => {
       });
   });
 
-  
+
   router.post('/login', (req, res) => { // localhost:9000/api/auth/login 
     // implement login
     const { email } = req.body
     const { password } = req.body
+    // const { fname } = require.body
   
     if(!email && !password) {
         res.status(401).json({ error: "Wrong password or username" })
@@ -34,7 +35,7 @@ router.post('/register', (req, res) => {
             if(user && bcrypt.compareSync(password, user.password)) {
                 const token = generateToken(user)
                 
-                res.status(200).json({ message: `Welcome ${user.username}!!`, token, id: user.id })  
+                res.status(200).json({ message: `Welcome ${user.fname}!!`, token, id: user.id })  
             } else {
                 res.status(400).json({ error: "please provide credentials"})
             }
