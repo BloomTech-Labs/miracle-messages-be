@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"); 
-const secrets = require("../secrets.js"); 
+const secrets = require("../config/secrets.js"); 
 
 function generateToken(volunteer) {
     const payload = {
