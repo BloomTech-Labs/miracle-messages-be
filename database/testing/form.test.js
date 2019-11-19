@@ -4,6 +4,7 @@ const server = require("../../server");
 const db = require("../../config/dbConfig.js");
 const Volunteers = require("../../models/form-model.js");
 const Interests = require("../../models/form-model.js");
+const VolunteersTwo = require('../../models/volunteer-model.js')
 
 describe("GET /", () => {
   it("should return 200", async () => {
@@ -24,22 +25,22 @@ describe("volunteers model", () => {
 
   describe("POST /", () => {
     it("should insert volunteers into the db", async () => {
-      await Volunteers.addVolunteer({
-        id: 0,
+      await VolunteersTwo.add({
         fname: "John2",
         lname: "Smith",
         email: "jsmith@.com",
+        password: 'password',
         phone: "+14802658966",
         city: "Los Angeles",
         state: "CA",
         country: "United States",
         comment: "No comment"
       });
-      await Volunteers.addVolunteer({
-        id: 1,
+      await VolunteersTwo.add({
         fname: "John",
         lname: "Smith",
         email: "johnsmith@.com",
+        password: 'password',
         phone: "+14802658966",
         city: "Los Angeles",
         state: "CA",
