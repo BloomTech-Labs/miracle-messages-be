@@ -4,7 +4,7 @@ const server = require("../../server");
 const db = require("../../config/dbConfig.js");
 const Volunteers = require("../../models/form-model.js");
 const Interests = require("../../models/form-model.js");
-const VolunteersTwo = require('../../models/volunteer-model.js')
+const VolunteersTwo = require("../../models/volunteer-model.js");
 
 describe("GET /", () => {
   it("should return 200", async () => {
@@ -19,17 +19,21 @@ describe("GET /", () => {
 });
 
 describe("volunteers model", () => {
-  beforeEach(async () => {
-    await db("volunteers").del();
-  });
+  // beforeEach(async () => {
+  //   await db("volunteers").delete();
+  // });
 
   describe("POST /", () => {
+    beforeEach(async () => {
+      await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
+    });
+
     it("should insert volunteers into the db", async () => {
       await VolunteersTwo.add({
         fname: "John2",
         lname: "Smith",
         email: "jsmith@.com",
-        password: 'password',
+        password: "password",
         phone: "+14802658966",
         city: "Los Angeles",
         state: "CA",
@@ -40,7 +44,7 @@ describe("volunteers model", () => {
         fname: "John",
         lname: "Smith",
         email: "johnsmith@.com",
-        password: 'password',
+        password: "password",
         phone: "+14802658966",
         city: "Los Angeles",
         state: "CA",
@@ -64,9 +68,10 @@ describe("volunteers model", () => {
 
 describe("UPDATE /", () => {
   it("should update a volunteer in the db", async () => {
-    await Volunteers.updateVolunteer(0, {
+    await VolunteersTwo.updateVolunteer(1, {
       fname: "Richard",
       lname: "Lovelace",
+      password: "password",
       email: "greyflanel@.com",
       phone: "+14802658966",
       city: "San Antonio",
@@ -74,9 +79,10 @@ describe("UPDATE /", () => {
       country: "United States",
       comment: "I got a comment"
     });
-    await Volunteers.updateVolunteer(1, {
+    await VolunteersTwo.updateVolunteer(2, {
       fname: "Ron",
       lname: "Smith",
+      password: "password",
       email: "1067703@.com",
       phone: "+14802658966",
       city: "Norfolk",
@@ -84,8 +90,9 @@ describe("UPDATE /", () => {
       country: "United States",
       comment: "Wasn't me"
     });
-    
+
     const volunteers = await db("volunteers");
+    console.log(volunteers);
 
     expect(volunteers).toHaveLength(2);
     expect(volunteers[0].fname).toEqual("Richard");
@@ -140,7 +147,7 @@ describe("UPDATE /", () => {
       joinmm: true,
       mediacoverage: true,
       somethingelse: "What's the frequency Kenneth?"
-    })
+    });
 
     await Interests.addInterests(1, {
       volunteersid: 1,
@@ -161,15 +168,15 @@ describe("UPDATE /", () => {
     expect(interests[1].mediacoverage).toBe(true);
     expect(interests[1].somethingelse).not.toContain("World");
     expect(interests[1].joinmm).toBe(true);
-  })
-})
+  });
+});
 
 describe("DELETE /", () => {
   it("should delete a volunteer in the db", async () => {
-    await Volunteers.deleteVolunteer(1)
- 
-  const volunteers = await db("volunteers");
+    await Volunteers.deleteVolunteer(1);
+
+    const volunteers = await db("volunteers");
 
     expect(volunteers).toHaveLength(1);
-   })
+  });
 });
