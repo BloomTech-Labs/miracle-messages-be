@@ -30,6 +30,7 @@ CD into your miracle-messages-be repo
   8. "npx knex seed:run --specific=004-partners.js"
   9. "npx knex migrate:up"
   10. "npx knex seed:run --specific=005-chapters-partners.js"
+  11. "npx knex migrate:up"
 
 - Migrations/Seeds for Testing Environment
 
@@ -43,6 +44,9 @@ CD into your miracle-messages-be repo
   8. "npx knex seed:run --specific=004-partners.js --env testing"
   9. "npx knex migrate:up --env testing"
   10. "npx knex seed:run --specific=005-chapters-partners.js --env testing"
+
+  11. "npx knex migrate:up"
+
 
 * Windows setup after postrges installation
   !!!MUST HAVE PostgreSQL installed and working!!!
@@ -97,3 +101,4 @@ CD into your miracle-messages-be repo
 4.  Once this is all set up, in terminal you should be able to run knex commands to migrate
     To migrate to the dev database "npx knex migrate:latest"
     To migrate to the test database "npx knex migrate:latest --env testing"
+

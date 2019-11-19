@@ -2,12 +2,12 @@ const request = require("supertest");
 const server = require("../../server");
 
 const db = require("../../config/dbConfig.js");
-const Volunteers = require("../../models/form-model.js");
-const Interests = require("../../models/form-model.js");
+const VolunteersTwo = require("../../models/volunteer-model.js");
+const InterestsTwo = require("../../models/volunteer-model.js");
 
 describe("GET /", () => {
   it("should return 200", async () => {
-    const res = await request(server).get("/api/form");
+    const res = await request(server).get("/api/form/");
     expect(res.status).toBe(200);
   });
 
@@ -18,28 +18,28 @@ describe("GET /", () => {
 });
 
 describe("volunteers model", () => {
-  beforeEach(async () => {
-    await db("volunteers").del();
-  });
+  describe("POST Volunteer /", () => {
+    beforeEach(async () => {
+      await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
+    });
 
-  describe("POST /", () => {
     it("should insert volunteers into the db", async () => {
-      await Volunteers.addVolunteer({
-        id: 0,
+      await VolunteersTwo.add({
         fname: "John2",
         lname: "Smith",
         email: "jsmith@.com",
+        password: "password",
         phone: "+14802658966",
         city: "Los Angeles",
         state: "CA",
         country: "United States",
         comment: "No comment"
       });
-      await Volunteers.addVolunteer({
-        id: 1,
+      await VolunteersTwo.add({
         fname: "John",
         lname: "Smith",
         email: "johnsmith@.com",
+        password: "password",
         phone: "+14802658966",
         city: "Los Angeles",
         state: "CA",
@@ -61,11 +61,12 @@ describe("volunteers model", () => {
   });
 });
 
-describe("UPDATE /", () => {
+describe("UPDATE Volunteer /", () => {
   it("should update a volunteer in the db", async () => {
-    await Volunteers.updateVolunteer(0, {
+    await VolunteersTwo.updateVolunteer(1, {
       fname: "Richard",
       lname: "Lovelace",
+      password: "password",
       email: "greyflanel@.com",
       phone: "+14802658966",
       city: "San Antonio",
@@ -73,9 +74,10 @@ describe("UPDATE /", () => {
       country: "United States",
       comment: "I got a comment"
     });
-    await Volunteers.updateVolunteer(1, {
+    await VolunteersTwo.updateVolunteer(2, {
       fname: "Ron",
       lname: "Smith",
+      password: "password",
       email: "1067703@.com",
       phone: "+14802658966",
       city: "Norfolk",
@@ -83,8 +85,9 @@ describe("UPDATE /", () => {
       country: "United States",
       comment: "Wasn't me"
     });
-    
+
     const volunteers = await db("volunteers");
+    console.log(volunteers);
 
     expect(volunteers).toHaveLength(2);
     expect(volunteers[0].fname).toEqual("Richard");
@@ -97,10 +100,10 @@ describe("UPDATE /", () => {
   });
 });
 
-describe("POST /", () => {
+describe("POST Interests /", () => {
   it("should insert interests into the db", async () => {
-    await Interests.addInterests({
-      volunteersid: 0,
+    await InterestsTwo.addInterests({
+      volunteersid: 1,
       volunteering: true,
       donating: true,
       joinmm: false,
@@ -108,8 +111,8 @@ describe("POST /", () => {
       somethingelse: "Hello"
     });
 
-    await Interests.addInterests({
-      volunteersid: 1,
+    await InterestsTwo.addInterests({
+      volunteersid: 2,
       volunteering: true,
       donating: true,
       joinmm: false,
@@ -130,19 +133,19 @@ describe("POST /", () => {
   });
 });
 
-describe("UPDATE /", () => {
+describe("UPDATE Interest /", () => {
   it("should update an interest in the db", async () => {
-    await Interests.updateInterest(0, {
-      volunteersid: 0,
+    await InterestsTwo.updateInterest(1, {
+      volunteersid: 1,
       volunteering: false,
       donating: false,
       joinmm: true,
       mediacoverage: true,
       somethingelse: "What's the frequency Kenneth?"
-    })
+    });
 
-    await Interests.addInterests(1, {
-      volunteersid: 1,
+    await InterestsTwo.addInterests(2, {
+      volunteersid: 2,
       volunteering: false,
       donating: false,
       joinmm: false,
@@ -160,15 +163,15 @@ describe("UPDATE /", () => {
     expect(interests[1].mediacoverage).toBe(true);
     expect(interests[1].somethingelse).not.toContain("World");
     expect(interests[1].joinmm).toBe(true);
-  })
-})
+  });
+});
 
-describe("DELETE /", () => {
+describe("DELETE Volunteer /", () => {
   it("should delete a volunteer in the db", async () => {
-    await Volunteers.deleteVolunteer(1)
- 
-  const volunteers = await db("volunteers");
+    await VolunteersTwo.deleteVolunteer(1);
+
+    const volunteers = await db("volunteers");
 
     expect(volunteers).toHaveLength(1);
-   })
+  });
 });

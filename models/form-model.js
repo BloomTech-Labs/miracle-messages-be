@@ -1,4 +1,4 @@
-const db = require('../config/dbConfig.js');
+const db = require("../config/dbConfig.js");
 
 module.exports = {
   find,
@@ -13,12 +13,16 @@ module.exports = {
 
 /////////// Get queries //////////////////
 
-function find(query) {
-  let { page = 1, limit = 10, sortby = 'id', sortdit = 'asc' } = query;
+function find() {
+  return db("volunteers").select("id", "username", "password");
+}
+
+function findDetailed(query) {
+  let { page = 1, limit = 10, sortby = "id", sortdit = "asc" } = query;
   const offset = limit * (page - 1);
 
-  const list = db('volunteers')
-    .innerJoin('interests', 'volunteers.id', 'interests.volunteersid')
+  const list = db("volunteers")
+    .innerJoin("interests", "volunteers.id", "interests.volunteersid")
     .orderBy(sortby, sortdit)
     .limit(limit)
     .offset(offset);
@@ -27,35 +31,32 @@ function find(query) {
 }
 
 function findBy(filter) {
-  return db('volunteers')
-    .innerJoin('interests', 'volunteers.id', 'interests.volunteersid')
-    .where(filter );
+  return db("volunteers")
+    .innerJoin("interests", "volunteers.id", "interests.volunteersid")
+    .where(filter);
 }
 
 ////// insert //////////
 
 async function addInterests(interests) {
-  const interestid = await db('interests').insert(interests);
+  const interestid = await db("interests").insert(interests);
   return interestid;
 }
 
-
-
-
 function addVolunteer(volunteer) {
-  return db('volunteers').insert(volunteer, 'id');
+  return db("volunteers").insert(volunteer, "id");
 }
 
 /////delete////////////
 
 function deleteVolunteer(id) {
-  return db('volunteers')
+  return db("volunteers")
     .where({ id })
     .del();
 }
 
 function deleteInterests(volunteerId) {
-  return db('interests')
+  return db("interests")
     .where({ volunteersid: volunteerId })
     .del();
 }
@@ -63,15 +64,15 @@ function deleteInterests(volunteerId) {
 ///////////update///////////////
 
 async function updateVolunteer(id, change) {
-  await db('volunteers')
+  await db("volunteers")
     .where({ id })
-    .update(change, '*');
+    .update(change, "*");
 
-  return findBy({id});
+  return findBy({ id });
 }
 
 function updateInterest(volunteerId, change) {
-  return db('interests')
+  return db("interests")
     .where({ volunteersid: volunteerId })
-    .update(change, '*');
+    .update(change, "*");
 }
