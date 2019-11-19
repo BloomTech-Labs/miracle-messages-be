@@ -2,9 +2,8 @@ const request = require("supertest");
 const server = require("../../server");
 
 const db = require("../../config/dbConfig.js");
-const Volunteers = require("../../models/form-model.js");
-const Interests = require("../../models/form-model.js");
 const VolunteersTwo = require("../../models/volunteer-model.js");
+const InterestsTwo = require("../../models/volunteer-model.js");
 
 describe("GET /", () => {
   it("should return 200", async () => {
@@ -19,11 +18,7 @@ describe("GET /", () => {
 });
 
 describe("volunteers model", () => {
-  // beforeEach(async () => {
-  //   await db("volunteers").delete();
-  // });
-
-  describe("POST /", () => {
+  describe("POST Volunteer /", () => {
     beforeEach(async () => {
       await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
     });
@@ -66,7 +61,7 @@ describe("volunteers model", () => {
   });
 });
 
-describe("UPDATE /", () => {
+describe("UPDATE Volunteer /", () => {
   it("should update a volunteer in the db", async () => {
     await VolunteersTwo.updateVolunteer(1, {
       fname: "Richard",
@@ -105,10 +100,10 @@ describe("UPDATE /", () => {
   });
 });
 
-describe("POST /", () => {
+describe("POST Interests /", () => {
   it("should insert interests into the db", async () => {
-    await Interests.addInterests({
-      volunteersid: 0,
+    await InterestsTwo.addInterests({
+      volunteersid: 1,
       volunteering: true,
       donating: true,
       joinmm: false,
@@ -116,8 +111,8 @@ describe("POST /", () => {
       somethingelse: "Hello"
     });
 
-    await Interests.addInterests({
-      volunteersid: 1,
+    await InterestsTwo.addInterests({
+      volunteersid: 2,
       volunteering: true,
       donating: true,
       joinmm: false,
@@ -138,10 +133,10 @@ describe("POST /", () => {
   });
 });
 
-describe("UPDATE /", () => {
+describe("UPDATE Interest /", () => {
   it("should update an interest in the db", async () => {
-    await Interests.updateInterest(0, {
-      volunteersid: 0,
+    await InterestsTwo.updateInterest(1, {
+      volunteersid: 1,
       volunteering: false,
       donating: false,
       joinmm: true,
@@ -149,8 +144,8 @@ describe("UPDATE /", () => {
       somethingelse: "What's the frequency Kenneth?"
     });
 
-    await Interests.addInterests(1, {
-      volunteersid: 1,
+    await InterestsTwo.addInterests(2, {
+      volunteersid: 2,
       volunteering: false,
       donating: false,
       joinmm: false,
@@ -171,9 +166,9 @@ describe("UPDATE /", () => {
   });
 });
 
-describe("DELETE /", () => {
+describe("DELETE Volunteer /", () => {
   it("should delete a volunteer in the db", async () => {
-    await Volunteers.deleteVolunteer(1);
+    await VolunteersTwo.deleteVolunteer(1);
 
     const volunteers = await db("volunteers");
 

@@ -1,5 +1,38 @@
 const db = require("../config/dbConfig.js");
 
+/////////// Get queries //////////////////
+
+function find() {
+  return db("volunteers").select("id", "username", "password");
+}
+
+function findBy(filter) {
+  return db("volunteers")
+    .innerJoin("interests", "volunteers.id", "interests.volunteersid")
+    .where(filter);
+}
+
+function findById(id) {
+  return db("volunteers")
+    .where({ id })
+    .first();
+}
+
+function findDetailed(query) {
+  let { page = 1, limit = 10, sortby = "id", sortdit = "asc" } = query;
+  const offset = limit * (page - 1);
+
+  const list = db("volunteers")
+    .innerJoin("interests", "volunteers.id", "interests.volunteersid")
+    .orderBy(sortby, sortdit)
+    .limit(limit)
+    .offset(offset);
+
+  return list;
+}
+
+///////////update///////////////
+
 function updateVolunteer(id, volunteer) {
   return db("volunteers")
     .update(volunteer)
@@ -9,19 +42,27 @@ function updateVolunteer(id, volunteer) {
     });
 }
 
+function updateInterest(volunteerId, change) {
+  return db("interests")
+    .where({ volunteersid: volunteerId })
+    .update(change, "*");
+}
+
+/////delete////////////
+
 function deleteVolunteer(id) {
   return db("volunteers")
-    .where("id", id)
-    .del(); //* returns count of deleted
+    .where({ id })
+    .del();
 }
 
-function find() {
-  return db("volunteers").select("id", "username", "password");
+function deleteInterests(volunteerId) {
+  return db("interests")
+    .where({ volunteersid: volunteerId })
+    .del();
 }
 
-function findBy(filter) {
-  return db("volunteers").where(filter);
-}
+////// insert //////////
 
 async function add(volunteer) {
   const [id] = await db("volunteers").insert(
@@ -41,16 +82,15 @@ async function add(volunteer) {
   return findById(id);
 }
 
+async function addInterests(interests) {
+  const interestid = await db("interests").insert(interests);
+  return interestid;
+}
+
 function addId(filter) {
   return db("volunteers")
     .first()
     .where(filter);
-}
-
-function findById(id) {
-  return db("volunteers")
-    .where({ id })
-    .first();
 }
 
 module.exports = {
@@ -60,5 +100,9 @@ module.exports = {
   findBy,
   findById,
   deleteVolunteer,
-  updateVolunteer
+  updateVolunteer,
+  updateInterest,
+  addInterests,
+  findDetailed,
+  deleteInterests
 };
