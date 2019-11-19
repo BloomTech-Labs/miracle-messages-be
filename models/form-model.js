@@ -13,6 +13,10 @@ module.exports = {
 
 /////////// Get queries //////////////////
 
+function find() {
+  return db("volunteers").select("id", "username", "password");
+}
+
 function findDetailed(query) {
   let { page = 1, limit = 10, sortby = "id", sortdit = "asc" } = query;
   const offset = limit * (page - 1);
