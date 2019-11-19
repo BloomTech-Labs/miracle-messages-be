@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const formDB = require("../models/form-model.js");
+const volunteerDB = require("../models/volunteer-model.js");
 
 //path: api/form
 //**************************************************
@@ -10,16 +11,27 @@ const formDB = require("../models/form-model.js");
 // FUNCTIONALITY NEEDS TO BE VERIFIED
 //**************************************************
 ////////Fetching all volunteers//////"co"
-router.get("/", (req, res) => {
-  formDB
-    .find(req.query)
-    .then(volunteers => {
-      res.status(200).json(volunteers);
-    })
-    .catch(error => {
-      // console.log(error);
-      res.status(500).json({ error: "Error retrieving the volunteers data" });
-    });
+// router.get("/", (req, res) => {
+//   volunteerDB
+//     .find()
+//     .then(volunteers => {
+//       res.status(200).json(volunteers);
+//     })
+//     .catch(error => {
+//       // console.log(error);
+//       res.status(500).json({ error: "Error retrieving the volunteers data" });
+//     });
+// });
+
+router.get("/", async (req, res) => {
+  try {
+    const volunteers = await volunteerDB.find();
+    res.status(200).json(volunteers);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "We ran into an error retrieving the volunteers" });
+  }
 });
 
 ///////////Fetching a volunteer by custom search/////////////

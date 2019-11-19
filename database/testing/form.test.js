@@ -7,7 +7,7 @@ const InterestsTwo = require("../../models/volunteer-model.js");
 
 describe("GET /", () => {
   it("should return 200", async () => {
-    const res = await request(server).get("/api/form");
+    const res = await request(server).get("/api/form/");
     expect(res.status).toBe(200);
   });
 

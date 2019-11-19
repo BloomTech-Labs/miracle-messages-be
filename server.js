@@ -13,8 +13,8 @@ const userRouter = require("./api/usersRouter");
 const partnerRouter = require("./api/partnerRouter");
 const uploadRouter = require("./api/uploadRouter");
 
-// importing auth routers below 
-const authRouter = require("./api/authRouter.js"); 
+// importing auth routers below
+const authRouter = require("./api/authRouter.js");
 // importing auth routers above
 
 server.use(helmet());
@@ -28,8 +28,8 @@ server.get("/", (req, res) => {
   res.status(200).json({ hello: "World!" });
 });
 
-// using auth router below 
-server.use("/api/volunteer", authRouter)
+// using auth router below
+server.use("/api/volunteer", authRouter);
 // using auth router above
 
 server.use("/api/upload", uploadRouter);

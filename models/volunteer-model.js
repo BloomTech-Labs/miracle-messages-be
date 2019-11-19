@@ -1,9 +1,8 @@
 const db = require("../config/dbConfig.js");
 
 /////////// Get queries //////////////////
-
 function find() {
-  return db("volunteers").select("id", "username", "password");
+  return db("volunteers").select("id", "email", "password");
 }
 
 function findBy(filter) {
