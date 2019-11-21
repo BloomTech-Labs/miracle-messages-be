@@ -4,11 +4,11 @@ const router = express.Router();
 const Volunteer = require("../models/volunteer-model.js"); 
 
 // To find the req.body of id and email to make sure that the email exists in the database 
-router.get("/email", (req, res) => {
-    // const { id } = req.body;
+router.get("/volunteerData", (req, res) => {
+    // const  id  = req.params;
     const email  = req.body;
 
-    Volunteer.findBy({email})
+    Volunteer.findBy(email)
     .then(mail => {
         if(email) {
             res.status(200).json(mail)
