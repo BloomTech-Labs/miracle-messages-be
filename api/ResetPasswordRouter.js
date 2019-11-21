@@ -27,3 +27,5 @@ router.get("/email", (req, res) => {
 router.put("/", (req, res) => {
 
 })
+
+module.exports = router; 
