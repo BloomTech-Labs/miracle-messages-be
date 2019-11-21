@@ -1,7 +1,10 @@
 const express = require("express")
 const router = express.Router(); 
+const bcrypt = require('bcryptjs');
 
 const Volunteer = require("../models/volunteer-model.js"); 
+
+const generateToken = require("../middleware/Token.js"); 
 
 // To find the req.body of id and email to make sure that the email exists in the database 
 router.get("/volunteerdata", (req, res) => {
@@ -23,12 +26,13 @@ router.get("/volunteerdata", (req, res) => {
 
 
 // To replace volunteers old password with new one 
-router.put("/updatepassword", (req, res) => {
+router.put("/updatepassword/:id", (req, res) => {
     const password =  req.body; 
+    const  id  = req.params; 
 
-    Volunteer.updateVolunteer(password)
+    Volunteer.updateVolunteer( id,password)
     .then(response => {
-        if(password) {
+        if(password && id) {
             res.status(200).json(response)
         } else {
             res.status(204).json(response)

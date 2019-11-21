@@ -37,7 +37,7 @@ server.use("/api/volunteer", authRouter);
 // using auth router above
 
 // using resetPassword router below 
-server.use("/api/resetpassword", resetPasswordRouter);
+server.use("/api/account", resetPasswordRouter);
 // using resetPassword router above
 
 server.use("/api/upload", uploadRouter);
