@@ -22,7 +22,7 @@ module.exports = {
   findBy,
   findById,
   deleteVolunteer,
-  updateVolunteer,
+  updateVolunteer
 };
 
 function find() {
