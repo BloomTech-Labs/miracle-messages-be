@@ -4,10 +4,9 @@ const bcrypt = require('bcryptjs');
 
 const Volunteer = require("../models/volunteer-model.js"); 
 
-const generateToken = require("../middleware/Token.js"); 
-
 // To find the req.body of id and email to make sure that the email exists in the database 
-router.get("/volunteerdata", (req, res) => {
+// This works 
+router.get("/getvolrunteer", (req, res) => {
     const email  = req.body;
 
     Volunteer.findBy(email)
@@ -26,21 +25,20 @@ router.get("/volunteerdata", (req, res) => {
 
 
 // To replace volunteers old password with new one 
-router.put("/updatepassword/:id", (req, res) => {
-    const password =  req.body; 
-    const  id  = req.params; 
-
-    Volunteer.updateVolunteer( id,password)
-    .then(response => {
-        if(password && id) {
-            res.status(200).json(response)
-        } else {
-            res.status(204).json(response)
-        }
-    })
-    .catch(error => {
-        res.status(500).json(error)
+router.put("/update/:id", (req, res) => {
+    const { id } = req.params;
+    const body  = req.body;
+    
+        Volunteer.updateVolunteer(id, body)
+        .then(mail => {
+            res.status(200).json(mail)
+        })
+        .catch(error => {
+            res.status(500).json({message: "Internal Server Error", error})
     })
 })
+
+        
+            
 
 module.exports = router; 

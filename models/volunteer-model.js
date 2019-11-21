@@ -22,7 +22,7 @@ module.exports = {
   findBy,
   findById,
   deleteVolunteer,
-  updateVolunteer
+  updateVolunteer,
 };
 
 function find() {
@@ -53,4 +53,11 @@ function findById(id) {
     .where({ id })
     .first();
 }
+
+// function update(id, change) {
+//   return db("foods")
+//   .where({ id })
+//   .first()
+//   .update(change)
+// }
 
