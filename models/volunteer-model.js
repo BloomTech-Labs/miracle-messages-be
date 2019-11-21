@@ -30,7 +30,9 @@ function find() {
 }
 
 function findBy(filter) {
-  return db('volunteers').where(filter);
+  return db('volunteers')
+  .select("id", "email")
+  .where(filter);
 }
 
 async function add(volunteer) {
