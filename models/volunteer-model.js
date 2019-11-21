@@ -65,17 +65,9 @@ function deleteInterests(volunteerId) {
 
 async function add(volunteer) {
   const [id] = await db("volunteers").insert(
+    //Abstracting out the id from inserted volunteer
     volunteer,
-    "id",
-    "fname",
-    "lname",
-    "email",
-    "password",
-    "phone",
-    "city",
-    "state",
-    "country",
-    "comment"
+    "id" //This returns the id instead of default
   );
 
   return findById(id);
