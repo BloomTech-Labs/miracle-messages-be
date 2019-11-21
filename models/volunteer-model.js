@@ -59,7 +59,6 @@ function deleteInterests(volunteerId) {
   return db("interests")
     .where({ volunteersid: volunteerId })
     .del();
-}
 
 ////// insert //////////
 
