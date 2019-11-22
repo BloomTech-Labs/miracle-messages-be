@@ -99,6 +99,6 @@ module.exports = {
   // updateInterest,
   // addInterests,
   findDetailed,
-  deleteInterests,
+  // deleteInterests,
   findEmail
 };
