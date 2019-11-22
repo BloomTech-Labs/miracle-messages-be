@@ -18,7 +18,7 @@ const authRouter = require("./api/authRouter.js");
 // importing auth routers above
 
 // import resetPassword router below 
-const resetPasswordRouter = require("./api/resetPasswordRouter.js"); 
+const resetPasswordRouter = require("./api/ResetPasswordRouter.js"); 
 // import resetPassword above
 
 server.use(helmet());

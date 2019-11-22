@@ -11,6 +11,10 @@ function findBy(filter) {
     .where(filter);
 }
 
+function findEmail() {
+  return db("volunteers").select("id", "email")
+}
+
 function findById(id) {
   return db("volunteers")
     .where({ id })
@@ -60,6 +64,8 @@ function deleteInterests(volunteerId) {
     .where({ volunteersid: volunteerId })
     .del();
 
+}
+
 ////// insert //////////
 
 async function add(volunteer) {
@@ -94,5 +100,6 @@ module.exports = {
   updateInterest,
   addInterests,
   findDetailed,
-  deleteInterests
-};
+  deleteInterests, 
+  findEmail
+}; 
