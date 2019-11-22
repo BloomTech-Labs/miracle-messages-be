@@ -2,7 +2,7 @@ const db = require("../config/dbConfig.js");
 
 /////////// Get queries //////////////////
 function find() {
-  return db("volunteers").select("id", "email", "password");
+  return db("volunteers").select("*");
 }
 
 function findBy(filter) {
@@ -10,6 +10,7 @@ function findBy(filter) {
     .innerJoin("interests", "volunteers.id", "interests.volunteersid")
     .where(filter);
 }
+
 
 function findEmail() {
   return db("volunteers").select("id", "email")
@@ -45,11 +46,11 @@ function updateVolunteer(id, volunteer) {
     });
 }
 
-function updateInterest(volunteerId, change) {
-  return db("interests")
-    .where({ volunteersid: volunteerId })
-    .update(change, "*");
-}
+// function updateInterest(volunteerId, change) {
+//   return db("interests")
+//     .where({ volunteersid: volunteerId })
+//     .update(change, "*");
+// }
 
 /////delete////////////
 
@@ -59,10 +60,10 @@ function deleteVolunteer(id) {
     .del();
 }
 
-function deleteInterests(volunteerId) {
-  return db("interests")
-    .where({ volunteersid: volunteerId })
-    .del();
+// function deleteInterests(volunteerId) {
+//   return db("interests")
+//     .where({ volunteersid: volunteerId })
+//     .del();
 
 }
 
@@ -78,10 +79,10 @@ async function add(volunteer) {
   return findById(id);
 }
 
-async function addInterests(interests) {
-  const interestid = await db("interests").insert(interests);
-  return interestid;
-}
+// async function addInterests(interests) {
+//   const interestid = await db("interests").insert(interests);
+//   return interestid;
+// }
 
 function addId(filter) {
   return db("volunteers")
@@ -97,9 +98,10 @@ module.exports = {
   findById,
   deleteVolunteer,
   updateVolunteer,
-  updateInterest,
-  addInterests,
+  // updateInterest,
+  // addInterests,
   findDetailed,
   deleteInterests, 
   findEmail
 }; 
+
