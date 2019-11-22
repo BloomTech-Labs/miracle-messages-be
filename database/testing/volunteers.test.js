@@ -3,7 +3,6 @@ const server = require("../../server");
 
 const db = require("../../config/dbConfig.js");
 const VolunteersTwo = require("../../models/volunteer-model.js");
-const InterestsTwo = require("../../models/volunteer-model.js");
 
 describe("GET /", () => {
   it("should return 200", async () => {
@@ -33,7 +32,12 @@ describe("volunteers model", () => {
         city: "Los Angeles",
         state: "CA",
         country: "United States",
-        comment: "No comment"
+        comment: "No comment",
+        volunteering: true,
+        donating: true,
+        joinmm: false,
+        mediacoverage: false,
+        somethingelse: "Hello"
       });
       await VolunteersTwo.add({
         fname: "John",
@@ -44,7 +48,12 @@ describe("volunteers model", () => {
         city: "Los Angeles",
         state: "CA",
         country: "United States",
-        comment: "No comment"
+        comment: "No comment",
+        volunteering: true,
+        donating: true,
+        joinmm: false,
+        mediacoverage: true,
+        somethingelse: "World"
       });
 
       const volunteers = await db("volunteers");
@@ -57,6 +66,13 @@ describe("volunteers model", () => {
       expect(volunteers[1].phone).toContain("0");
       expect(volunteers[1].state).toBe("CA");
       expect(volunteers[1].country).not.toBe("Canada");
+      expect(volunteers[0].donating).toBe(true);
+      expect(volunteers[0].somethingelse).toContain("Hello");
+      expect(volunteers[0].mediacoverage).toBe(false);
+      expect(volunteers[0].volunteering).not.toBe(false);
+      expect(volunteers[1].mediacoverage).toBe(true);
+      expect(volunteers[1].somethingelse).toContain("World");
+      expect(volunteers[1].joinmm).toBe(false);
     });
   });
 });
@@ -72,7 +88,12 @@ describe("UPDATE Volunteer /", () => {
       city: "San Antonio",
       state: "TX",
       country: "United States",
-      comment: "I got a comment"
+      comment: "I got a comment",
+      volunteering: true,
+      donating: false,
+      joinmm: true,
+      mediacoverage: true,
+      somethingelse: "What's the frequency Kenneth?"
     });
     await VolunteersTwo.updateVolunteer(2, {
       fname: "Ron",
@@ -83,7 +104,12 @@ describe("UPDATE Volunteer /", () => {
       city: "Norfolk",
       state: "VA",
       country: "United States",
-      comment: "Wasn't me"
+      comment: "Wasn't me",
+      volunteering: false,
+      donating: false,
+      joinmm: false,
+      mediacoverage: true,
+      somethingelse: "Not again!!!!!"
     });
 
     const volunteers = await db("volunteers");
@@ -97,72 +123,11 @@ describe("UPDATE Volunteer /", () => {
     expect(volunteers[1].phone).not.toContain("7");
     expect(volunteers[1].state).toBe("VA");
     expect(volunteers[0].lname).not.toBe("Jones");
-  });
-});
-
-describe("POST Interests /", () => {
-  it("should insert interests into the db", async () => {
-    await InterestsTwo.addInterests({
-      volunteersid: 1,
-      volunteering: true,
-      donating: true,
-      joinmm: false,
-      mediacoverage: false,
-      somethingelse: "Hello"
-    });
-
-    await InterestsTwo.addInterests({
-      volunteersid: 2,
-      volunteering: true,
-      donating: true,
-      joinmm: false,
-      mediacoverage: true,
-      somethingelse: "World"
-    });
-
-    const interests = await db("interests");
-
-    expect(interests).toHaveLength(2);
-    expect(interests[0].donating).toBe(true);
-    expect(interests[0].somethingelse).toContain("Hello");
-    expect(interests[0].mediacoverage).toBe(false);
-    expect(interests[0].volunteering).not.toBe(false);
-    expect(interests[1].mediacoverage).toBe(true);
-    expect(interests[1].somethingelse).toContain("World");
-    expect(interests[1].joinmm).toBe(false);
-  });
-});
-
-describe("UPDATE Interest /", () => {
-  it("should update an interest in the db", async () => {
-    await InterestsTwo.updateInterest(1, {
-      volunteersid: 1,
-      volunteering: false,
-      donating: false,
-      joinmm: true,
-      mediacoverage: true,
-      somethingelse: "What's the frequency Kenneth?"
-    });
-
-    await InterestsTwo.addInterests(2, {
-      volunteersid: 2,
-      volunteering: false,
-      donating: false,
-      joinmm: false,
-      mediacoverage: false,
-      somethingelse: "Not again!!!!!"
-    });
-
-    const interests = await db("interests");
-
-    expect(interests).toHaveLength(2);
-    expect(interests[0].donating).not.toBe(false);
-    expect(interests[0].somethingelse).not.toContain("Hello");
-    expect(interests[0].mediacoverage).toBe(true);
-    expect(interests[0].volunteering).not.toBe(false);
-    expect(interests[1].mediacoverage).toBe(true);
-    expect(interests[1].somethingelse).not.toContain("World");
-    expect(interests[1].joinmm).toBe(true);
+    expect(volunteers[0].somethingelse).not.toContain("Hello");
+    expect(volunteers[0].mediacoverage).toBe(true);
+    expect(volunteers[0].volunteering).not.toBe(false);
+    expect(volunteers[1].mediacoverage).toBe(true);
+    expect(volunteers[1].somethingelse).not.toContain("World");
   });
 });
 

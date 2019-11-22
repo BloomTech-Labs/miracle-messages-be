@@ -63,7 +63,8 @@ function deleteVolunteer(id) {
 //   return db("interests")
 //     .where({ volunteersid: volunteerId })
 //     .del();
-// }
+//}
+
 
 ////// insert //////////
 
@@ -99,6 +100,6 @@ module.exports = {
   // updateInterest,
   // addInterests,
   findDetailed,
-  deleteInterests,
+  // deleteInterests,
   findEmail
 };
