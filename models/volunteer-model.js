@@ -41,11 +41,11 @@ function updateVolunteer(id, volunteer) {
     });
 }
 
-function updateInterest(volunteerId, change) {
-  return db("interests")
-    .where({ volunteersid: volunteerId })
-    .update(change, "*");
-}
+// function updateInterest(volunteerId, change) {
+//   return db("interests")
+//     .where({ volunteersid: volunteerId })
+//     .update(change, "*");
+// }
 
 /////delete////////////
 
