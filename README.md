@@ -34,9 +34,9 @@ Set up Postgres and create databases for both the development server (miracle_be
 
 1. Make sure in the knexfile.js that both the development and testing servers have their connection set to
 
-   <!-- This is for the dev database -->
-
 ```
+    Development
+
     connection: {
     host: process.env.POSTGRESS_DEV_HOST,
     port: process.env.POSTGRESS_DEV_PORT,
@@ -46,9 +46,9 @@ Set up Postgres and create databases for both the development server (miracle_be
     },
 ```
 
-    <!-- this is for the test database -->
-
 ```
+    Testing
+
     connection: {
     host: process.env.POSTGRESS_TEST_HOST,
     port: process.env.POSTGRESS_TEST_PORT,
@@ -60,17 +60,13 @@ Set up Postgres and create databases for both the development server (miracle_be
 
 2.  Create a .env file and add the following for both DEV and TEST databases
 
-    <!-- This is for the dev database -->
-
 ```
-    POSTGRESS*DEV_HOST=localhost
+    POSTGRESS_DEV_HOST=localhost
     POSTGRESS_DEV_PORT=5432
     POSTGRESS_DEV_USER=postgres
     POSTGRESS_DEV_PASSWORD= \_Insert your postgres password here*
     POSTGRESS_DEV_DATABASE=miracle_be
 ```
-
-    <!-- this is for the test database -->
 
 ```
     POSTGRESS_TEST_HOST=localhost
@@ -87,25 +83,31 @@ Set up Postgres and create databases for both the development server (miracle_be
 
 **Migrations/Seeds for Development Environment**
 
-- If you don't want to install seeds
-  To migrate to the dev database "npx knex migrate:latest"
-  To migrate to the test database "npx knex migrate:latest --env testing"
+If you don't want to install seeds
 
-- FOLLOW THIS STEP BY STEP
+1. To migrate to the dev database "npx knex migrate:latest"
 
-  1. "npx knex migrate:up" -- Adds table into postgres db
-  2. "npx knex seed:run --specific=001-chapters.js" -- Adds seed into table
-  3. "npx knex migrate:up"
-  4. "npx knex seed:run --specific=002-volunteers.js"
-  5. "npx knex migrate:up"
-  6. "npx knex seed:run --specific=003-interests.js"
-  7. "npx knex migrate:up"
-  8. "npx knex seed:run --specific=004-partners.js"
-  9. "npx knex migrate:up"
-  10. "npx knex seed:run --specific=005-chapters-partners.js"
-  11. "npx knex migrate:up"
+FOLLOW THIS STEP BY STEP
+
+1. "npx knex migrate:up" -- Adds table into postgres db
+2. "npx knex seed:run --specific=001-chapters.js" -- Adds seed into table
+3. "npx knex migrate:up"
+4. "npx knex seed:run --specific=002-volunteers.js"
+5. "npx knex migrate:up"
+6. "npx knex seed:run --specific=003-interests.js"
+7. "npx knex migrate:up"
+8. "npx knex seed:run --specific=004-partners.js"
+9. "npx knex migrate:up"
+10. "npx knex seed:run --specific=005-chapters-partners.js"
+11. "npx knex migrate:up"
 
 **Migrations/Seeds for Testing Environment**
+
+If you don't want to install seeds
+
+1. To migrate to the test database "npx knex migrate:latest --env testing"
+
+FOLLOW THIS STEP BY STEP
 
 1. "npx knex migrate:up --env testing" -- Adds table into postgres db
 2. "npx knex seed:run --specific=001-chapters.js --env testing" -- Adds seed into table
