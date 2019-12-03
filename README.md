@@ -94,12 +94,10 @@ FOLLOW THIS STEP BY STEP
 3. "npx knex migrate:up"
 4. "npx knex seed:run --specific=002-volunteers.js"
 5. "npx knex migrate:up"
-6. "npx knex seed:run --specific=003-interests.js"
+6. "npx knex seed:run --specific=004-partners.js"
 7. "npx knex migrate:up"
-8. "npx knex seed:run --specific=004-partners.js"
+8. "npx knex seed:run --specific=005-chapters-partners.js"
 9. "npx knex migrate:up"
-10. "npx knex seed:run --specific=005-chapters-partners.js"
-11. "npx knex migrate:up"
 
 **Migrations/Seeds for Testing Environment**
 
@@ -114,9 +112,7 @@ FOLLOW THIS STEP BY STEP
 3. "npx knex migrate:up --env testing"
 4. "npx knex seed:run --specific=002-volunteers.js --env testing"
 5. "npx knex migrate:up --env testing"
-6. "npx knex seed:run --specific=003-interests.js --env testing"
+6. "npx knex seed:run --specific=004-partners.js --env testing"
 7. "npx knex migrate:up --env testing"
-8. "npx knex seed:run --specific=004-partners.js --env testing"
-9. "npx knex migrate:up --env testing"
-10. "npx knex seed:run --specific=005-chapters-partners.js --env testing"
-11. "npx knex migrate:up"
+8. "npx knex seed:run --specific=005-chapters-partners.js --env testing"
+9. "npx knex migrate:up"
