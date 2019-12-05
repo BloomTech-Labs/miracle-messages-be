@@ -5,7 +5,10 @@ const db = require("../config/dbConfig");
 const authZ = async (req, res, next) => {
   try {
     const { password, email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await db.raw(
+      `SELECT * FROM volunteers WHERE email = ${email};`
+    ); //This works...
+    console.log(email, req, "email and pass");
     if (!user) {
       res.status(400).json("User not found");
     }
