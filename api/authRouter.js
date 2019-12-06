@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const Volunteer = require("../models/volunteer-model.js");
 
 const generateToken = require("../middleware/Token.js");
-const mw = require("../auth/auth-middleware.js");
+// const mw = require("../auth/auth-middleware.js");
 
 router.post("/register", async (req, res) => {
   console.log(req.body);
@@ -29,6 +29,12 @@ router.post("/register", async (req, res) => {
   //   });
 });
 
+/**
+ * Method: POST
+ * Endpoint: /api/volunteer/login
+ * Requires: `req.body: email`, `req.body: password`
+ * Returns: Json Token if user logs in successfully
+ */
 router.post("/login", (req, res) => {
   // localhost:9000/api/auth/login
   // implement login
@@ -45,6 +51,7 @@ router.post("/login", (req, res) => {
         // console.log(user)
         if (user && bcrypt.compareSync(password, user.password)) {
           const token = generateToken(user);
+          console.log(token);
 
           res
             .status(200)
@@ -59,21 +66,6 @@ router.post("/login", (req, res) => {
       });
   }
 });
-
-/**
- * Method: POST
- * Endpoint: /api/users/login
- * Requires: `req.body: email`, `req.body: password`
- * Returns: Json Token if user logs in successfully
- * Middleware: `authZ` validates the user's credentials
- */
-// router.post("/login", mw.authZ, (req, res) => {
-//   res.status(202).json({
-//     message: "Logged in Successfully",
-//     token: req.token,
-//     id: req.user_id
-//   });
-// });
 
 // For Hash
 router.get("/hash", (req, res) => {
