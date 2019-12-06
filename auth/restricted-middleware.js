@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 const secrets = require("../config/secrets");
-const db = require("../config/dbConfig");
 
+/**
+ * Protected Middleware
+ * For all routes that need protection with auth token
+ * Returns: logged in user's id for use with specific routes
+ */
 module.exports = (req, res, next) => {
   const token = req.headers.authorization;
 
