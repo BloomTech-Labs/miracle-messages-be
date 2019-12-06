@@ -6,6 +6,13 @@ const Volunteer = require("../models/volunteer-model.js");
 const generateToken = require("../middleware/Token.js");
 // const mw = require("../auth/auth-middleware.js");
 
+/**
+ * Method: POST
+ * Endpoint: /api/volunteer/register
+ * Requires: `req.body: email`, `req.body: password`
+ * Returns: Json Token if user logs in successfully
+ */
+
 router.post("/register", async (req, res) => {
   console.log(req.body);
   let user = req.body;
@@ -18,15 +25,6 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Error registering user: " + err });
   }
-
-  // Volunteer.add(user)
-  //   .then(user => {
-  //     console.log(user);
-  //     res.status(201).json(user);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).json({ message: "Error registering user: " + err });
-  //   });
 });
 
 /**
