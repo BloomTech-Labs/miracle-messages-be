@@ -4,7 +4,7 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const chapterDB = require("../models/chapters-model.js");
 const chaptersPartnersDB = require("../models/chapters-partners-model.js");
 const partnerDB = require("../models/partners-model");
-const protected = require("../auth/restricted-middleware");
+const authenticated = require("../auth/restricted-middleware");
 const aws_link =
   "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
@@ -15,7 +15,7 @@ const aws_link =
 /****************************************************************************/
 /*               GET all chapters with all related partners                */
 /****************************************************************************/
-router.get("/", protected, async (req, res) => {
+router.get("/", authenticated, async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
