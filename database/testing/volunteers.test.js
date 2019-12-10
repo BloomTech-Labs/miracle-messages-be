@@ -9,7 +9,7 @@ afterAll(async () => {
   await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
 });
 
-xdescribe("GET /", () => {
+describe("GET /", () => {
   it("should return 200", async () => {
     const res = await request(server).get("/api/form/");
     expect(res.status).toBe(200);
@@ -21,7 +21,7 @@ xdescribe("GET /", () => {
   });
 });
 
-xdescribe("volunteers model", () => {
+describe("volunteers model", () => {
   describe("POST Volunteer /", () => {
     it("should insert volunteers into the db", async () => {
       await VolunteersTwo.add({
@@ -78,7 +78,7 @@ xdescribe("volunteers model", () => {
   });
 });
 
-xdescribe("UPDATE Volunteer /", () => {
+describe("UPDATE Volunteer /", () => {
   it("should update a volunteer in the db", async () => {
     await VolunteersTwo.updateVolunteer(1, {
       fname: "Richard",
@@ -132,7 +132,7 @@ xdescribe("UPDATE Volunteer /", () => {
   });
 });
 
-xdescribe("DELETE Volunteer /", () => {
+describe("DELETE Volunteer /", () => {
   it("should delete a volunteer in the db", async () => {
     await VolunteersTwo.deleteVolunteer(1);
 
