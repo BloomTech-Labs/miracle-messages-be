@@ -5,14 +5,13 @@ const db = require("../../config/dbConfig.js");
 const Chapters = require("../../models/chapters-model.js");
 const Volunteers = require("../../models/volunteer-model.js");
 
-require("dotenv").config();
-
 let token; //Global Variable token to be used all over test
 
 beforeAll(done => {
   //Logging in with the volunteer credentials above
   request(server)
     .post("/api/volunteer/login")
+    .set("Content-Type", "application/json")
     .send({
       email: "jsmith@.com",
       password: "password"
@@ -48,8 +47,6 @@ afterAll(async () => {
     });
 });
 
-console.log(token);
-
 //Tests for authentication
 describe("GET /", () => {
   //Checks an authenticated route '/api/chapter'
@@ -64,8 +61,8 @@ describe("GET /", () => {
   // send the token - should respond with a 200
   test("It responds with JSON", () => {
     return request(server)
-      .get("/")
-      .set("Authorization", `Bearer ${token}`)
+      .get("/api/chapter")
+      .set("Authorization", `${token}`)
       .then(response => {
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe("application/json");

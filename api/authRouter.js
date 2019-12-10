@@ -14,7 +14,6 @@ const generateToken = require("../middleware/Token.js");
  */
 
 router.post("/register", async (req, res) => {
-  console.log(req.body);
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10);
   user.password = hash;
