@@ -7,26 +7,10 @@ const Chapters = require("../../models/chapters-model.js");
 let token; //Global Variable token to be used all over test
 
 beforeAll(done => {
-  //Logging in with the volunteer credentials above
-  request(server)
-    .post("/api/volunteer/login")
-    .send({
-      email: "jsmith@.com",
-      password: "password"
-    })
-    .end((err, response) => {
-      token = response.body.token; // save the token!
-      done();
-    });
-});
-
-//Clears out volunteers database
-afterAll(async () => {
-  db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
-
   //register a volunteer
-  await request(server)
+  request(server)
     .post("/api/volunteer/register")
+    .set("Content-Type", "application/json")
     .send({
       fname: "John2",
       lname: "Smith",
@@ -42,30 +26,50 @@ afterAll(async () => {
       joinmm: false,
       mediacoverage: false,
       somethingelse: "Hello"
+    })
+    .end((err, res) => {
+      request(server)
+        .post("/api/volunteer/login")
+        .set("Content-Type", "application/json")
+        .send({
+          email: "jsmith@.com",
+          password: "password"
+        })
+        .end((err, response) => {
+          token = response.body.token; // save the token!
+          done();
+        });
     });
+  //Logging in with the volunteer credentials above
 });
 
-xdescribe("chapter model", () => {
+//Clears out volunteers database
+afterAll(async () => {
+  await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
+});
+
+describe("chapter model", () => {
   beforeEach(async () => {
     await db("chapters").del();
     await db("chapters_partners").del();
   });
 
   describe("GET /", () => {
-    it("should return 200", async () => {
-      const res = await request(server)
+    it("should return 200", () => {
+      return request(server)
         .get("/api/chapter")
-        .set("Authorization", `Bearer ${token}`);
-      console.log(token, `I'm at the get call`);
-      expect(res.status).toBe(200);
+        .set("Authorization", `${token}`)
+        .then(res => {
+          expect(res.status).toBe(200);
+        });
     });
 
-    xit("should return json type", async () => {
+    it("should return json type", async () => {
       const res = await request(server).get("/api/chapter");
       expect(res.type).toBe("application/json");
     });
 
-    xit("should insert chapters into the db", async () => {
+    it("should insert chapters into the db", async () => {
       await Chapters.addChapter({
         city: "Los Angeles",
         title: "Los Angeles",

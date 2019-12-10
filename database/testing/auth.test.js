@@ -8,27 +8,10 @@ const Volunteers = require("../../models/volunteer-model.js");
 let token; //Global Variable token to be used all over test
 
 beforeAll(done => {
-  //Logging in with the volunteer credentials above
-  request(server)
-    .post("/api/volunteer/login")
-    .set("Content-Type", "application/json")
-    .send({
-      email: "jsmith@.com",
-      password: "password"
-    })
-    .end((err, response) => {
-      token = response.body.token; // save the token!
-      done();
-    });
-});
-
-//Clears out volunteers database
-afterAll(async () => {
-  db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
-
   //register a volunteer
-  await request(server)
+  request(server)
     .post("/api/volunteer/register")
+    .set("Content-Type", "application/json")
     .send({
       fname: "John2",
       lname: "Smith",
@@ -44,7 +27,26 @@ afterAll(async () => {
       joinmm: false,
       mediacoverage: false,
       somethingelse: "Hello"
+    })
+    .end((err, res) => {
+      request(server)
+        .post("/api/volunteer/login")
+        .set("Content-Type", "application/json")
+        .send({
+          email: "jsmith@.com",
+          password: "password"
+        })
+        .end((err, response) => {
+          token = response.body.token; // save the token!
+          done();
+        });
     });
+  //Logging in with the volunteer credentials above
+});
+
+//Clears out volunteers database
+afterAll(async () => {
+  await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
 });
 
 //Tests for authentication
@@ -58,7 +60,7 @@ describe("GET /", () => {
         expect(response.statusCode).toBe(401);
       });
   });
-  // send the token - should respond with a 200
+  // send the token to protected route - should respond with a 200
   test("It responds with JSON", () => {
     return request(server)
       .get("/api/chapter")
