@@ -17,6 +17,7 @@ exports.up = function(knex, Promise) {
     tbl.text("description").notNullable();
     tbl.text("story").notNullable();
     tbl.string("email").notNullable();
+    tbl.string("facebook");
 
     //Pending Requests
     tbl.boolean("approved").defaultTo(false);
