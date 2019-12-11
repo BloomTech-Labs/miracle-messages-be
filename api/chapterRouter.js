@@ -5,6 +5,7 @@ const chapterDB = require("../models/chapters-model.js");
 const chaptersPartnersDB = require("../models/chapters-partners-model.js");
 const partnerDB = require("../models/partners-model");
 const authenticated = require("../auth/restricted-middleware");
+const chaptersVolunteersDb = require("../models/chapters-volunteers-model");
 const aws_link =
   "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
@@ -31,6 +32,21 @@ router.get("/", authenticated, async (req, res) => {
     res.status(500).json({
       error: "there was a problem getting chapter or partner information"
     });
+  }
+});
+
+/****************************************************************************/
+/*                 Get all volunteers of one specific chapter                 */
+/****************************************************************************/
+router.get("/:id", authenticated, async (req, res) => {
+  const chapterId = req.params.id;
+  try {
+    const volunteers = await volunteersDb.findById(chapterId);
+    res.status(200).json(volunteers);
+  } catch {
+    res
+      .status(500)
+      .json({ errorMessage: "There is a problem finding volunteers data" });
   }
 });
 
@@ -154,6 +170,29 @@ router.post("/:id/partners", async (req, res) => {
   }
 });
 
+//**********************************************************************
+//********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
+//**********************************************************************
+
+router.post("/:id/volunteers", authenticated, async (req, res) => {
+  try {
+    console.log("in the router");
+    console.log(req.user_id);
+    console.log(req.params.id);
+
+    const id = await chaptersVolunteersDb.assignChapterVolunteer(
+      req.user_id,
+      req.params.id
+    );
+
+    res.status(200).json(id);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error assigning zee dang partner to the chapter" });
+  }
+});
+
 /********************/
 // ** ALL THE PUTS **
 /********************/
@@ -262,6 +301,46 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
     res
       .status(500)
       .json({ error: "error unassigning zee dang partner from the chapter" });
+  }
+});
+
+/****************************************************************************/
+/*      Delete a volunteer from a specific chapter - Admin
+/****************************************************************************/
+router.delete(
+  "/:id/volunteers/:volunteerid",
+  authenticated,
+  async (req, res) => {
+    try {
+      const count = await chaptersVolunteersDb.removeSpecificChapterVolunteer(
+        req.params.volunteerid,
+        req.params.id //chapterId
+      );
+
+      res.status(200).json(count);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "error unassigning zee dang partner from the chapter" });
+    }
+  }
+);
+
+/****************************************************************************/
+/*      Delete a volunteer from a specific chapter - Volunteer
+/****************************************************************************/
+router.delete("/:id/volunteers/", authenticated, async (req, res) => {
+  try {
+    const count = await chaptersVolunteersDb.removeSpecificChapterVolunteer(
+      req.user_id,
+      req.params.id //chapterId
+    );
+
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error unassigning zee dang volunteer from the chapter" });
   }
 });
 
