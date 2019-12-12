@@ -15,9 +15,27 @@ function removeVolFromAllChapters(volunteerId) {
     .del();
 }
 
+// //Get specific chapter volunteer row
+async function getSpecificChapterVolunteer(volunteerId, chapterId) {
+  return db("chapters_volunteers")
+    .where("chaptersid", chapterId)
+    .where("volunteersid", volunteerId);
+}
+
+// //Get specific chapter volunteer row
+// async function getSpecificChapterVolunteer() {
+//   // return db("chapters_volunteers").where({
+//   //   volunteersid: volunteerId,
+//   //   chaptersId: chapterId
+//   // });
+//   return db("chapters_volunteers")
+//     .where("chaptersid", 1)
+//     .where("volunteersid", 25);
+// }
+
 // assign a volunteer to a Chapter to be displayed under the volunteers section
 //volunteers work with and support Miracle Messages
-function assignChapterVolunteer(volunteerId, chapterId) {
+async function assignChapterVolunteer(volunteerId, chapterId) {
   console.log("in the model");
   console.log(volunteerId);
   console.log(chapterId);
@@ -44,5 +62,6 @@ module.exports = {
   findChapterVolunteers,
   removeVolFromAllChapters,
   assignChapterVolunteer,
-  removeSpecificChapterVolunteer
+  removeSpecificChapterVolunteer,
+  getSpecificChapterVolunteer
 };

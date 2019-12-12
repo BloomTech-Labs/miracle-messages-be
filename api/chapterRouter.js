@@ -5,7 +5,7 @@ const chapterDB = require("../models/chapters-model.js");
 const chaptersPartnersDB = require("../models/chapters-partners-model.js");
 const partnerDB = require("../models/partners-model");
 const authenticated = require("../auth/restricted-middleware");
-const chaptersVolunteersDb = require("../models/chapters-volunteers-model");
+const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const aws_link =
   "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
 
@@ -38,10 +38,12 @@ router.get("/", authenticated, async (req, res) => {
 /****************************************************************************/
 /*                 Get all volunteers of one specific chapter                 */
 /****************************************************************************/
-router.get("/:id", authenticated, async (req, res) => {
+router.get("/:id/volunteers", authenticated, async (req, res) => {
   const chapterId = req.params.id;
   try {
-    const volunteers = await volunteersDb.findById(chapterId);
+    const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
+      chapterId
+    );
     res.status(200).json(volunteers);
   } catch {
     res
@@ -77,6 +79,28 @@ router.get("/:id/partners", async (req, res) => {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
 
     res.status(200).json(chapter);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error getting the chapter"
+    });
+  }
+});
+
+/****************************************************************************/
+// THIS IS FOR GETTING A SPECIFIC CHAPTER_VOLUNTEER BY ID's
+/****************************************************************************/
+
+router.get("/:id/volunteer", authenticated, async (req, res) => {
+  let chapterId = req.params.id;
+  let volunteerId = req.user_id;
+  try {
+    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+      volunteerId,
+      chapterId
+    );
+    // const isVol = await chaptersVolunteersDB.getSpecificChapterVolunteer();
+    console.log(isVolunteerInChapter);
+    res.status(200).json(isVolunteerInChapter);
   } catch (error) {
     res.status(500).json({
       message: "Error getting the chapter"
@@ -174,22 +198,36 @@ router.post("/:id/partners", async (req, res) => {
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 
-router.post("/:id/volunteers", authenticated, async (req, res) => {
+router.post("/:id/volunteer", authenticated, async (req, res) => {
   try {
     console.log("in the router");
     console.log(req.user_id);
     console.log(req.params.id);
 
-    const id = await chaptersVolunteersDb.assignChapterVolunteer(
-      req.user_id,
-      req.params.id
+    const isVolunteerInChapter = await getSpecificChapterVolunteer(
+      volunteerId,
+      chapterId
     );
+    console.log(isVolunteerInChapter);
+    if (!isVolunteerInChapter) {
+      const id = await chaptersVolunteersDB.assignChapterVolunteer(
+        req.user_id,
+        req.params.id
+      );
 
-    res.status(200).json(id);
+      res.status(200).json({
+        message: `You have successfully signed up for this chapter.`,
+        id: id
+      });
+    } else {
+      res
+        .status(400)
+        .json({ message: "This volunteer is already in this chapter" });
+    }
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning zee dang partner to the chapter" });
+      .json({ error: "error assigning zee dang volunteer to the chapter" });
   }
 });
 
@@ -312,7 +350,7 @@ router.delete(
   authenticated,
   async (req, res) => {
     try {
-      const count = await chaptersVolunteersDb.removeSpecificChapterVolunteer(
+      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
         req.params.volunteerid,
         req.params.id //chapterId
       );
@@ -331,7 +369,7 @@ router.delete(
 /****************************************************************************/
 router.delete("/:id/volunteers/", authenticated, async (req, res) => {
   try {
-    const count = await chaptersVolunteersDb.removeSpecificChapterVolunteer(
+    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
       req.user_id,
       req.params.id //chapterId
     );
