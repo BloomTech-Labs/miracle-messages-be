@@ -98,8 +98,7 @@ router.get("/:id/volunteer", authenticated, async (req, res) => {
       volunteerId,
       chapterId
     );
-    // const isVol = await chaptersVolunteersDB.getSpecificChapterVolunteer();
-    console.log(isVolunteerInChapter);
+    // console.log(Boolean(isVolunteerInChapter.length));
     res.status(200).json(isVolunteerInChapter);
   } catch (error) {
     res.status(500).json({
@@ -199,25 +198,25 @@ router.post("/:id/partners", async (req, res) => {
 //**********************************************************************
 
 router.post("/:id/volunteer", authenticated, async (req, res) => {
-  try {
-    console.log("in the router");
-    console.log(req.user_id);
-    console.log(req.params.id);
+  let chapterId = req.params.id;
+  let volunteerId = req.user_id;
 
-    const isVolunteerInChapter = await getSpecificChapterVolunteer(
+  try {
+    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
       volunteerId,
       chapterId
     );
     console.log(isVolunteerInChapter);
-    if (!isVolunteerInChapter) {
-      const id = await chaptersVolunteersDB.assignChapterVolunteer(
-        req.user_id,
-        req.params.id
+    //Checks if this volunteer is in the chapter
+    if (isVolunteerInChapter.length < 1) {
+      const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
+        volunteerId,
+        chapterId
       );
 
       res.status(200).json({
         message: `You have successfully signed up for this chapter.`,
-        id: id
+        id: signedUp
       });
     } else {
       res
