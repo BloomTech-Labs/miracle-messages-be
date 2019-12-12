@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
         .notNullable()
         .references('id')
         .inTable('chapters')
-        .onDelete('RESTRICT')
+        .onDelete('CASCADE')
         .onUpdate('CASCADE');
         
       tbl.integer('partnersid')
@@ -17,7 +17,7 @@ exports.up = function(knex, Promise) {
         .references('id')
         .inTable('partners')
         .onUpdate('CASCADE')
-        .onDelete('RESTRICT')  
+        .onDelete('CASCADE')  
   })
 };
 
