@@ -44,7 +44,14 @@ router.get("/:id/volunteers", authenticated, async (req, res) => {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
       chapterId
     );
-    res.status(200).json(volunteers);
+    if (volunteers.rows.length < 1) {
+      res
+        .status(404)
+        .json({ message: "There is no volunteers in this chapter" });
+    } else {
+      console.log(volunteers.rows);
+      res.status(200).json(volunteers.rows);
+    }
   } catch {
     res
       .status(500)
@@ -207,7 +214,7 @@ router.post("/:id/volunteer", authenticated, async (req, res) => {
       chapterId
     );
     console.log(isVolunteerInChapter);
-    //Checks if this volunteer is in the chapter
+    //Checks if this volunteer is already in the chapter
     if (isVolunteerInChapter.length < 1) {
       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
         volunteerId,
@@ -366,18 +373,21 @@ router.delete(
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteers/", authenticated, async (req, res) => {
+router.delete("/:id/volunteer/", authenticated, async (req, res) => {
+  let chapterId = req.params.id;
+  let volunteerId = req.user_id;
+
   try {
     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      req.user_id,
-      req.params.id //chapterId
+      volunteerId,
+      chapterId
     );
 
     res.status(200).json(count);
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error unassigning zee dang volunteer from the chapter" });
+      .json({ error: "error removing zee dang volunteer from the chapter" });
   }
 });
 

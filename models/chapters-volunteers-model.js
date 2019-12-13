@@ -1,11 +1,22 @@
 const db = require("../config/dbConfig");
 
 //given a chapter ID, find all volunteers assigned to the Chapter:
-function findChapterVolunteers(chapterId) {
-  return db("chapters as c")
-    .join("chapters_volunteers as cv", "c.id", "cv.chaptersid")
-    .join("volunteers as v", "v.id", "cp.volunteersid")
-    .where({ chaptersid: chapterId });
+function findChapterVolunteers(id) {
+  console.log(id);
+  // return db.raw(`SELECT * FROM volunteers`);
+  return db.raw(
+    `SELECT c.id, c.city, cv.volunteersid, v.fname, v.lname FROM chapters c
+        INNER JOIN chapters_volunteers cv ON c.id = cv.chaptersid
+        INNER JOIN volunteers v ON cv.volunteersid = v.id
+        WHERE c.id = ${id}`
+  );
+  // return db("chapters as c")
+  //   .join("chapters_volunteers as cv", "c.id", "cv.chaptersid")
+  //   .join("volunteers as v", "v.id", "cp.volunteersid")
+  //   .where({ chaptersid: chapterId });
+  // return db.raw(
+  //   "SELECT chapters.id, chapters_volunteers.volunteersid, volunteers.fname, volunteers.lname"
+  // );
 }
 
 //given a volunteer id, remove all chapter relationships for that volunteer
@@ -21,17 +32,6 @@ async function getSpecificChapterVolunteer(volunteerId, chapterId) {
     .where("chaptersid", chapterId)
     .where("volunteersid", volunteerId);
 }
-
-// //Get specific chapter volunteer row
-// async function getSpecificChapterVolunteer() {
-//   // return db("chapters_volunteers").where({
-//   //   volunteersid: volunteerId,
-//   //   chaptersId: chapterId
-//   // });
-//   return db("chapters_volunteers")
-//     .where("chaptersid", 1)
-//     .where("volunteersid", 25);
-// }
 
 // assign a volunteer to a Chapter to be displayed under the volunteers section
 //volunteers work with and support Miracle Messages
