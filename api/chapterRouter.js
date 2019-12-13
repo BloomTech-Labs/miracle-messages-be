@@ -44,8 +44,8 @@ router.get("/:id/volunteers", authenticated, async (req, res) => {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
       chapterId
     );
+    //Checks if there are volunteers in chapter
     if (volunteers.rows.length < 1) {
-      //Checks if there are volunteers in chapter
       res
         .status(404)
         .json({ message: "There is no volunteers in this chapter" });
