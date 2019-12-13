@@ -45,11 +45,11 @@ router.get("/:id/volunteers", authenticated, async (req, res) => {
       chapterId
     );
     if (volunteers.rows.length < 1) {
+      //Checks if there are volunteers in chapter
       res
         .status(404)
         .json({ message: "There is no volunteers in this chapter" });
     } else {
-      console.log(volunteers.rows);
       res.status(200).json(volunteers.rows);
     }
   } catch {
