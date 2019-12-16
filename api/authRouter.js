@@ -2,7 +2,16 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 
 const Volunteer = require("../models/volunteer-model.js");
+
 const generateToken = require("../middleware/Token.js");
+// const mw = require("../auth/auth-middleware.js");
+
+/**
+ * Method: POST
+ * Endpoint: /api/volunteer/register
+ * Requires: `req.body: email`, `req.body: password`
+ * Returns: Json Token if user logs in successfully
+ */
 
 router.post("/register", async (req, res) => {
   let user = req.body;
@@ -15,17 +24,14 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Error registering user: " + err });
   }
-
-  // Volunteer.add(user)
-  //   .then(user => {
-  //     console.log(user);
-  //     res.status(201).json(user);
-  //   })
-  //   .catch(err => {
-  //     res.status(500).json({ message: "Error registering user: " + err });
-  //   });
 });
 
+/**
+ * Method: POST
+ * Endpoint: /api/volunteer/login
+ * Requires: `req.body: email`, `req.body: password`
+ * Returns: Json Token if user logs in successfully
+ */
 router.post("/login", (req, res) => {
   // localhost:9000/api/auth/login
   // implement login
@@ -42,6 +48,7 @@ router.post("/login", (req, res) => {
         // console.log(user)
         if (user && bcrypt.compareSync(password, user.password)) {
           const token = generateToken(user);
+          console.log(token);
 
           res
             .status(200)

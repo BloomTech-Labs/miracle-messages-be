@@ -4,6 +4,11 @@ const server = require("../../server");
 const db = require("../../config/dbConfig.js");
 const VolunteersTwo = require("../../models/volunteer-model.js");
 
+// Clears out volunteers database
+afterAll(async () => {
+  await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
+});
+
 describe("GET /", () => {
   it("should return 200", async () => {
     const res = await request(server).get("/api/form/");
@@ -18,10 +23,6 @@ describe("GET /", () => {
 
 describe("volunteers model", () => {
   describe("POST Volunteer /", () => {
-    beforeEach(async () => {
-      await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
-    });
-
     it("should insert volunteers into the db", async () => {
       await VolunteersTwo.add({
         fname: "John2",
