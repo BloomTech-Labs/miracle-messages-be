@@ -14,6 +14,7 @@ const aws_link =
 /******************/
 /**
  * Method: GET
+ * What: Getting all chapters
  * Endpoint: /api/chapter
  * Returns: Json of all chapters with related partners
  */
@@ -38,6 +39,7 @@ router.get("/", async (req, res) => {
 
 /**
  * Method: GET
+ * What: Getting a list of volunteers from chapter
  * Endpoint: /api/chapter/:id/volunteers
  * Returns: Json of all volunteers related to a specific chapter
  */
@@ -64,13 +66,10 @@ router.get("/:id/volunteers", authenticated, async (req, res) => {
 
 /**
  * Method: GET
+ * What: Getting a specific chapter
  * Endpoint: /api/chapter/:id
  * Returns: JSON a specific chapter by id
  */
-/****************************************************************************/
-// THIS IS FOR GETTING A SPECIFIC CHAPTER BY ID
-/****************************************************************************/
-
 router.get("/:id", async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
@@ -88,6 +87,7 @@ router.get("/:id", async (req, res) => {
 
 /**
  * Method: GET
+ * What: Getting partners from chapter
  * Endpoint: /api/chapter/:id/partners
  * Returns: JSON of all partners specific to a chapter
  */
@@ -105,6 +105,7 @@ router.get("/:id/partners", async (req, res) => {
 
 /**
  * Method: GET
+ * What: Getting a specific volunteer from chapter
  * Endpoint: /api/chapter/:id/volunteer
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
@@ -200,7 +201,7 @@ router.post("/", async (req, res) => {
  * Returns: ID of newly created row
  */
 
-router.post("/:id/partners", async (req, res) => {
+router.post("/:id/partners", authenticated, async (req, res) => {
   try {
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
@@ -217,10 +218,11 @@ router.post("/:id/partners", async (req, res) => {
 
 /**
  * Method: POST
+ * What: Adding volunteer into chapter
  * Endpoint: /api/chapter
  * Requires: req.user_id: volunteerId
  *           req.params.id : chapterId
- * Returns: JSON o
+ * Returns: ID of the created chapter_volunteers row
  */
 //**********************************************************************
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
@@ -263,6 +265,12 @@ router.post("/:id/volunteer", authenticated, async (req, res) => {
 // ** ALL THE PUTS **
 /********************/
 
+/**
+ * Method: PUT
+ * Endpoint: /api/chapter/:id
+ * Requires: req.user_id: volunteerId
+ * Returns: ID of the created chapter_volunteers row
+ */
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
@@ -317,6 +325,13 @@ router.put("/:id", authenticated, async (req, res) => {
 // ** ALL THE DELETES **
 /********************/
 
+/**
+ * Method: DEL
+ * What: Deleting a chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
 //************************************************************
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
@@ -350,11 +365,16 @@ router.delete("/:id", authenticated, async (req, res) => {
   }
 });
 
+/**
+ * Method: DEL
+ * What: Unassigning a partner from chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-
-//
 router.delete("/:id/partners/:partnerid", authenticated, async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
@@ -370,6 +390,14 @@ router.delete("/:id/partners/:partnerid", authenticated, async (req, res) => {
   }
 });
 
+/**
+ * Method: DEL
+ * What: Unassigning a volunteer from chapter (Admin)
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ * UNTESTED DON'T KNOW IF IT WORKS YET
+ */
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
@@ -392,6 +420,13 @@ router.delete(
   }
 );
 
+/**
+ * Method: DEL
+ * What: Unassigning a volunteer from chapter (Volunteer)
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
