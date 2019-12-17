@@ -137,7 +137,7 @@ router.get("/:id/volunteer", authenticated, async (req, res) => {
  * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
  * Returns: JSON of chapter or id
  */
-router.post("/", async (req, res) => {
+router.post("/", authetnicated, async (req, res) => {
   try {
     const newChapter = await req.body;
 
