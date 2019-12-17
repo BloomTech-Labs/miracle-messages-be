@@ -4,6 +4,7 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const MW = require("../middleware/partnersMW");
 const partnersDb = require("../models/partners-model.js");
 const chaptersPartnersDb = require("../models/chapters-partners-model.js");
+const authenticated = require("../auth/restricted-middleware");
 
 // this link below is to specify the AWS S3 BUCKET where our images will live:
 
@@ -13,7 +14,7 @@ const aws_link =
 /****************************************************************************/
 /*                 Get all partners 
 /****************************************************************************/
-router.get("/", async (req, res) => {
+router.get("/", authenticated, async (req, res) => {
   try {
     const partners = await partnersDb.find();
     res.status(200).json(partners);
@@ -26,7 +27,7 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 /*                 Get all partners of one specific chapter                 */
 /****************************************************************************/
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticated, async (req, res) => {
   const chapterId = req.params.id;
   try {
     const partners = await partnersDb.findById(chapterId);
@@ -74,18 +75,14 @@ router.delete("/:id", MW.validatePartnerId, async (req, res) => {
 /****************************************************************************/
 
 router.post("/", MW.verifyPartnerData, async (req, res) => {
-  
   const newPartner = req.body;
   const { partner_icon } = req.files;
 
   //first we upload the icon to AWS and make sure it succeeds:
   try {
     uploadToS3(partner_icon, res);
-  } 
-  catch (error) {
-    res
-      .status(500)
-      .json({ error: "error uploading the partner_icon to AWS" });
+  } catch (error) {
+    res.status(500).json({ error: "error uploading the partner_icon to AWS" });
   }
 
   // next we build the partner icon url that will get stored in the database:
@@ -96,28 +93,21 @@ router.post("/", MW.verifyPartnerData, async (req, res) => {
   //add the icon url to the newPartner object:
   newPartner.icon_url = aws_link + encodedpartnerIconName;
 
-
   //finally, we add the newPartner object to the database:
   try {
     const partnerId = await partnersDb.addPartner(newPartner);
     res.status(201).json(partnerId);
+  } catch {
+    res
+      .status(500)
+      .json({ errorMessage: "There was a problem adding partner to database" });
   }
-  catch {
-    res.status(500).json({errorMessage: "There was a problem adding partner to database"})
-  }
-  
-
 });
-
-
-
 
 /****************************************************************************/
 /*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
 /****************************************************************************/
 router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
-
-
   try {
     const changes = await req.body;
     const id = req.params.id;

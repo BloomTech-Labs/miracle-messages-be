@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// const uploadToS3 = require("../middleware/uploadToS3.js");
-// const MW = require("../middleware/partnersMW");
 const volunteersDb = require("../models/volunteer-model");
-const chaptersVolunteersDb = require("../models/chapters-volunteers-model");
 const authenticated = require("../auth/restricted-middleware");
 
 /****************************************************************************/
@@ -31,7 +28,7 @@ router.delete('/:id', authenticated, (req, res) => {
 
 })
 /****************************************************************************/
-/*                 Update Volunteer
+/*                 Update Volunteer - Deprioritized LABS18
 /****************************************************************************/
 router.put('/', authenticated, (req, res) => {
   const volunteedId = req.user_id;
