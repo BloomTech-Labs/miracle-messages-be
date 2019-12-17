@@ -3,6 +3,7 @@ const router = express.Router();
 
 // const formDB = require("../models/form-model.js");
 const volunteerDB = require("../models/volunteer-model.js");
+const authenticated = require("../auth/restricted-middleware");
 
 //path: api/form
 //**************************************************
@@ -23,7 +24,7 @@ const volunteerDB = require("../models/volunteer-model.js");
 //     });
 // });
 
-router.get("/", async (req, res) => {
+router.get("/", authenticated, async (req, res) => {
   try {
     const volunteers = await volunteerDB.find();
     res.status(200).json(volunteers);

@@ -12,10 +12,11 @@ const aws_link =
 /******************/
 // ** ALL THE GETS **
 /******************/
-
-/****************************************************************************/
-/*               GET all chapters with all related partners                */
-/****************************************************************************/
+/**
+ * Method: GET
+ * Endpoint: /api/chapter
+ * Returns: Json of all chapters with related partners
+ */
 router.get("/", authenticated, async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
@@ -35,9 +36,11 @@ router.get("/", authenticated, async (req, res) => {
   }
 });
 
-/****************************************************************************/
-/*                 Get all volunteers of one specific chapter                 */
-/****************************************************************************/
+/**
+ * Method: GET
+ * Endpoint: /api/chapter/:id/volunteers
+ * Returns: Json of all volunteers related to a specific chapter
+ */
 router.get("/:id/volunteers", authenticated, async (req, res) => {
   const chapterId = req.params.id;
   try {
@@ -59,6 +62,11 @@ router.get("/:id/volunteers", authenticated, async (req, res) => {
   }
 });
 
+/**
+ * Method: GET
+ * Endpoint: /api/chapter/:id
+ * Returns: JSON a specific chapter by id
+ */
 /****************************************************************************/
 // THIS IS FOR GETTING A SPECIFIC CHAPTER BY ID
 /****************************************************************************/
@@ -78,9 +86,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//************************************************************
-//THIS IS FOR GETTING ALL PARTNER ORGANIZATIONS FOR A SPECIFIC CHAPTER
-//************************************************************
+/**
+ * Method: GET
+ * Endpoint: /api/chapter/:id/partners
+ * Returns: JSON of all partners specific to a chapter
+ */
 router.get("/:id/partners", async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
@@ -93,10 +103,11 @@ router.get("/:id/partners", async (req, res) => {
   }
 });
 
-/****************************************************************************/
-// THIS IS FOR GETTING A SPECIFIC CHAPTER_VOLUNTEER BY ID's
-/****************************************************************************/
-
+/**
+ * Method: GET
+ * Endpoint: /api/chapter/:id/volunteer
+ * Returns: JSON of specific Chapter_Volunteer by their id's
+ */
 router.get("/:id/volunteer", authenticated, async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
@@ -105,7 +116,6 @@ router.get("/:id/volunteer", authenticated, async (req, res) => {
       volunteerId,
       chapterId
     );
-    // console.log(Boolean(isVolunteerInChapter.length));
     res.status(200).json(isVolunteerInChapter);
   } catch (error) {
     res.status(500).json({
@@ -118,10 +128,14 @@ router.get("/:id/volunteer", authenticated, async (req, res) => {
 // ** ALL THE POSTS **
 /********************/
 
-//**********************************************************************
-//********* ADDING A CHAPTER TO THE DATABASE  *************/
-//**********************************************************************
-
+/**
+ * Method: POST
+ * What: Adds chapter into DB
+ * Endpoint: /api/chapter
+ * Requires: `req.body: longitude, latitude, city, title, state, email, chapter_img_url, established_date, description, email
+ * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
+ * Returns: JSON of chapter or id
+ */
 router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
@@ -177,16 +191,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-//**********************************************************************
-//********* ASSIGNING A PARTNER ORGANIZATION TO A CHAPTER   *************/
-//**********************************************************************
+/**
+ * Method: POST
+ * What: Creates row in chapters_partners for specific chapter/partner
+ * Endpoint: /api/chapter/:id/partners
+ * Requires: req.body: partnerId
+ *           req.params.id
+ * Returns: ID of newly created row
+ */
 
 router.post("/:id/partners", async (req, res) => {
   try {
-    console.log("in the router");
-    console.log(req.body.partnerId);
-    console.log(req.params.id);
-
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
       req.params.id
