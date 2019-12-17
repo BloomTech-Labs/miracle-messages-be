@@ -16,7 +16,7 @@ const aws_link =
 /****************************************************************************/
 /*               GET all chapters with all related partners                */
 /****************************************************************************/
-router.get("/", authenticated, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -38,7 +38,7 @@ router.get("/", authenticated, async (req, res) => {
 /****************************************************************************/
 /*                 Get all volunteers of one specific chapter                 */
 /****************************************************************************/
-router.get("/:id/volunteers", authenticated, async (req, res) => {
+router.get("/:id/volunteers", async (req, res) => {
   const chapterId = req.params.id;
   try {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
@@ -97,7 +97,7 @@ router.get("/:id/partners", async (req, res) => {
 // THIS IS FOR GETTING A SPECIFIC CHAPTER_VOLUNTEER BY ID's
 /****************************************************************************/
 
-router.get("/:id/volunteer", authenticated, async (req, res) => {
+router.get("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
   try {
