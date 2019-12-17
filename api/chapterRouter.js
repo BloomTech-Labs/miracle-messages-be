@@ -12,12 +12,19 @@ const aws_link =
 /******************/
 // ** ALL THE GETS **
 /******************/
+<<<<<<< HEAD
 /**
  * Method: GET
  * What: Getting all chapters
  * Endpoint: /api/chapter
  * Returns: Json of all chapters with related partners
  */
+=======
+
+/****************************************************************************/
+/*               GET all chapters with all related partners                */
+/****************************************************************************/
+>>>>>>> e1c440e91aeb9676f479250296d0c9468770d5e9
 router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
@@ -37,6 +44,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 /**
  * Method: GET
  * What: Getting a list of volunteers from chapter
@@ -44,6 +52,12 @@ router.get("/", async (req, res) => {
  * Returns: Json of all volunteers related to a specific chapter
  */
 router.get("/:id/volunteers", authenticated, async (req, res) => {
+=======
+/****************************************************************************/
+/*                 Get all volunteers of one specific chapter                 */
+/****************************************************************************/
+router.get("/:id/volunteers", async (req, res) => {
+>>>>>>> e1c440e91aeb9676f479250296d0c9468770d5e9
   const chapterId = req.params.id;
   try {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
@@ -103,6 +117,7 @@ router.get("/:id/partners", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 /**
  * Method: GET
  * What: Getting a specific volunteer from chapter
@@ -110,6 +125,13 @@ router.get("/:id/partners", async (req, res) => {
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
 router.get("/:id/volunteer", authenticated, async (req, res) => {
+=======
+/****************************************************************************/
+// THIS IS FOR GETTING A SPECIFIC CHAPTER_VOLUNTEER BY ID's
+/****************************************************************************/
+
+router.get("/:id/volunteer", async (req, res) => {
+>>>>>>> e1c440e91aeb9676f479250296d0c9468770d5e9
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
   try {
