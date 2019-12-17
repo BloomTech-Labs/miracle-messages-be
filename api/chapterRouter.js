@@ -17,7 +17,7 @@ const aws_link =
  * Endpoint: /api/chapter
  * Returns: Json of all chapters with related partners
  */
-router.get("/", authenticated, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -215,6 +215,13 @@ router.post("/:id/partners", async (req, res) => {
   }
 });
 
+/**
+ * Method: POST
+ * Endpoint: /api/chapter
+ * Requires: req.user_id: volunteerId
+ *           req.params.id : chapterId
+ * Returns: JSON o
+ */
 //**********************************************************************
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
@@ -259,7 +266,7 @@ router.post("/:id/volunteer", authenticated, async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticated, async (req, res) => {
   try {
     const updatedChapter = await req.body;
 
@@ -313,7 +320,7 @@ router.put("/:id", async (req, res) => {
 //************************************************************
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticated, async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
 
@@ -348,7 +355,7 @@ router.delete("/:id", async (req, res) => {
 //***************************************************************
 
 //
-router.delete("/:id/partners/:partnerid", async (req, res) => {
+router.delete("/:id/partners/:partnerid", authenticated, async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
       req.params.partnerid,
