@@ -14,7 +14,7 @@ const aws_link =
 /****************************************************************************/
 /*                 Get all partners 
 /****************************************************************************/
-router.get("/", authenticated, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const partners = await partnersDb.find();
     res.status(200).json(partners);
@@ -27,7 +27,7 @@ router.get("/", authenticated, async (req, res) => {
 /****************************************************************************/
 /*                 Get all partners of one specific chapter                 */
 /****************************************************************************/
-router.get("/:id", authenticated, async (req, res) => {
+router.get("/:id", async (req, res) => {
   const chapterId = req.params.id;
   try {
     const partners = await partnersDb.findById(chapterId);

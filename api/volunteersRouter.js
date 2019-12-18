@@ -24,24 +24,25 @@ router.get("/", authenticated, async (req, res) => {
 /****************************************************************************/
 /*                 Delete Volunteer - Deprioritized LABS18
 /****************************************************************************/
-router.delete('/:id', authenticated, (req, res) => {
-
-})
+router.delete("/:id", authenticated, (req, res) => {});
 /****************************************************************************/
 /*                 Update Volunteer - Deprioritized LABS18
 /****************************************************************************/
-router.put('/', authenticated, (req, res) => {
+router.put("/", authenticated, async (req, res) => {
   const volunteedId = req.user_id;
   const updatedVolunteer = req.body;
   try {
-    const volunteer = await volunteersDb.updateVolunteer(volunteedId, updatedVolunteer);
-    if(volunteer){
+    const volunteer = await volunteersDb.updateVolunteer(
+      volunteedId,
+      updatedVolunteer
+    );
+    if (volunteer) {
       res.status(200).json(volunteer);
     } else {
       res.status(404).json({ message: "The volunteer could not be found" });
     }
-  } catch(err){
-    res.status(500).json({messgae: 'Error updating the volunteer'})
+  } catch (err) {
+    res.status(500).json({ messgae: "Error updating the volunteer" });
   }
 });
 

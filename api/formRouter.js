@@ -11,7 +11,7 @@ const authenticated = require("../auth/restricted-middleware");
  * Endpoint: /api/form
  * Returns: Json of all volunteers
  */
-router.get("/", authenticated, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const volunteers = await volunteerDB.find();
     res.status(200).json(volunteers);

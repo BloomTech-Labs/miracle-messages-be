@@ -12,19 +12,12 @@ const aws_link =
 /******************/
 // ** ALL THE GETS **
 /******************/
-<<<<<<< HEAD
 /**
  * Method: GET
  * What: Getting all chapters
  * Endpoint: /api/chapter
  * Returns: Json of all chapters with related partners
  */
-=======
-
-/****************************************************************************/
-/*               GET all chapters with all related partners                */
-/****************************************************************************/
->>>>>>> e1c440e91aeb9676f479250296d0c9468770d5e9
 router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
@@ -44,20 +37,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 /**
  * Method: GET
  * What: Getting a list of volunteers from chapter
  * Endpoint: /api/chapter/:id/volunteers
  * Returns: Json of all volunteers related to a specific chapter
  */
-router.get("/:id/volunteers", authenticated, async (req, res) => {
-=======
-/****************************************************************************/
-/*                 Get all volunteers of one specific chapter                 */
-/****************************************************************************/
 router.get("/:id/volunteers", async (req, res) => {
->>>>>>> e1c440e91aeb9676f479250296d0c9468770d5e9
   const chapterId = req.params.id;
   try {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
@@ -117,21 +103,13 @@ router.get("/:id/partners", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 /**
  * Method: GET
  * What: Getting a specific volunteer from chapter
  * Endpoint: /api/chapter/:id/volunteer
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
-router.get("/:id/volunteer", authenticated, async (req, res) => {
-=======
-/****************************************************************************/
-// THIS IS FOR GETTING A SPECIFIC CHAPTER_VOLUNTEER BY ID's
-/****************************************************************************/
-
 router.get("/:id/volunteer", async (req, res) => {
->>>>>>> e1c440e91aeb9676f479250296d0c9468770d5e9
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
   try {
@@ -159,7 +137,7 @@ router.get("/:id/volunteer", async (req, res) => {
  * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
  * Returns: JSON of chapter or id
  */
-router.post("/", authetnicated, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
 
@@ -223,7 +201,7 @@ router.post("/", authetnicated, async (req, res) => {
  * Returns: ID of newly created row
  */
 
-router.post("/:id/partners", authenticated, async (req, res) => {
+router.post("/:id/partners", async (req, res) => {
   try {
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
@@ -250,7 +228,7 @@ router.post("/:id/partners", authenticated, async (req, res) => {
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 
-router.post("/:id/volunteer", authenticated, async (req, res) => {
+router.post("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
 
@@ -296,7 +274,7 @@ router.post("/:id/volunteer", authenticated, async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
-router.put("/:id", authenticated, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
 
@@ -357,7 +335,7 @@ router.put("/:id", authenticated, async (req, res) => {
 //************************************************************
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
-router.delete("/:id", authenticated, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
 
@@ -397,7 +375,7 @@ router.delete("/:id", authenticated, async (req, res) => {
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-router.delete("/:id/partners/:partnerid", authenticated, async (req, res) => {
+router.delete("/:id/partners/:partnerid", async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
       req.params.partnerid,
@@ -423,24 +401,20 @@ router.delete("/:id/partners/:partnerid", authenticated, async (req, res) => {
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
-router.delete(
-  "/:id/volunteers/:volunteerid",
-  authenticated,
-  async (req, res) => {
-    try {
-      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-        req.params.volunteerid,
-        req.params.id //chapterId
-      );
+router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
+  try {
+    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+      req.params.volunteerid,
+      req.params.id //chapterId
+    );
 
-      res.status(200).json(count);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ error: "error unassigning zee dang partner from the chapter" });
-    }
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error unassigning zee dang partner from the chapter" });
   }
-);
+});
 
 /**
  * Method: DEL
@@ -452,7 +426,7 @@ router.delete(
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteer/", authenticated, async (req, res) => {
+router.delete("/:id/volunteer/", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
 
