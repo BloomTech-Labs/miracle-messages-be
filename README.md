@@ -99,6 +99,7 @@ FOLLOW THIS STEP BY STEP
 8. "npx knex seed:run --specific=005-chapters-partners.js"
 9. "npx knex migrate:up"
 10. "npx knex migrate:up"
+11. "npx knex seed:run --specific=006-users.js"
 
 **Migrations/Seeds for Testing Environment**
 

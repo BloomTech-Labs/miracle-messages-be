@@ -12,10 +12,12 @@ const aws_link =
 /******************/
 // ** ALL THE GETS **
 /******************/
-
-/****************************************************************************/
-/*               GET all chapters with all related partners                */
-/****************************************************************************/
+/**
+ * Method: GET
+ * What: Getting all chapters
+ * Endpoint: /api/chapter
+ * Returns: Json of all chapters with related partners
+ */
 router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
@@ -35,9 +37,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-/****************************************************************************/
-/*                 Get all volunteers of one specific chapter                 */
-/****************************************************************************/
+/**
+ * Method: GET
+ * What: Getting a list of volunteers from chapter
+ * Endpoint: /api/chapter/:id/volunteers
+ * Returns: Json of all volunteers related to a specific chapter
+ */
 router.get("/:id/volunteers", async (req, res) => {
   const chapterId = req.params.id;
   try {
@@ -59,10 +64,12 @@ router.get("/:id/volunteers", async (req, res) => {
   }
 });
 
-/****************************************************************************/
-// THIS IS FOR GETTING A SPECIFIC CHAPTER BY ID
-/****************************************************************************/
-
+/**
+ * Method: GET
+ * What: Getting a specific chapter
+ * Endpoint: /api/chapter/:id
+ * Returns: JSON a specific chapter by id
+ */
 router.get("/:id", async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
@@ -78,9 +85,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//************************************************************
-//THIS IS FOR GETTING ALL PARTNER ORGANIZATIONS FOR A SPECIFIC CHAPTER
-//************************************************************
+/**
+ * Method: GET
+ * What: Getting partners from chapter
+ * Endpoint: /api/chapter/:id/partners
+ * Returns: JSON of all partners specific to a chapter
+ */
 router.get("/:id/partners", async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
@@ -93,10 +103,12 @@ router.get("/:id/partners", async (req, res) => {
   }
 });
 
-/****************************************************************************/
-// THIS IS FOR GETTING A SPECIFIC CHAPTER_VOLUNTEER BY ID's
-/****************************************************************************/
-
+/**
+ * Method: GET
+ * What: Getting a specific volunteer from chapter
+ * Endpoint: /api/chapter/:id/volunteer
+ * Returns: JSON of specific Chapter_Volunteer by their id's
+ */
 router.get("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
@@ -105,7 +117,6 @@ router.get("/:id/volunteer", async (req, res) => {
       volunteerId,
       chapterId
     );
-    // console.log(Boolean(isVolunteerInChapter.length));
     res.status(200).json(isVolunteerInChapter);
   } catch (error) {
     res.status(500).json({
@@ -118,10 +129,14 @@ router.get("/:id/volunteer", async (req, res) => {
 // ** ALL THE POSTS **
 /********************/
 
-//**********************************************************************
-//********* ADDING A CHAPTER TO THE DATABASE  *************/
-//**********************************************************************
-
+/**
+ * Method: POST
+ * What: Adds chapter into DB
+ * Endpoint: /api/chapter
+ * Requires: `req.body: longitude, latitude, city, title, state, email, chapter_img_url, established_date, description, email
+ * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
+ * Returns: JSON of chapter or id
+ */
 router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
@@ -177,16 +192,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-//**********************************************************************
-//********* ASSIGNING A PARTNER ORGANIZATION TO A CHAPTER   *************/
-//**********************************************************************
+/**
+ * Method: POST
+ * What: Creates row in chapters_partners for specific chapter/partner
+ * Endpoint: /api/chapter/:id/partners
+ * Requires: req.body: partnerId
+ *           req.params.id
+ * Returns: ID of newly created row
+ */
 
 router.post("/:id/partners", async (req, res) => {
   try {
-    console.log("in the router");
-    console.log(req.body.partnerId);
-    console.log(req.params.id);
-
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
       req.params.id
@@ -200,11 +216,19 @@ router.post("/:id/partners", async (req, res) => {
   }
 });
 
+/**
+ * Method: POST
+ * What: Adding volunteer into chapter
+ * Endpoint: /api/chapter
+ * Requires: req.user_id: volunteerId
+ *           req.params.id : chapterId
+ * Returns: ID of the created chapter_volunteers row
+ */
 //**********************************************************************
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 
-router.post("/:id/volunteer", authenticated, async (req, res) => {
+router.post("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
 
@@ -241,6 +265,12 @@ router.post("/:id/volunteer", authenticated, async (req, res) => {
 // ** ALL THE PUTS **
 /********************/
 
+/**
+ * Method: PUT
+ * Endpoint: /api/chapter/:id
+ * Requires: req.user_id: volunteerId
+ * Returns: ID of the created chapter_volunteers row
+ */
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
@@ -295,6 +325,13 @@ router.put("/:id", async (req, res) => {
 // ** ALL THE DELETES **
 /********************/
 
+/**
+ * Method: DEL
+ * What: Deleting a chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
 //************************************************************
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
@@ -328,11 +365,16 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+/**
+ * Method: DEL
+ * What: Unassigning a partner from chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-
-//
 router.delete("/:id/partners/:partnerid", async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
@@ -348,32 +390,43 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
   }
 });
 
+/**
+ * Method: DEL
+ * What: Unassigning a volunteer from chapter (Admin)
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ * UNTESTED DON'T KNOW IF IT WORKS YET
+ */
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
-router.delete(
-  "/:id/volunteers/:volunteerid",
-  authenticated,
-  async (req, res) => {
-    try {
-      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-        req.params.volunteerid,
-        req.params.id //chapterId
-      );
+router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
+  try {
+    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+      req.params.volunteerid,
+      req.params.id //chapterId
+    );
 
-      res.status(200).json(count);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ error: "error unassigning zee dang partner from the chapter" });
-    }
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error unassigning zee dang partner from the chapter" });
   }
-);
+});
 
+/**
+ * Method: DEL
+ * What: Unassigning a volunteer from chapter (Volunteer)
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteer/", authenticated, async (req, res) => {
+router.delete("/:id/volunteer/", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
 
