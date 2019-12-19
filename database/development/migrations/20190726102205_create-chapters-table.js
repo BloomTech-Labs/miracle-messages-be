@@ -13,11 +13,10 @@ exports.up = function(knex, Promise) {
     tbl.integer("msg_delivered");
     tbl.string("chapter_img_url").notNullable();
     tbl.string("reunion_img_url");
-    tbl
-      .string("established_date")
-      .tbl.text("description")
-      .notNullable();
-    tbl.text("story");
+    tbl.string("established_date");
+    tbl.text("description");
+
+    tbl.string("story");
     tbl.string("email").notNullable();
     tbl.string("facebook");
 
