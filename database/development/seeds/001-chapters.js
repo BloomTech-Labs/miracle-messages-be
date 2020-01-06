@@ -24,7 +24,8 @@ exports.seed = function(knex) {
           story:
             "Wayne reunited with his beloved niece Jasmine and the rest of his family after years disconnected. Today, Wayne is off-the-streets thanks to his reunion!",
           longitude: -122.431297,
-          latitude: 37.773972
+          latitude: 37.773972,
+          approved: true
         },
         {
           city: "Los Angeles",
@@ -46,7 +47,8 @@ exports.seed = function(knex) {
             "Jose Jr. was searching for his father Jose Sr. with the help of Miracle Messages. The father and son had not parted on good terms, but Jose Jr. felt as though enough time had passed and that he wanted to reconnect and get to know more of his family, specifically his brother and sister whom he has not met. A messenger searched for Jose Sr.'s on White Pages and Facebook but was unable to find any current information. After finding an inactive Facebook profile for Jose Sr., a messenger reached out to some of Jose Sr.'s Facebook friends with the same last name.  One of Jose Sr.'s sons relayed the message to Jose Sr., who then called our messenger. He spoke spanish, so with the help of a translator, Jose Jr. was able to deliver his message.  Jose Sr. wanted to reconnect, so after getting back in touch with Jose Jr. via a letter in the mail, a phone call was facilitated between the father and son. The two talked for a long while and decided to keep talking and see one another. Soon after Jose Sr. drove to San Diego from Tijuana to have lunch with Jose Jr. seen in the attached picture. Jose Jr. has reunited with his father after nearly 25 years of separation.",
 
           longitude: -118.243683,
-          latitude: 34.052235
+          latitude: 34.052235,
+          approved: true
         },
         {
           city: "Riverside",
@@ -66,7 +68,8 @@ exports.seed = function(knex) {
           story:
             "Paula was searching for her sister Shela when she found Miracle Messages. A messengers was able to find Shela’s contact information via Whitepages and contacted her on behalf of Paula. Shela was more than willing to reconnect with her sister. The two sisters have been reunited after months of separation.",
           longitude: -117.377022,
-          latitude: 33.98053
+          latitude: 33.98053,
+          approved: true
         },
         {
           city: "Seattle",
@@ -87,7 +90,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -122.332069,
-          latitude: 47.606209
+          latitude: 47.606209,
+          approved: true
         },
         {
           city: "Fort Lauderdale",
@@ -108,7 +112,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -80.137314,
-          latitude: 26.122438
+          latitude: 26.122438,
+          approved: true
         },
         {
           city: "Miami",
@@ -129,7 +134,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -80.191788,
-          latitude: 25.761681
+          latitude: 25.761681,
+          approved: true
         },
         {
           city: "San Antonio",
@@ -150,7 +156,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -98.493629,
-          latitude: 29.424122
+          latitude: 29.424122,
+          approved: true
         },
         {
           city: "New York",
@@ -171,7 +178,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -74.005974,
-          latitude: 40.712776
+          latitude: 40.712776,
+          approved: true
         },
         {
           city: "Boston",
@@ -192,7 +200,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -71.058884,
-          latitude: 42.360081
+          latitude: 42.360081,
+          approved: true
         },
         {
           city: "Phoenix",
@@ -213,7 +222,8 @@ exports.seed = function(knex) {
           story:
             "Miracle Messages partnered with Choose Love Foundation to reunite Isaac with his family. Isaac was reunited with his sister Guadalupe Avila after nearly 40 years of separation. Isaac is now off the streets and living with his sister.",
           longitude: -112.074036,
-          latitude: 33.448376
+          latitude: 33.448376,
+          approved: true
         }
       ]);
     });
