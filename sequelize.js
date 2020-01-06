@@ -1,16 +1,18 @@
-import Sequelize from "sequelize";
-import UserModel from "./models/user";
+// This is for the password reset -- NOT NEEDED Must convert to knex routes.
 
-const sequelize = new Sequelize("database", "email", "password", {
-  // gimme postgres, please!
-  dialect: "postgres"
-});
+// import Sequelize from "sequelize";
+// import UserModel from "./models/user";
 
-const User = UserModel(sequelize, Sequelize);
+// const sequelize = new Sequelize("database", "email", "password", {
+//   // gimme postgres, please!
+//   dialect: "postgres"
+// });
 
-sequelize.sync().then(() => {
-  // eslint-disable-next-line no-console
-  console.log("Users db and user table have been created");
-});
+// const User = UserModel(sequelize, Sequelize);
 
-module.exports = User;
+// sequelize.sync().then(() => {
+//   // eslint-disable-next-line no-console
+//   console.log("Users db and user table have been created");
+// });
+
+// module.exports = User;
