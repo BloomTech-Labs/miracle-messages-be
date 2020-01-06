@@ -15,8 +15,8 @@ exports.up = function(knex, Promise) {
     tbl.string("reunion_img_url");
     tbl.string("established_date");
     tbl.text("description");
+    tbl.text("story");
 
-    tbl.string("story");
     tbl.string("email").notNullable();
     tbl.string("facebook");
 
