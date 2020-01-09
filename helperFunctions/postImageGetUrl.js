@@ -4,11 +4,11 @@ const aws_link =
 
 const postImageGetUrl = async function(img, res) {
   //pulling out the chapter_img file
-  console.log("in the function");
+  // console.log("in the function");
   //uploading the file to AWS
   try {
     uploadToS3(img);
-    console.log("success");
+    // console.log("success");
   } catch (error) {
     res.status(500).json({ error: `error uploading the ${img} to AWS` });
   }

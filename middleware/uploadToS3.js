@@ -31,11 +31,11 @@ const uploadToS3 = (file, res) => {
 
     s3Bucket.upload(params, (err, data) => {
       if (err) {
-        console.log("error in callback");
-        console.log(err);
+        // console.log("error in callback");
+        // console.log(err);
         return err;
       }
-      console.log("success");
+      // console.log("success");
 
       return data;
 

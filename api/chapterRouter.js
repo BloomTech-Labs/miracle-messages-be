@@ -237,7 +237,7 @@ router.post("/:id/volunteer", async (req, res) => {
       volunteerId,
       chapterId
     );
-    console.log(isVolunteerInChapter);
+    // console.log(isVolunteerInChapter);
     //Checks if this volunteer is already in the chapter
     if (isVolunteerInChapter.length < 1) {
       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
