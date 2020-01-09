@@ -119,3 +119,89 @@ FOLLOW THIS STEP BY STEP
 8. "npx knex seed:run --specific=005-chapters-partners.js --env testing"
 9. "npx knex migrate:up"
 10. "npx knex migrate:up"
+
+
+
+==================== LOGIN && REGISTER ENDPOINTS START HERE =======================
+
+**Register a volunteer**
+method url: **/api/volunteer/register** 
+
+http method: **[POST]**
+
+
+**Body**
+
+| name      | type     | required | description                         |  
+| --------  | -------  | ------- | ----------------------------------   |
+| fname     | String   | Yes      | Must be <= 128 char                 |
+| lname     | String   | Yes      | Must be <= 128 char                 |    
+| email     | String   | Yes      | Must be unique/ Must be <= 255 char |    
+| password  | String   | Yes      | Must be <= 128 char                 |
+| phone     | String   | No       | Must be <= 32 char                  |    
+| city      | String   | Yes      | Must be <= 64 char                  |  
+| state     | String   | Yes      | Must be <= 32 char                  |
+| country   | String   | Yes      | Must be <= 32 char                  |    
+| comment   | Text     | No       | Must be <= 64 char                  |  
+| date      | datetime | Yes      | Must be <= 32 char                  |
+
+*** I am Interested In Section ***
+
+| name          | type        | required  | defaultTo/description |  
+| -----------   -----------  | ----------| -------------------    |
+| volunteering  | boolean | No           | false                  |    
+| donating      | boolean | No           | false                  |  
+| joinmm        | boolean | No           | false                  |    
+| mediacoverage | boolean | No           | false                  |  
+| somethingelse | String  | No           | Must be <= 32 char     |
+
+
+**Example**
+
+```
+{
+    fname: 'Bobby',
+    lname : 'Frank',
+    email: 'b@gmail.com',
+    password: '123',
+    phone: '878-999-9999',
+    city: 'Seattle',
+    state: 'Washington',
+    country: 'United States',
+    comment: 'hello there',
+    date: '06-30-2005',
+    volunteering: 'false',
+    donating: 'false',
+    joinmm: 'false',
+    mediacoverage: 'true',
+    somethingelse: 'false'
+}
+```
+
+**Response** 200 (created)
+
+
+**Login a volunteer**
+method url: **/api/volunteer/login** 
+
+http method: **[POST]**
+
+
+**Body**
+
+| name      | type     | required | description                         |  
+| --------  | -------  | ------- | ----------------------------------   |
+| email     | String   | Yes      | Must be unique/ Must be <= 255 char |    
+| password  | String   | Yes      | Must be <= 128 char                 |
+
+
+**Example**
+
+```
+{
+    email: 'b@gmail.com',
+    password: '123',
+}
+```
+
+**Response** 200 (created)
