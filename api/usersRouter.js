@@ -10,7 +10,7 @@ const router = express.Router();
 /*                    New  user registration by an admin                    */
 /****************************************************************************/
 
-router.post("/register", restricted, async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 10);

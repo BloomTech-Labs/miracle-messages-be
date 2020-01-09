@@ -16,6 +16,7 @@ exports.up = function(knex, Promise) {
     tbl.string("established_date");
     tbl.text("description");
     tbl.text("story");
+
     tbl.string("email").notNullable();
     tbl.string("facebook");
 
