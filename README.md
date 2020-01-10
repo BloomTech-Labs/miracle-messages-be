@@ -208,8 +208,8 @@ http method: **[POST]**
 
 ==================== CHAPTER ENDPOINTS START HERE =======================
 
-**Login a volunteer**
-method url: **/api/volunteer/login** 
+**Post new Chapters**
+method url: **/api/chapter/** 
 
 http method: **[POST]**
 
@@ -259,3 +259,130 @@ facebook: "https://www.facebook.com/"
 ```
 
 **Response** 200 (created)
+
+
+**Put new Chapters**
+method url: **/api/chapter/:id** 
+
+http method: **[PUT]**
+
+
+**Body**
+
+| name             | type     | required | description             |  
+| -----------      | -------  | -------  | --------------------    |
+| numvolunteers    | Integer  | No       | none                    |    
+| longitude        | Double   | Yes      | none                    |
+| latitude         | Double   | Yes      | none                    |
+| city             | String   | Yes      |  Must be <= 128 char    |    
+| title            | String   | Yes      |  Must be <= 128 char    |
+| state            | String   | Yes      |  Must be <= 128 char    |    
+| numreunions      | Integer  | No       |  none                   |
+| msg_recorded     | Integer  | No       |  none                   |    
+| msg_delivered    | Integer  | No       |  none                   |
+| chapter_img_url  | String   | Yes      |  none                   |    
+| reunion_img_url  | String   | No       |  none                   |
+| established_date | String   | No       |  none                   |    
+| description      | Text     | No       |  none                   |
+| story            | Text     | No       |  none                   |    
+| email            | String   | Yes      |  none                   |
+| facebook         | String   | No       |  none                   | 
+
+**Example**
+
+```
+{
+numvolunteers: 5,
+longitude: 47.6062,
+latitude:  122.3321,
+city: Seattle, 
+title: Seattle Group,
+state: Washington,
+numreunions: 10,
+msg_recorded: 100,
+msg_delivered: 120,
+chapter_img_url: "https://images.squarespace-cdn.com/content/v1/57e2d6ab440243c69eb9cb95/1573141887647-LR438DECYR8M1B1KOHS7/ke17ZwdGBToddI8pDm48kOVtNrpe7dYbM_JOZaIb8PR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UcmmE2WSOo-yNshFv8pHpEIf8HnJS8QicebBj_MVoHD9GLDe_BHBL9JV7OZzPTrWmA/74457563_1512074532278704_1205922294392684544_o.jpg?format=1000w",
+reunion_img_url: "https://images.squarespace-cdn.com/content/v1/57e2d6ab440243c69eb9cb95/1573141887647-LR438DECYR8M1B1KOHS7/ke17ZwdGBToddI8pDm48kOVtNrpe7dYbM_JOZaIb8PR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UcmmE2WSOo-yNshFv8pHpEIf8HnJS8QicebBj_MVoHD9GLDe_BHBL9JV7OZzPTrWmA/74457563_1512074532278704_1205922294392684544_o.jpg?format=1000w",
+established_date: 06-20-2016,
+description: "awesome group located in Seattle Washington",
+story: "",
+email: "chapterstaff@gmail.com",
+facebook: "https://www.facebook.com/"
+}
+```
+
+**Response** 200 (created)
+
+
+**delete a Chapter**
+method url: **/api/chapter/:id** 
+
+http method: **[DELETE]**
+
+
+**Body**
+
+No Body 
+
+**Example**
+
+```
+{
+numvolunteers: 5,
+longitude: 47.6062,
+latitude:  122.3321,
+city: Seattle, 
+title: Seattle Group,
+state: Washington,
+numreunions: 10,
+msg_recorded: 100,
+msg_delivered: 120,
+chapter_img_url: "https://images.squarespace-cdn.com/content/v1/57e2d6ab440243c69eb9cb95/1573141887647-LR438DECYR8M1B1KOHS7/ke17ZwdGBToddI8pDm48kOVtNrpe7dYbM_JOZaIb8PR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UcmmE2WSOo-yNshFv8pHpEIf8HnJS8QicebBj_MVoHD9GLDe_BHBL9JV7OZzPTrWmA/74457563_1512074532278704_1205922294392684544_o.jpg?format=1000w",
+reunion_img_url: "https://images.squarespace-cdn.com/content/v1/57e2d6ab440243c69eb9cb95/1573141887647-LR438DECYR8M1B1KOHS7/ke17ZwdGBToddI8pDm48kOVtNrpe7dYbM_JOZaIb8PR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UcmmE2WSOo-yNshFv8pHpEIf8HnJS8QicebBj_MVoHD9GLDe_BHBL9JV7OZzPTrWmA/74457563_1512074532278704_1205922294392684544_o.jpg?format=1000w",
+established_date: 06-20-2016,
+description: "awesome group located in Seattle Washington",
+story: "",
+email: "chapterstaff@gmail.com",
+facebook: "https://www.facebook.com/"
+}
+```
+
+**Response** 200 (created)
+
+**get a Chapter**
+method url: **/api/chapter/** 
+
+http method: **[GET]**
+
+
+**Body**
+
+No Body 
+
+**Example**
+
+```
+{
+numvolunteers: 5,
+longitude: 47.6062,
+latitude:  122.3321,
+city: Seattle, 
+title: Seattle Group,
+state: Washington,
+numreunions: 10,
+msg_recorded: 100,
+msg_delivered: 120,
+chapter_img_url: "https://images.squarespace-cdn.com/content/v1/57e2d6ab440243c69eb9cb95/1573141887647-LR438DECYR8M1B1KOHS7/ke17ZwdGBToddI8pDm48kOVtNrpe7dYbM_JOZaIb8PR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UcmmE2WSOo-yNshFv8pHpEIf8HnJS8QicebBj_MVoHD9GLDe_BHBL9JV7OZzPTrWmA/74457563_1512074532278704_1205922294392684544_o.jpg?format=1000w",
+reunion_img_url: "https://images.squarespace-cdn.com/content/v1/57e2d6ab440243c69eb9cb95/1573141887647-LR438DECYR8M1B1KOHS7/ke17ZwdGBToddI8pDm48kOVtNrpe7dYbM_JOZaIb8PR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UcmmE2WSOo-yNshFv8pHpEIf8HnJS8QicebBj_MVoHD9GLDe_BHBL9JV7OZzPTrWmA/74457563_1512074532278704_1205922294392684544_o.jpg?format=1000w",
+established_date: 06-20-2016,
+description: "awesome group located in Seattle Washington",
+story: "",
+email: "chapterstaff@gmail.com",
+facebook: "https://www.facebook.com/"
+}
+```
+
+**Response** 200 (created)
+
+
+<!-- Because of lack of time we were not able to document all endpoints -->
