@@ -9,7 +9,7 @@ const AWS = require("aws-sdk");
 router.post("/", async (req, res) => {
   const file = req.files.name;
 
-  console.log(filename);
+  // console.log(filename);
 
   uploadToS3(filename, res);
 });

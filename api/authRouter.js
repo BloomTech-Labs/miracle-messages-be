@@ -45,11 +45,9 @@ router.post("/login", (req, res) => {
     Volunteer.addId({ email })
       .first()
       .then(user => {
-        // console.log(user)
         if (user && bcrypt.compareSync(password, user.password)) {
           const token = generateToken(user);
-          console.log(token);
-
+          // console.log(token)
           res
             .status(200)
             .json({ message: `Welcome ${user.fname}!!`, token, id: user.id });
@@ -58,7 +56,7 @@ router.post("/login", (req, res) => {
         }
       })
       .catch(error => {
-        console.log(error);
+        // console.log(err)
         res.status(500).json({ error: "Internal Server Error" });
       });
   }
@@ -77,3 +75,15 @@ router.get("/hash", (req, res) => {
 });
 
 module.exports = router;
+
+
+router.post('/newfav', async(req, res) => {
+  const message = req.body
+  // const comment_id = parseInt(req.body.comment, 10);
+  try{
+    let comment = await Trolls.savedComment(message)
+    res.status(200).json(comment)
+  }catch(err){
+    res.status(500).json({message: 'err'})
+  }
+}

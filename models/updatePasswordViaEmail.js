@@ -20,7 +20,7 @@ module.exports = app => {
         console.error("password reset link is invalid or has expired");
         res.status(403).send("password reset link is invalid or has expired");
       } else if (user != null) {
-        console.log("user exists in db");
+        // console.log("user exists in db");
         bcrypt
           .hash(req.body.password, BCRYPT_SALT_ROUNDS)
           .then(hashedPassword => {

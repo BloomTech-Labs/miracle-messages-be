@@ -34,9 +34,9 @@ function removeChapterPartner(chapterId) {
 // assign a Partner to a Chapter to be displayed under the partners/sponsors section
 //partners and sponsors are organizations that work with and support Miracle Messages
 function assignChapterPartner(partnerId, chapterId) {
-  console.log("in the model");
-  console.log(partnerId);
-  console.log(chapterId);
+  // console.log("in the model");
+  // console.log(partnerId);
+  // console.log(chapterId);
   return db("chapters_partners").insert(
     {
       partnersid: partnerId,

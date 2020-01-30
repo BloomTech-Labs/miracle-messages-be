@@ -114,7 +114,7 @@ describe("UPDATE Volunteer /", () => {
     });
 
     const volunteers = await db("volunteers");
-    console.log(volunteers);
+    // console.log(volunteers);
 
     expect(volunteers).toHaveLength(2);
     expect(volunteers[0].fname).toEqual("Richard");
