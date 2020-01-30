@@ -75,15 +75,3 @@ router.get("/hash", (req, res) => {
 });
 
 module.exports = router;
-
-
-router.post('/newfav', async(req, res) => {
-  const message = req.body
-  // const comment_id = parseInt(req.body.comment, 10);
-  try{
-    let comment = await Trolls.savedComment(message)
-    res.status(200).json(comment)
-  }catch(err){
-    res.status(500).json({message: 'err'})
-  }
-}
