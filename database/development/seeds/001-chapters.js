@@ -1,8 +1,8 @@
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex("chapters")
-    .truncate()
-    .then(function() {
+  //return knex("chapters")
+    //.truncate()
+    //.then(function() {
       // Inserts seed entries
       return knex("chapters").insert([
         {
@@ -226,5 +226,5 @@ exports.seed = function(knex) {
           approved: true
         }
       ]);
-    });
+   // });
 };
