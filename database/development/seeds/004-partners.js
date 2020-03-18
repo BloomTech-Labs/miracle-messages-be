@@ -1,9 +1,9 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('partners')
-    .truncate()
-    .then(function () {
+  // return knex('partners')
+  //   .truncate()
+  //   .then(function () {
       // Inserts seed entries
       return knex('partners').insert([
         {category: 'partner', name: 'USC', site_url:'www.usc.edu', icon_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/University_of_Southern_California_-_Wikipedia.png" },
@@ -13,5 +13,5 @@ exports.seed = function(knex) {
         {category: 'sponsor', name: 'AT$T', site_url: "https://www.att.com/local/california/san-francisco", icon_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/att-logo.png"},
         {category: 'partner', name: 'DSCS', site_url: "https://www.dscs.org/", icon_url: "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/DSCS.jpg"},  
       ]);
-    });
+    // });
 };
