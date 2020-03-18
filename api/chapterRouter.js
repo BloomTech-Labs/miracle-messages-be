@@ -18,6 +18,8 @@ const aws_link =
  * Endpoint: /api/chapter
  * Returns: Json of all chapters with related partners
  */
+// ENDPOINT VERIFIED
+
 router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
@@ -43,6 +45,8 @@ router.get("/", async (req, res) => {
  * Endpoint: /api/chapter/:id/volunteers
  * Returns: Json of all volunteers related to a specific chapter
  */
+// ENDPOINT VERIFIED
+
 router.get("/:id/volunteers", async (req, res) => {
   const chapterId = req.params.id;
   try {
@@ -70,6 +74,8 @@ router.get("/:id/volunteers", async (req, res) => {
  * Endpoint: /api/chapter/:id
  * Returns: JSON a specific chapter by id
  */
+// ENDPOINT VERIFIED
+
 router.get("/:id", async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
@@ -91,6 +97,8 @@ router.get("/:id", async (req, res) => {
  * Endpoint: /api/chapter/:id/partners
  * Returns: JSON of all partners specific to a chapter
  */
+// ENDPOINT VERIFIED
+
 router.get("/:id/partners", async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
@@ -109,6 +117,7 @@ router.get("/:id/partners", async (req, res) => {
  * Endpoint: /api/chapter/:id/volunteer
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
+// ENDPOINT VERIFIED
 router.get("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
@@ -200,7 +209,7 @@ router.post("/", async (req, res) => {
  *           req.params.id
  * Returns: ID of newly created row
  */
-
+// ENDPOINT VERIFIED
 router.post("/:id/partners", async (req, res) => {
   try {
     const id = await chaptersPartnersDB.assignChapterPartner(
@@ -212,7 +221,7 @@ router.post("/:id/partners", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning zee dang partner to the chapter" });
+      .json({ error: "error assigning partner to the chapter", error });
   }
 });
 
@@ -227,17 +236,17 @@ router.post("/:id/partners", async (req, res) => {
 //**********************************************************************
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
-
+// ROUTE FIXED AND VERIFIED
 router.post("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
-  let volunteerId = req.user_id;
-
+  let volunteerId = req.body.user_id;
+  console.log(volunteerId)
   try {
     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
       volunteerId,
       chapterId
     );
-    // console.log(isVolunteerInChapter);
+    console.log(isVolunteerInChapter);
     //Checks if this volunteer is already in the chapter
     if (isVolunteerInChapter.length < 1) {
       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
@@ -257,7 +266,7 @@ router.post("/:id/volunteer", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning zee dang volunteer to the chapter" });
+      .json({ error: "error assigning volunteer to the chapter", error });
   }
 });
 
@@ -335,6 +344,7 @@ router.put("/:id", async (req, res) => {
 //************************************************************
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
+// ROUTE VERIFIED
 router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
