@@ -8,18 +8,18 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const chaptersRouter = require("./api/chapterRouter.js");
-const formRouter = require("./api/formRouter.js");
-const userRouter = require("./api/usersRouter");
+const formRouter = require("./Lab18_unusedcode/formRouter.js");
+const userRouter = require("./api/masterRouter");
 const partnerRouter = require("./api/partnerRouter");
 const uploadRouter = require("./api/uploadRouter");
-const volunteersRouter = require("./api/volunteersRouter");
+const volunteersRouter = require("./Lab18_unusedcode/volunteersRouter");
 
 // importing auth routers below
 const authRouter = require("./api/authRouter.js");
 // importing auth routers above
 
 // import resetPassword router below
-const resetPasswordRouter = require("./api/ResetPasswordRouter.js");
+const resetPasswordRouter = require("./Lab18_unusedcode/ResetPasswordRouter.js");
 // import resetPassword above
 
 server.use(helmet());

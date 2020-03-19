@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // const formDB = require("../models/form-model.js");
-const volunteerDB = require("../models/volunteer-model.js");
+const volunteerDB = require("./volunteer-model.js");
 const authenticated = require("../auth/restricted-middleware");
 
 /**
@@ -11,6 +11,7 @@ const authenticated = require("../auth/restricted-middleware");
  * Endpoint: /api/form
  * Returns: Json of all volunteers
  */
+
 router.get("/", async (req, res) => {
   try {
     const volunteers = await volunteerDB.find();
@@ -24,6 +25,7 @@ router.get("/", async (req, res) => {
 
 ///////////Fetching a volunteer by custom search/////////////
 //TODO unable to verify
+
 router.get("/findby/", (req, res) => {
   const searchParam = req.query;
 
