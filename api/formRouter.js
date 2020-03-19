@@ -23,6 +23,7 @@ router.get("/", async (req, res) => {
 });
 
 ///////////Fetching a volunteer by custom search/////////////
+//TODO unable to verify
 router.get("/findby/", (req, res) => {
   const searchParam = req.query;
 
@@ -56,10 +57,11 @@ router.get("/findby/", (req, res) => {
 // });
 
 ///////// updating a volunteer //////////////////
-
+// TODO Unable to update volunteer
 router.put("/:id", async (req, res) => {
   try {
     const interests = await formDB.updateInterest(
+      
       req.params.id,
       req.body.interests
     );

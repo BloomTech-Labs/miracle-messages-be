@@ -73,7 +73,7 @@ router.delete("/:id", MW.validatePartnerId, async (req, res) => {
 /****************************************************************************/
 /*      ADD A PARNTER ORGANIZATION TO THE DATABASE
 /****************************************************************************/
-
+//TODO POST Requires an image/Need to re-visit: AWS 
 router.post("/", MW.verifyPartnerData, async (req, res) => {
   const newPartner = req.body;
   const { partner_icon } = req.files;
@@ -107,6 +107,7 @@ router.post("/", MW.verifyPartnerData, async (req, res) => {
 /****************************************************************************/
 /*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
 /****************************************************************************/
+//TODO Remove requirement for file upload in order to update partner
 router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
   try {
     const changes = await req.body;
