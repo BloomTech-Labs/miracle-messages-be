@@ -8,6 +8,7 @@ const authenticated = require("../auth/restricted-middleware");
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const aws_link =
   "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+const axios = require('axiois')
 
 /******************/
 // ** ALL THE GETS **
@@ -193,9 +194,23 @@ router.post("/", async (req, res) => {
     }
 
     //adding the newChapter object to the database
-    const chapter = await chapterDB.addChapter(newChapter);
-
-    res.status(201).json(chapter);
+    try {
+      axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`)
+      .then(response => {
+        if (response.data.features) {
+          newChapter.latitude = response.data.features[0].center[0];
+          newChapter.longitude = response.data.features[0].center[1];
+          const chapter = await chapterDB.addChapter(newChapter);
+          res.status(201).json(chapter);
+        }
+        else {
+          res.status(500).json({ error: 'Please check city spelling.' })
+        }
+      })
+    }
+    catch (err) {
+      res.status(500).json({ error: 'Mapbox request could not complete.'})
+    }
   } catch (error) {
     res.status(500).json({ error: "Something went wrong, Please try again" });
   }
