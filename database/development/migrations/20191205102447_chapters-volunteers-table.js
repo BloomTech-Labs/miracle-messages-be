@@ -1,5 +1,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable("chapters_volunteers", tbl => {
+    //TODO may need to add this to prevent duplicate rows tbl.unique(['chaptersid', 'volunteersid']);
+
     tbl.increments();
 
     tbl

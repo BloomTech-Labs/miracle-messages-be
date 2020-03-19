@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const express = require("express");
 
 const chapterDB = require("../models/chapters-model.js");
-
+//TODO Need keys for AWS up-loader
 // CONSTANTS
 const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME;
 const S3_SECRET_ACCESS_KEY = process.env.S3_SECRET_ACCESS_KEY;
