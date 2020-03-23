@@ -9,7 +9,7 @@ const authenticated = require("../auth/restricted-middleware");
 // this link below is to specify the AWS S3 BUCKET where our images will live:
 
 const aws_link =
-  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+  "https://miraclemessagesimages.s3.amazonaws.com/";
 
 /****************************************************************************/
 /*                 Get all partners 

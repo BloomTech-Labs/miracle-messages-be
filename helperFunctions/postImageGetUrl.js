@@ -1,6 +1,6 @@
 const uploadToS3 = require("./uploadToS3.js");
 const aws_link =
-  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+  "https://miraclemessagesimages.s3.amazonaws.com/";
 
 const postImageGetUrl = async function(img, res) {
   //pulling out the chapter_img file

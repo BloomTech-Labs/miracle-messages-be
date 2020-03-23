@@ -7,7 +7,7 @@ const partnerDB = require("../models/partners-model");
 const authenticated = require("../auth/restricted-middleware");
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const aws_link =
-  "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/";
+  "https://miraclemessagesimages.s3.amazonaws.com/";
 const axios = require('axios');
 
 /******************/
