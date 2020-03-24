@@ -21,6 +21,17 @@ In terminal run the following commands:
 
 If you dont have postgres follow this link: https://www.2ndquadrant.com/en/blog/pginstaller-install-postgresql/
 
+### Update S3 Credentials
+
+To update S3 do the following
+
+1. Using the Heroku CLI
+   You may have to use Git BASH as the command is so long
+2. Command: heroku git:remote -a miracle-messages-dev
+3. Command: heroku config:set AWS_ACCESS_KEY_ID=xxx AWS_SECRET_ACCESS_KEY=yyy
+4. Command: heroku config:set S3_BUCKET_NAME=appname-assets
+
+
 #### Create dev and test databases (Windows)
 
 Set up Postgres and create databases for both the development server (miracle_be) and testing server (miracle_be_test)
@@ -29,6 +40,7 @@ Set up Postgres and create databases for both the development server (miracle_be
 2. Create a server if needed, if already created, turn server on by right clicking and pressing "Connect Server"
 3. Once connected, look for the drop down for databases and right click to Create a database
 4. Create a database called 'miracle_be' for the development connection & (miracle_be_test) for the testing connection
+
 
 ## Environmental Variables at Runtime
 

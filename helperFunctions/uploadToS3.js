@@ -8,9 +8,6 @@ const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME;
 const S3_SECRET_ACCESS_KEY = process.env.S3_SECRET_ACCESS_KEY;
 const S3_ACCESS_KEY_ID = process.env.S3_ACCESS_KEY_ID;
 
-// UPLOAD TO S3 BUCKET
-
-// UPLOAD TO S3 BUCKET
 const uploadToS3 = (file, res) => {
   const s3Bucket = new AWS.S3({
     accessKeyId: S3_ACCESS_KEY_ID,
