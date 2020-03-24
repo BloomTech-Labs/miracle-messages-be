@@ -7,7 +7,7 @@ const fileupload = require("express-fileupload");
 const cors = require("cors");
 const helmet = require("helmet");
 
-const okta = require("./middleware/Okta.js");
+const authenticationRequired = require("./middleware/Okta.js");
 
 const chaptersRouter = require("./api/chapterRouter.js");
 const formRouter = require("./Lab18_unusedcode/formRouter.js");
@@ -44,10 +44,10 @@ server.use("/api/account", resetPasswordRouter);
 // using resetPassword router above
 
 server.use("/api/upload", uploadRouter);
-server.use("/api/chapter", okta, chaptersRouter);
+server.use("/api/chapter", authenticationRequired, chaptersRouter);
 server.use("/api/partner", partnerRouter);
 server.use("/api/form", formRouter);
-server.use("/api/user", okta, userRouter);
+server.use("/api/user", authenticationRequired, userRouter);
 
 /**************************************/
 /*      Custom Middleware             */

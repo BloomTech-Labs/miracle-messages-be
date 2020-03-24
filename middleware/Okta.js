@@ -2,7 +2,7 @@ const OktaJwtVerifier = require("@okta/jwt-verifier");
 
 // Pulls from {okta}
 const oktaJwtVerifier = new OktaJwtVerifier({
-  issuer: `https//${process.env.OKTA_DOMAIN}/oauth2/default`,
+  issuer: `https://${process.env.OKTA_DOMAIN}/oauth2/default`,
   clientId: process.env.CLIENT_ID,
   assertClaims: {
     aud: "api://default"
@@ -10,7 +10,7 @@ const oktaJwtVerifier = new OktaJwtVerifier({
 });
 
 // Authenticates access token
-export default function authenticationRequired(req, res, next) {
+function authenticationRequired(req, res, next) {
   const authHeader = req.headers.authorization || "";
   const match = authHeader.match(/Bearer (.+)/);
 
@@ -31,3 +31,5 @@ export default function authenticationRequired(req, res, next) {
       res.status(401).send(err.message);
     });
 }
+
+module.exports = authenticationRequired;
