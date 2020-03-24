@@ -44,7 +44,7 @@ server.use("/api/account", resetPasswordRouter);
 // using resetPassword router above
 
 server.use("/api/upload", uploadRouter);
-server.use("/api/chapter", authenticationRequired, chaptersRouter);
+server.use("/api/chapter", chaptersRouter);
 server.use("/api/partner", partnerRouter);
 server.use("/api/form", formRouter);
 server.use("/api/user", authenticationRequired, userRouter);
