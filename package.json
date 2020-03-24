@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/labs-14-miracle-messages/Back-End#readme",
   "dependencies": {
+    "@okta/oidc-middleware": "^4.0.0",
     "aws-sdk": "^2.510.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
@@ -31,6 +32,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
+    "express-session": "^1.17.0",
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.1",

@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const Volunteer = require("../Lab18_unusedcode/volunteer-model.js");
 
+//TODO token is created here as well as masterRouter: Do we need both?
 const generateToken = require("../middleware/Token.js");
 // const mw = require("../auth/auth-middleware.js");
 

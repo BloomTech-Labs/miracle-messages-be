@@ -68,6 +68,8 @@ router.get("/users", restricted, (req, res) => {
 /*                              Generate token                              */
 /****************************************************************************/
 
+
+//TODO token is created here as well as in the authRouter
 function generateToken(user) {
   const payload = {
     subject: user.id,
