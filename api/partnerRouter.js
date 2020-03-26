@@ -5,7 +5,7 @@ const MW = require("../middleware/partnersMW");
 const partnersDb = require("../models/partners-model.js");
 const chaptersPartnersDb = require("../models/chapters-partners-model.js");
 const authenticated = require("../auth/restricted-middleware");
-
+const authenticationRequired = require("../middleware/Okta");
 // this link below is to specify the AWS S3 BUCKET where our images will live:
 
 const aws_link =
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res) => {
 /****************************************************************************/
 /*      Delete a partner - will also also delete it from each chapter       */
 /****************************************************************************/
-router.delete("/:id", MW.validatePartnerId, async (req, res) => {
+router.delete("/:id", authenticationRequired, MW.validatePartnerId, async (req, res) => {
   const partnerId = req.params.id;
   let numChapters;
 
@@ -74,7 +74,7 @@ router.delete("/:id", MW.validatePartnerId, async (req, res) => {
 /*      ADD A PARNTER ORGANIZATION TO THE DATABASE
 /****************************************************************************/
 //TODO POST Requires an image/Need to re-visit: AWS 
-router.post("/", MW.verifyPartnerData, async (req, res) => {
+router.post("/", authenticationRequired, MW.verifyPartnerData, async (req, res) => {
   const newPartner = req.body;
   const { partner_icon } = req.files;
 
@@ -108,7 +108,7 @@ router.post("/", MW.verifyPartnerData, async (req, res) => {
 /*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
 /****************************************************************************/
 //TODO Remove requirement for file upload in order to update partner
-router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
+router.put("/:id", authenticationRequired, MW.verifyPartnerImgFilename, async (req, res) => {
   try {
     const changes = await req.body;
     const id = req.params.id;
