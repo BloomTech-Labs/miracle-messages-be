@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../config/secrets");
 const Users = require("../models/users-model.js");
-const restricted = require("../auth/restricted-middleware.js");
+//const restricted = require("../auth/restricted-middleware.js");
+const authenticationRequired = "../middleware/Okta.js";
 const router = express.Router();
 
 /****************************************************************************/
@@ -56,7 +57,7 @@ router.post("/login", (req, res) => {
 /*                              Get all Admins                              */
 /****************************************************************************/
 
-router.get("/users", restricted, (req, res) => {
+router.get("/users", (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);

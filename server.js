@@ -10,11 +10,11 @@ const helmet = require("helmet");
 const authenticationRequired = require("./middleware/Okta.js");
 
 const chaptersRouter = require("./api/chapterRouter.js");
-const formRouter = require("./Lab18_unusedcode/formRouter.js");
+// const formRouter = require("./Lab18_unusedcode/formRouter.js");
 const userRouter = require("./api/masterRouter");
 const partnerRouter = require("./api/partnerRouter");
-const uploadRouter = require("./api/uploadRouter");
-const volunteersRouter = require("./Lab18_unusedcode/volunteersRouter");
+// const uploadRouter = require("./api/uploadRouter");
+// const volunteersRouter = require("./Lab18_unusedcode/volunteersRouter");
 
 // importing auth routers below
 const authRouter = require("./api/authRouter.js");
@@ -43,10 +43,10 @@ server.use("/api/volunteer", authRouter);
 server.use("/api/account", resetPasswordRouter);
 // using resetPassword router above
 
-server.use("/api/upload", uploadRouter);
+// server.use("/api/upload", uploadRouter);
 server.use("/api/chapter", chaptersRouter);
 server.use("/api/partner", partnerRouter);
-server.use("/api/form", formRouter);
+// server.use("/api/form", formRouter);
 server.use("/api/user", authenticationRequired, userRouter);
 
 /**************************************/

@@ -9,6 +9,7 @@ const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const aws_link =
   "https://miraclemessagesimages.s3.amazonaws.com/";
 const axios = require('axios');
+const authenticationRequired = require('../middleware/Okta');
 
 /******************/
 // ** ALL THE GETS **
@@ -48,7 +49,7 @@ router.get("/", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id/volunteers", async (req, res) => {
+router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
   const chapterId = req.params.id;
   try {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
@@ -77,7 +78,7 @@ router.get("/:id/volunteers", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticationRequired, async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
 
@@ -100,7 +101,7 @@ router.get("/:id", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id/partners", async (req, res) => {
+router.get("/:id/partners", authenticationRequired, async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
 
@@ -119,7 +120,7 @@ router.get("/:id/partners", async (req, res) => {
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
 // ENDPOINT VERIFIED
-router.get("/:id/volunteer", async (req, res) => {
+router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
   try {
@@ -147,7 +148,7 @@ router.get("/:id/volunteer", async (req, res) => {
  * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
  * Returns: JSON of chapter or id
  */
-router.post("/", async (req, res) => {
+router.post("/", authenticationRequired, async (req, res) => {
   try {
     const newChapter = await req.body;
 
@@ -225,7 +226,7 @@ router.post("/", async (req, res) => {
  * Returns: ID of newly created row
  */
 // ENDPOINT VERIFIED
-router.post("/:id/partners", async (req, res) => {
+router.post("/:id/partners", authenticationRequired, async (req, res) => {
   try {
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
@@ -252,7 +253,7 @@ router.post("/:id/partners", async (req, res) => {
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 // ROUTE FIXED AND VERIFIED
-router.post("/:id/volunteer", async (req, res) => {
+router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.body.user_id;
   console.log(volunteerId)
@@ -298,7 +299,7 @@ router.post("/:id/volunteer", async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticationRequired, async (req, res) => {
   try {
     const updatedChapter = await req.body;
 
@@ -360,7 +361,7 @@ router.put("/:id", async (req, res) => {
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
 // ROUTE VERIFIED
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticationRequired, async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
 
@@ -400,7 +401,7 @@ router.delete("/:id", async (req, res) => {
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-router.delete("/:id/partners/:partnerid", async (req, res) => {
+router.delete("/:id/partners/:partnerid", authenticationRequired, async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
       req.params.partnerid,
@@ -426,7 +427,7 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
-router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
+router.delete("/:id/volunteers/:volunteerid", authenticationRequired, async (req, res) => {
   try {
     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
       req.params.volunteerid,
@@ -451,7 +452,7 @@ router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteer/", async (req, res) => {
+router.delete("/:id/volunteer/", authenticationRequired, async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.user_id;
 
