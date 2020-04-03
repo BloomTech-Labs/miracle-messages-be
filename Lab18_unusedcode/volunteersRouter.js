@@ -18,7 +18,7 @@ router.get("/", authenticated,  async (req, res) => {
 });
 
 /****************************************************************************/
-/*         Insert Volunteer is in authRouter.js (Registering Volunteer)
+/*         Insert Volunteer is in authRouter.js (Registering Volunteer))
 /****************************************************************************/
 
 /****************************************************************************/
