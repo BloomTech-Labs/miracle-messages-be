@@ -1,0 +1,38 @@
+# The name of the workflow
+    name: build
+    
+    # What conditions trigger the workflow
+    #  In this case, all pushes and pull requests
+    on:
+# Trigger the workflow on push or pull request,
+   # but only for the master branch
+      push:
+       branches:
+         - master
+         - production
+         - codeClimate
+         
+      pull_request:
+        branches:
+         - master
+         - production
+    
+    # The jobs that will be run, usually in parallel
+    jobs:
+      # A job to generate and publish code coverage
+      coverage:
+        name: Test and publish test coverage
+    
+        runs-on: ubuntu-latest
+    
+        steps:	
+          - uses: actions/checkout@master
+          - uses: actions/setup-node@master
+            with:
+              node-version: "12"
+          - run: yarn
+          - uses: paambaati/codeclimate-action@v2.4.0
+            env:
+              CC_TEST_REPORTER_ID: bed79ab001492761029825267eced607e7f651654ef24c5cc732666a8dcfda8d
+            with:
+              coverageCommand: yarn coverage
