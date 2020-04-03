@@ -5,12 +5,19 @@
   "main": "index.js",
   "scripts": {
     "cypress:open": "cypress open",
-    "test": "cross-env DB_ENV=testing jest --watch --verbose",
+    "test": "jest --detectOpenHandles --forceExit --verbose",
+    "coverage": "jest --coverage --detectOpenHandles --forceExit || true", 
     "server": "nodemon index.js",
     "start": "node index.js"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/__tests__/**"
+    ]
   },
   "repository": {
     "type": "git",
