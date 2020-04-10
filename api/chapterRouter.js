@@ -4,12 +4,10 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const chapterDB = require("../models/chapters-model.js");
 const chaptersPartnersDB = require("../models/chapters-partners-model.js");
 const partnerDB = require("../models/partners-model");
-const authenticated = require("../auth/restricted-middleware");
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
-const aws_link =
-  "https://miraclemessagesimages.s3.amazonaws.com/";
-const axios = require('axios');
-const authenticationRequired = require('../middleware/Okta');
+const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
+const axios = require("axios");
+const authenticationRequired = require("../middleware/Okta");
 
 /******************/
 // ** ALL THE GETS **
@@ -26,7 +24,7 @@ router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
-    const promises = chapters.map(async chapter => {
+    const promises = chapters.map(async (chapter) => {
       let partners = await partnerDB.findById(chapter.id);
       chapter.partners = partners;
       return chapter;
@@ -36,7 +34,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(chapters);
   } catch {
     res.status(500).json({
-      error: "there was a problem getting chapter or partner information"
+      error: "there was a problem getting chapter or partner information",
     });
   }
 });
@@ -88,7 +86,7 @@ router.get("/:id", authenticationRequired, async (req, res) => {
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: "Error getting the chapter",
     });
   }
 });
@@ -108,7 +106,7 @@ router.get("/:id/partners", authenticationRequired, async (req, res) => {
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: "Error getting the chapter",
     });
   }
 });
@@ -131,7 +129,7 @@ router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
     res.status(200).json(isVolunteerInChapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: "Error getting the chapter",
     });
   }
 });
@@ -196,21 +194,22 @@ router.post("/", authenticationRequired, async (req, res) => {
 
     //adding the newChapter object to the database
     try {
-      axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`)
-      .then(async response => {
-        if (response.data.features) {
-          newChapter.latitude = response.data.features[0].center[0];
-          newChapter.longitude = response.data.features[0].center[1];
-          const chapter = await chapterDB.addChapter(newChapter);
-          res.status(201).json(chapter);
-        }
-        else {
-          res.status(500).json({ error: 'Please check city spelling.' })
-        }
-      })
-    }
-    catch (err) {
-      res.status(500).json({ error: 'Mapbox request could not complete.'})
+      axios
+        .get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
+        )
+        .then(async (response) => {
+          if (response.data.features) {
+            newChapter.latitude = response.data.features[0].center[0];
+            newChapter.longitude = response.data.features[0].center[1];
+            const chapter = await chapterDB.addChapter(newChapter);
+            res.status(201).json(chapter);
+          } else {
+            res.status(500).json({ error: "Please check city spelling." });
+          }
+        });
+    } catch (err) {
+      res.status(500).json({ error: "Mapbox request could not complete." });
     }
   } catch (error) {
     res.status(500).json({ error: "Something went wrong, Please try again" });
@@ -256,7 +255,7 @@ router.post("/:id/partners", authenticationRequired, async (req, res) => {
 router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
   let chapterId = req.params.id;
   let volunteerId = req.body.user_id;
-  console.log(volunteerId)
+  console.log(volunteerId);
   try {
     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
       volunteerId,
@@ -272,7 +271,7 @@ router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
 
       res.status(200).json({
         message: `You have successfully signed up for this chapter.`,
-        id: signedUp
+        id: signedUp,
       });
     } else {
       res
@@ -341,7 +340,7 @@ router.put("/:id", authenticationRequired, async (req, res) => {
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error updating the chapter"
+      message: "Error updating the chapter",
     });
   }
 });
@@ -373,7 +372,7 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
   } catch {
     res.status(500).json({
       "error message":
-        "There is a problem removing all chapter-partner relationships for this chapter"
+        "There is a problem removing all chapter-partner relationships for this chapter",
     });
   }
 
@@ -382,11 +381,11 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
     const numChapters = await chapterDB.removeChapter(chapterId);
     res.status(200).json({
       partners: `${numChapters} chapter deleted`,
-      chapters: `this chapter was removed from ${numPartners} partners`
+      chapters: `this chapter was removed from ${numPartners} partners`,
     });
   } catch {
     res.status(500).json({
-      "error message": "There is a problem removing this partner"
+      "error message": "There is a problem removing this partner",
     });
   }
 });
@@ -401,20 +400,24 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-router.delete("/:id/partners/:partnerid", authenticationRequired, async (req, res) => {
-  try {
-    const count = await chaptersPartnersDB.unassignChapterPartner(
-      req.params.partnerid,
-      req.params.id
-    );
+router.delete(
+  "/:id/partners/:partnerid",
+  authenticationRequired,
+  async (req, res) => {
+    try {
+      const count = await chaptersPartnersDB.unassignChapterPartner(
+        req.params.partnerid,
+        req.params.id
+      );
 
-    res.status(200).json(count);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error unassigning zee dang partner from the chapter" });
+      res.status(200).json(count);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "error unassigning zee dang partner from the chapter" });
+    }
   }
-});
+);
 
 /**
  * Method: DEL
@@ -427,20 +430,24 @@ router.delete("/:id/partners/:partnerid", authenticationRequired, async (req, re
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
-router.delete("/:id/volunteers/:volunteerid", authenticationRequired, async (req, res) => {
-  try {
-    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      req.params.volunteerid,
-      req.params.id //chapterId
-    );
+router.delete(
+  "/:id/volunteers/:volunteerid",
+  authenticationRequired,
+  async (req, res) => {
+    try {
+      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+        req.params.volunteerid,
+        req.params.id //chapterId
+      );
 
-    res.status(200).json(count);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error unassigning zee dang partner from the chapter" });
+      res.status(200).json(count);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "error unassigning zee dang partner from the chapter" });
+    }
   }
-});
+);
 
 /**
  * Method: DEL
