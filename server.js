@@ -10,14 +10,15 @@ const helmet = require("helmet");
 const authenticationRequired = require("./middleware/Okta.js");
 
 const chaptersRouter = require("./api/chapterRouter.js");
-// const formRouter = require("./Lab18_unusedcode/formRouter.js");
-const userRouter = require("./api/masterRouter");
 const partnerRouter = require("./api/partnerRouter");
+
+//TODO return and test to see if this route is still needed
 // const uploadRouter = require("./api/uploadRouter");
+
 const volunteersRouter = require("./api/volunteersRouter.js");
 
 // importing auth routers below
-const authRouter = require("./api/authRouter.js");
+// const authRouter = require("./api/authRouter.js");
 // importing auth routers above
 
 // import resetPassword router below
@@ -39,17 +40,15 @@ server.get("/", (req, res) => {
 server.use("/api/volunteer", volunteersRouter);
 // using auth router above
 
-// using resetPassword router below
-server.use("/api/account", resetPasswordRouter);
-// using resetPassword router above
+// // using resetPassword router below
+// server.use("/api/account", resetPasswordRouter);
+// // using resetPassword router above
 
 // server.use("/api/upload", uploadRouter);
 server.use("/api/chapter", chaptersRouter);
 server.use("/api/partner", partnerRouter);
 // server.use("/api/form", formRouter);
 
-//TODO Should be no longer needed with Okta implemented
-server.use("/api/user", userRouter);
 
 /**************************************/
 /*      Custom Middleware             */
