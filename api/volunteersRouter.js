@@ -21,6 +21,17 @@ router.get("/", async (req, res) => {
 /*         Insert Volunteer is in authRouter.js (Registering Volunteer)
 /****************************************************************************/
 
+router.post("/", (req, res) => {
+  const volunteer = volunteersDb
+    .add(volunteers)
+    .then((res) => {
+      res.status(201).json(volunteer);
+    })
+    .catch((error) => {
+      res.status(500).json({ errorMessage: "Could not add volunteer" });
+    });
+});
+
 /****************************************************************************/
 /*                 Delete Volunteer - Deprioritized LABS18
 /****************************************************************************/
