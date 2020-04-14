@@ -12,6 +12,7 @@ const oktaJwtVerifier = new OktaJwtVerifier({
 // Authenticates access token
 function authenticationRequired(req, res, next) {
   const authHeader = req.headers.authorization || "";
+  
   const match = authHeader.match(/Bearer (.+)/);
 
   if (!match) {
@@ -25,9 +26,11 @@ function authenticationRequired(req, res, next) {
     .verifyAccessToken(accessToken, expectedAudience)
     .then(jwt => {
       req.jwt = jwt;
+      console.log("token is valid")
       next();
     })
     .catch(err => {
+      console.warn("token failed validation")
       res.status(401).send(err.message);
     });
 }

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const volunteersDb = require("../models/volunteer-model.js");
-const authenticated = require("../auth/restricted-middleware");
+// const authenticated = require("../auth/restricted-middleware");
 
 /****************************************************************************/
 /*                 Get all volunteers 
@@ -24,11 +24,11 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 /*                 Delete Volunteer - Deprioritized LABS18
 /****************************************************************************/
-router.delete("/:id", authenticated, (req, res) => {});
+router.delete("/:id", (req, res) => {});
 /****************************************************************************/
 /*                 Update Volunteer - Deprioritized LABS18
 /****************************************************************************/
-router.put("/", authenticated, async (req, res) => {
+router.put("/", async (req, res) => {
   const volunteerId = req.body.user_id;
   const updatedVolunteer = req.body;
   try {
