@@ -14,7 +14,7 @@ const chaptersRouter = require("./api/chapterRouter.js");
 const userRouter = require("./api/masterRouter");
 const partnerRouter = require("./api/partnerRouter");
 // const uploadRouter = require("./api/uploadRouter");
-// const volunteersRouter = require("./Lab18_unusedcode/volunteersRouter");
+const volunteersRouter = require("./api/volunteersRouter.js");
 
 // importing auth routers below
 const authRouter = require("./api/authRouter.js");
@@ -36,7 +36,7 @@ server.get("/", (req, res) => {
 });
 
 // using auth router below
-server.use("/api/volunteer", authRouter);
+server.use("/api/volunteer", volunteersRouter);
 // using auth router above
 
 // using resetPassword router below
@@ -49,7 +49,7 @@ server.use("/api/partner", partnerRouter);
 // server.use("/api/form", formRouter);
 
 //TODO Should be no longer needed with Okta implemented
-server.use("/api/user",  userRouter);
+server.use("/api/user", userRouter);
 
 /**************************************/
 /*      Custom Middleware             */
