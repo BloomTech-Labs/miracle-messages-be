@@ -6,7 +6,6 @@ const cors = require("cors");
 const helmet = require("helmet");
 const authenticationRequired = require("./middleware/Okta.js");
 
-
 //TODO return and test to see if this route is still needed
 // const uploadRouter = require("./api/uploadRouter");
 
@@ -25,13 +24,11 @@ server.get("/", (req, res) => {
   res.status(200).json({ hello: "World!" });
 });
 
-
 // server.use("/api/upload", uploadRouter);
-server.use("/api/volunteer", authenticationRequired, volunteersRouter);
-server.use("/api/chapter", authenticationRequired, chaptersRouter);
-server.use("/api/partner", authenticationRequired, partnerRouter);
+server.use("/api/volunteer", volunteersRouter);
+server.use("/api/chapter", chaptersRouter);
+server.use("/api/partner", partnerRouter);
 // server.use("/api/form", formRouter);
-
 
 /**************************************/
 /*      Custom Middleware             */
