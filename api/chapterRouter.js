@@ -20,7 +20,7 @@ const authenticationRequired = require("../middleware/Okta");
  */
 // ENDPOINT VERIFIED
 
-router.get("/", async (req, res) => {
+router.get("/", authenticationRequired, async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -39,6 +39,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//TODO could use to assign specific volunteers to specific chapters
 /**
  * Method: GET
  * What: Getting a list of volunteers from chapter
@@ -47,26 +48,26 @@ router.get("/", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
-  const chapterId = req.params.id;
-  try {
-    const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
-      chapterId
-    );
-    //Checks if there are volunteers in chapter
-    if (volunteers.rows.length < 1) {
-      res
-        .status(404)
-        .json({ message: "There is no volunteers in this chapter" });
-    } else {
-      res.status(200).json(volunteers.rows);
-    }
-  } catch {
-    res
-      .status(500)
-      .json({ errorMessage: "There is a problem finding volunteers data" });
-  }
-});
+// router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
+//   const chapterId = req.params.id;
+//   try {
+//     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
+//       chapterId
+//     );
+//     //Checks if there are volunteers in chapter
+//     if (volunteers.rows.length < 1) {
+//       res
+//         .status(404)
+//         .json({ message: "There is no volunteers in this chapter" });
+//     } else {
+//       res.status(200).json(volunteers.rows);
+//     }
+//   } catch {
+//     res
+//       .status(500)
+//       .json({ errorMessage: "There is a problem finding volunteers data" });
+//   }
+// });
 
 /**
  * Method: GET

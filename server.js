@@ -1,29 +1,18 @@
 const express = require("express");
 const server = express();
-
 const morgan = require("morgan");
 const fileupload = require("express-fileupload");
-
 const cors = require("cors");
 const helmet = require("helmet");
-
 const authenticationRequired = require("./middleware/Okta.js");
 
-const chaptersRouter = require("./api/chapterRouter.js");
-const partnerRouter = require("./api/partnerRouter");
 
 //TODO return and test to see if this route is still needed
 // const uploadRouter = require("./api/uploadRouter");
 
+const chaptersRouter = require("./api/chapterRouter.js");
+const partnerRouter = require("./api/partnerRouter");
 const volunteersRouter = require("./api/volunteersRouter.js");
-
-// importing auth routers below
-// const authRouter = require("./api/authRouter.js");
-// importing auth routers above
-
-// import resetPassword router below
-const resetPasswordRouter = require("./Lab18_unusedcode/ResetPasswordRouter.js");
-// import resetPassword above
 
 server.use(helmet());
 server.use(cors());
@@ -36,17 +25,11 @@ server.get("/", (req, res) => {
   res.status(200).json({ hello: "World!" });
 });
 
-// using auth router below
-server.use("/api/volunteer", volunteersRouter);
-// using auth router above
-
-// // using resetPassword router below
-// server.use("/api/account", resetPasswordRouter);
-// // using resetPassword router above
 
 // server.use("/api/upload", uploadRouter);
-server.use("/api/chapter", chaptersRouter);
-server.use("/api/partner", partnerRouter);
+server.use("/api/volunteer", authenticationRequired, volunteersRouter);
+server.use("/api/chapter", authenticationRequired, chaptersRouter);
+server.use("/api/partner", authenticationRequired, partnerRouter);
 // server.use("/api/form", formRouter);
 
 

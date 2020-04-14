@@ -4,7 +4,6 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const MW = require("../middleware/partnersMW");
 const partnersDb = require("../models/partners-model.js");
 const chaptersPartnersDb = require("../models/chapters-partners-model.js");
-const authenticated = require("../auth/restricted-middleware");
 const authenticationRequired = require("../middleware/Okta");
 // this link below is to specify the AWS S3 BUCKET where our images will live:
 
