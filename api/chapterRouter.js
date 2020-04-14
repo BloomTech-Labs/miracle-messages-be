@@ -20,7 +20,7 @@ const authenticationRequired = require("../middleware/Okta");
  */
 // ENDPOINT VERIFIED
 
-router.get("/", authenticationRequired, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let chapters = await chapterDB.findChapters();
 
