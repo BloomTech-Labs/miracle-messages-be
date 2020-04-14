@@ -47,6 +47,8 @@ server.use("/api/account", resetPasswordRouter);
 server.use("/api/chapter", chaptersRouter);
 server.use("/api/partner", partnerRouter);
 // server.use("/api/form", formRouter);
+
+//TODO Should be no longer needed with Okta implemented
 server.use("/api/user",  userRouter);
 
 /**************************************/

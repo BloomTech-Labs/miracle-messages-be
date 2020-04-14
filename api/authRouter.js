@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 
-const Volunteer = require("../Lab18_unusedcode/volunteer-model.js");
+const Volunteer = require("../models/volunteer-model.js");
 
 //TODO token is created here as well as masterRouter: Do we need both?
 const generateToken = require("../middleware/Token.js");
