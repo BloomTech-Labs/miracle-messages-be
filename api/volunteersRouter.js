@@ -18,19 +18,19 @@ router.get("/", async (req, res) => {
 });
 
 /****************************************************************************/
-/*         Insert Volunteer is in authRouter.js (Registering Volunteer)
+/*         Add Volunteer 
 /****************************************************************************/
 
 router.post("/", (req, res) => {
   const volunteer = req.body;
-   volunteersDb
+  volunteersDb
     .add(volunteer)
     .then((res) => {
       res.status(201).json(volunteer);
     })
     .catch((error) => {
-      res.status(500).json({ errorMessage: "Could not add volunteer" });
-    });
+      res.status(500).json(error);
+    })
 });
 
 /****************************************************************************/
