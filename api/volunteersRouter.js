@@ -22,14 +22,15 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 
 router.post("/", (req, res) => {
-  const volunteer = await volunteersDb.add().then(res => {
-  
-    res.status(201).json(volunteer)
-  })
-  .catch(error => {
-    res.status(500).json({errorMessage: "Could not add volunteer"});
-  })
-})
+  const volunteer = volunteersDb
+    .add(volunteers)
+    .then((res) => {
+      res.status(201).json(volunteer);
+    })
+    .catch((error) => {
+      res.status(500).json({ errorMessage: "Could not add volunteer" });
+    });
+});
 
 /****************************************************************************/
 /*                 Delete Volunteer - Deprioritized LABS18
