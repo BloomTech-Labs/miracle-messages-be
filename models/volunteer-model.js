@@ -70,7 +70,7 @@ function deleteVolunteer(id) {
 
 async function add(volunteer) {
   
-  return db('volunteers').insert(volunteer, "id");
+  return db("volunteers").insert(volunteer, "id");
 }
 
 // async function addInterests(interests) {

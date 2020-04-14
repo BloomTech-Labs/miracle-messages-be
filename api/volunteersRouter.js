@@ -25,7 +25,7 @@ router.post("/", (req, res) => {
   const volunteer = req.body;
   volunteersDb
     .add(volunteer)
-    .then((res) => {
+    .then(volunteer => {
       res.status(201).json(volunteer);
     })
     .catch((error) => {
