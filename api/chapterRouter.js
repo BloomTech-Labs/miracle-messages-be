@@ -112,6 +112,7 @@ router.get("/:id/partners", authenticationRequired, async (req, res) => {
   }
 });
 
+//TODO could use in the future
 /**
  * Method: GET
  * What: Getting a specific volunteer from chapter
@@ -119,21 +120,21 @@ router.get("/:id/partners", authenticationRequired, async (req, res) => {
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
 // ENDPOINT VERIFIED
-router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
-  let chapterId = req.params.id;
-  let volunteerId = req.user_id;
-  try {
-    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-      volunteerId,
-      chapterId
-    );
-    res.status(200).json(isVolunteerInChapter);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error getting the chapter",
-    });
-  }
-});
+// router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
+//   let chapterId = req.params.id;
+//   let volunteerId = req.user_id;
+//   try {
+//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+//       volunteerId,
+//       chapterId
+//     );
+//     res.status(200).json(isVolunteerInChapter);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error getting the chapter",
+//     });
+//   }
+// });
 
 /********************/
 // ** ALL THE POSTS **
@@ -217,6 +218,7 @@ router.post("/", authenticationRequired, async (req, res) => {
   }
 });
 
+//TODO assigns a partner/sponsor to a chapter
 /**
  * Method: POST
  * What: Creates row in chapters_partners for specific chapter/partner
@@ -241,6 +243,7 @@ router.post("/:id/partners", authenticationRequired, async (req, res) => {
   }
 });
 
+//TODO could use in the future
 /**
  * Method: POST
  * What: Adding volunteer into chapter
@@ -253,38 +256,38 @@ router.post("/:id/partners", authenticationRequired, async (req, res) => {
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 // ROUTE FIXED AND VERIFIED
-router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
-  let chapterId = req.params.id;
-  let volunteerId = req.body.user_id;
-  console.log(volunteerId);
-  try {
-    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-      volunteerId,
-      chapterId
-    );
-    console.log(isVolunteerInChapter);
-    //Checks if this volunteer is already in the chapter
-    if (isVolunteerInChapter.length < 1) {
-      const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
-        volunteerId,
-        chapterId
-      );
+// router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
+//   let chapterId = req.params.id;
+//   let volunteerId = req.body.user_id;
+//   console.log(volunteerId);
+//   try {
+//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+//       volunteerId,
+//       chapterId
+//     );
+//     console.log(isVolunteerInChapter);
+//     //Checks if this volunteer is already in the chapter
+//     if (isVolunteerInChapter.length < 1) {
+//       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
+//         volunteerId,
+//         chapterId
+//       );
 
-      res.status(200).json({
-        message: `You have successfully signed up for this chapter.`,
-        id: signedUp,
-      });
-    } else {
-      res
-        .status(400)
-        .json({ message: "This volunteer is already in this chapter" });
-    }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error assigning volunteer to the chapter", error });
-  }
-});
+//       res.status(200).json({
+//         message: `You have successfully signed up for this chapter.`,
+//         id: signedUp,
+//       });
+//     } else {
+//       res
+//         .status(400)
+//         .json({ message: "This volunteer is already in this chapter" });
+//     }
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ error: "error assigning volunteer to the chapter", error });
+//   }
+// });
 
 /********************/
 // ** ALL THE PUTS **
@@ -450,6 +453,8 @@ router.delete(
   }
 );
 
+//TODO could use in the future
+
 /**
  * Method: DEL
  * What: Unassigning a volunteer from chapter (Volunteer)
@@ -460,22 +465,22 @@ router.delete(
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteer/", authenticationRequired, async (req, res) => {
-  let chapterId = req.params.id;
-  let volunteerId = req.user_id;
+// router.delete("/:id/volunteer/", authenticationRequired, async (req, res) => {
+//   let chapterId = req.params.id;
+//   let volunteerId = req.user_id;
 
-  try {
-    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      volunteerId,
-      chapterId
-    );
+//   try {
+//     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+//       volunteerId,
+//       chapterId
+//     );
 
-    res.status(200).json(count);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error removing zee dang volunteer from the chapter" });
-  }
-});
+//     res.status(200).json(count);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ error: "error removing zee dang volunteer from the chapter" });
+//   }
+// });
 
 module.exports = router;
