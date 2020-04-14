@@ -22,8 +22,9 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 
 router.post("/", (req, res) => {
-  const volunteer = volunteersDb
-    .add(volunteers)
+  const volunteer = req.body;
+   volunteersDb
+    .add(volunteer)
     .then((res) => {
       res.status(201).json(volunteer);
     })
