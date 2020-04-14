@@ -5,19 +5,12 @@
   "main": "index.js",
   "scripts": {
     "cypress:open": "cypress open",
-    "test": "jest --detectOpenHandles --forceExit --verbose",
-    "coverage": "jest --coverage --detectOpenHandles --forceExit || true", 
+    "test": "cross-env DB_ENV=testing jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js"
   },
   "jest": {
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "**/*.js",
-      "!**/node_modules/**",
-      "!**/vendor/**",
-      "!**/__tests__/**"
-    ]
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -33,32 +26,32 @@
   "dependencies": {
     "@okta/jwt-verifier": "^1.0.0",
     "@okta/oidc-middleware": "^4.0.0",
-    "aws-sdk": "^2.510.0",
+    "aws-sdk": "^2.656.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.6",
+    "express-fileupload": "^1.1.7-alpha.3",
     "express-session": "^1.17.0",
-    "helmet": "^3.21.2",
+    "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.19.1",
+    "knex": "^0.20.13",
     "knex-cleaner": "^1.3.0",
-    "morgan": "^1.9.1",
-    "nodemailer": "^6.3.1",
-    "passport": "^0.4.0",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.4.6",
+    "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "pg": "^7.14.0",
+    "pg": "^8.0.2",
     "pg-hstore": "^2.3.3",
     "secrets": "^0.1.0",
-    "sequelize": "^5.21.2"
+    "sequelize": "^5.21.6"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0",
-    "jest": "^24.8.0",
-    "nodemon": "^1.19.1",
+    "cross-env": "^7.0.2",
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.3",
     "supertest": "^4.0.2"
   }
 }
