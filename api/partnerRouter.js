@@ -7,13 +7,12 @@ const chaptersPartnersDb = require("../models/chapters-partners-model.js");
 const authenticationRequired = require("../middleware/Okta");
 // this link below is to specify the AWS S3 BUCKET where our images will live:
 
-const aws_link =
-  "https://miraclemessagesimages.s3.amazonaws.com/";
+const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 
 /****************************************************************************/
 /*                 Get all partners 
 /****************************************************************************/
-router.get("/", authenticationRequired, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const partners = await partnersDb.find();
     res.status(200).json(partners);
@@ -26,7 +25,7 @@ router.get("/", authenticationRequired, async (req, res) => {
 /****************************************************************************/
 /*                 Get all partners of one specific chapter                 */
 /****************************************************************************/
-router.get("/:id", authenticationRequired, async (req, res) => {
+router.get("/:id", async (req, res) => {
   const chapterId = req.params.id;
   try {
     const partners = await partnersDb.findById(chapterId);
@@ -41,7 +40,7 @@ router.get("/:id", authenticationRequired, async (req, res) => {
 /****************************************************************************/
 /*      Delete a partner - will also also delete it from each chapter       */
 /****************************************************************************/
-router.delete("/:id", authenticationRequired, MW.validatePartnerId, async (req, res) => {
+router.delete("/:id", MW.validatePartnerId, async (req, res) => {
   const partnerId = req.params.id;
   let numChapters;
 
@@ -51,7 +50,7 @@ router.delete("/:id", authenticationRequired, MW.validatePartnerId, async (req, 
   } catch {
     res.status(500).json({
       "error message":
-        "There is a problem removing this partner from all chapters"
+        "There is a problem removing this partner from all chapters",
     });
   }
 
@@ -60,7 +59,7 @@ router.delete("/:id", authenticationRequired, MW.validatePartnerId, async (req, 
     const numPartners = await partnersDb.remove(partnerId);
     res.status(200).json({
       partners: `${numPartners} partner deleted`,
-      chapters: `this partner removed from ${numChapters} chapters`
+      chapters: `this partner removed from ${numChapters} chapters`,
     });
   } catch {
     res
@@ -72,8 +71,8 @@ router.delete("/:id", authenticationRequired, MW.validatePartnerId, async (req, 
 /****************************************************************************/
 /*      ADD A PARNTER ORGANIZATION TO THE DATABASE
 /****************************************************************************/
-//TODO POST Requires an image/Need to re-visit: AWS 
-router.post("/", authenticationRequired, MW.verifyPartnerData, async (req, res) => {
+//TODO POST Requires an image/Need to re-visit: AWS
+router.post("/", MW.verifyPartnerData, async (req, res) => {
   const newPartner = req.body;
   const { partner_icon } = req.files;
 
@@ -107,7 +106,7 @@ router.post("/", authenticationRequired, MW.verifyPartnerData, async (req, res) 
 /*     UPDATE A PARTNER ORGANIZATION IN THE DATABASE                        */
 /****************************************************************************/
 //TODO Remove requirement for file upload in order to update partner
-router.put("/:id", authenticationRequired, MW.verifyPartnerImgFilename, async (req, res) => {
+router.put("/:id", MW.verifyPartnerImgFilename, async (req, res) => {
   try {
     const changes = await req.body;
     const id = req.params.id;
