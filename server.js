@@ -12,6 +12,7 @@ const authenticationRequired = require("./middleware/Okta.js");
 const chaptersRouter = require("./api/chapterRouter.js");
 const partnerRouter = require("./api/partnerRouter");
 const volunteersRouter = require("./api/volunteersRouter.js");
+const mailRouter = require("./api/mailRouter.js");
 
 server.use(helmet());
 server.use(cors());
