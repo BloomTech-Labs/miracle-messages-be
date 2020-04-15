@@ -77,7 +77,7 @@ router.get("/", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id", authenticationRequired, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
 
@@ -100,7 +100,7 @@ router.get("/:id", authenticationRequired, async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id/partners", authenticationRequired, async (req, res) => {
+router.get("/:id/partners", async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
 
@@ -140,6 +140,7 @@ router.get("/:id/partners", authenticationRequired, async (req, res) => {
 // ** ALL THE POSTS **
 /********************/
 
+//TODO adds chapter
 /**
  * Method: POST
  * What: Adds chapter into DB
@@ -148,7 +149,7 @@ router.get("/:id/partners", authenticationRequired, async (req, res) => {
  * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
  * Returns: JSON of chapter or id
  */
-router.post("/", authenticationRequired, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const newChapter = await req.body;
 
@@ -228,7 +229,7 @@ router.post("/", authenticationRequired, async (req, res) => {
  * Returns: ID of newly created row
  */
 // ENDPOINT VERIFIED
-router.post("/:id/partners", authenticationRequired, async (req, res) => {
+router.post("/:id/partners", async (req, res) => {
   try {
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
@@ -302,7 +303,7 @@ router.post("/:id/partners", authenticationRequired, async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
-router.put("/:id", authenticationRequired, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
 
@@ -364,7 +365,7 @@ router.put("/:id", authenticationRequired, async (req, res) => {
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
 // ROUTE VERIFIED
-router.delete("/:id", authenticationRequired, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
 
@@ -404,24 +405,20 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-router.delete(
-  "/:id/partners/:partnerid",
-  authenticationRequired,
-  async (req, res) => {
-    try {
-      const count = await chaptersPartnersDB.unassignChapterPartner(
-        req.params.partnerid,
-        req.params.id
-      );
+router.delete("/:id/partners/:partnerid", async (req, res) => {
+  try {
+    const count = await chaptersPartnersDB.unassignChapterPartner(
+      req.params.partnerid,
+      req.params.id
+    );
 
-      res.status(200).json(count);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ error: "error unassigning zee dang partner from the chapter" });
-    }
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error unassigning zee dang partner from the chapter" });
   }
-);
+});
 
 /**
  * Method: DEL
@@ -434,24 +431,20 @@ router.delete(
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
-router.delete(
-  "/:id/volunteers/:volunteerid",
-  authenticationRequired,
-  async (req, res) => {
-    try {
-      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-        req.params.volunteerid,
-        req.params.id //chapterId
-      );
+router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
+  try {
+    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+      req.params.volunteerid,
+      req.params.id //chapterId
+    );
 
-      res.status(200).json(count);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ error: "error unassigning zee dang partner from the chapter" });
-    }
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error unassigning zee dang partner from the chapter" });
   }
-);
+});
 
 //TODO could use in the future
 
