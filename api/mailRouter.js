@@ -4,7 +4,7 @@ const sgMail = require("@sendgrid/mail");
  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const axios = require("axios");
 
-router.get("/", (req, res) => {
+router.post("/send", (req, res) => {
 const msg = {
  to: "viola4lfe@gmail.com",
     from: "dan@miraclemessages.org",
