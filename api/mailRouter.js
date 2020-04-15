@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
   from: "dan@miraclemessages.org",
   subject: "Sending with Twilio SendGrid is Fun",
   text: "and easy to do anywhere, even with Node.js",
-  html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+  html: "<strong>and easy to do anywhere, even with Node.js</strong>"
  };
  try {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
