@@ -3,7 +3,7 @@ const router = express.Router();
 const sgMail = require("@sendgrid/mail");
 
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
  const msg = {
   to: "viola4lfe@gmail.com",
   from: "dan@miraclemessages.org",
