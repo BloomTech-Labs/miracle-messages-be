@@ -30,6 +30,9 @@ server.use("/api/chapter", chaptersRouter);
 server.use("/api/partner", partnerRouter);
 // server.use("/api/form", formRouter);
 
+// test email
+server.use("/api/mail", mailRouter)
+
 /**************************************/
 /*      Custom Middleware             */
 /**************************************/
