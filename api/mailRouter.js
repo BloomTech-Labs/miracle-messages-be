@@ -15,8 +15,8 @@ router.get("/", async (req, res) => {
   try {
     await sgMail.send(msg);
     res.status(201).json({ message: "mail sent" });
-  } catch (err) {
-    res.status(500).json(err);
+  } catch ({message, stack, code, }) {
+    res.status(500).json(message, stack, code);
   }
 });
 
