@@ -21,6 +21,10 @@ const authenticationRequired = require("../middleware/Okta");
 // ENDPOINT VERIFIED
 
 router.get("/", async (req, res) => {
+
+
+
+
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -150,8 +154,29 @@ router.get("/:id/partners", async (req, res) => {
  * Returns: JSON of chapter or id
  */
 router.post("/", async (req, res) => {
+  const newChapter = req.body;
+  // let locationData;
+
+
+  // Gets the coordinates based of of city and state
+  const chapterCoordinates  = await axios
+  .get(`https://maps.googleapis.com/maps/api/geocode/json?address=${newChapter.city},+${newChapter.state}&key=${process.env.GOOGLE_MAPS_API}`)
+  .then(async res => {
+    return res.data.results[0].geometry.location
+  })
+  .catch( err => {
+    console.log('could not get lat & lng', err)
+  })
+
+  newChapter.latitude = chapterCoordinates.lat;
+  newChapter.longitude = chapterCoordinates.lng;
+
+
+
+
+
+
   try {
-    const newChapter = await req.body;
 
     //checking to see if any chapter images were added so we can upload it to the AWS bucket:
     if (req.files && req.files.chapter_img) {
@@ -196,18 +221,16 @@ router.post("/", async (req, res) => {
     }
 
 
-            newChapter.latitude = 122;
-            newChapter.longitude = 133;
-            chapterDB.addChapter(newChapter)
-            .then( chapter => {
-              res.status(201).json(chapter)
-            })
-            .catch(err => {
-              console.log(err)
-              res.status(500).json({error: 'didnt work', err})
-            })
 
-    
+    // Adds Chapter to the Database
+    chapterDB.addChapter(newChapter)
+    .then( chapter => {
+      res.status(201).json(chapter)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({error: 'didnt work', err})
+    })
 
     //adding the newChapter object to the database
     // try {
