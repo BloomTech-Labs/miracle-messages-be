@@ -166,7 +166,7 @@ router.post("/", async (req, res) => {
         res
           .status(500)
           .json({ error: "error uploading the chapter_img to AWS" });
-      }
+      } 
 
       // 3) we store the chapter image url in the database:
       //a) first get the name of the file
@@ -188,33 +188,48 @@ router.post("/", async (req, res) => {
       } catch (error) {
         res.status(500).json({ error: "error uploading the image to AWS" });
       }
-
+      
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
       const encodedReunionImgName = encodeURI(reunionImgName);
       newChapter.reunion_img_url = aws_link + encodedReunionImgName;
     }
 
+
+            newChapter.latitude = 122;
+            newChapter.longitude = 133;
+            chapterDB.addChapter(newChapter)
+            .then( chapter => {
+              res.status(201).json(chapter)
+            })
+            .catch(err => {
+              console.log(err)
+              res.status(500).json({error: 'didnt work', err})
+            })
+
+    
+
     //adding the newChapter object to the database
-    try {
-      axios
-        .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
-        )
-        .then(async (response) => {
-          if (response.data.features) {
-            newChapter.latitude = response.data.features[0].center[0];
-            newChapter.longitude = response.data.features[0].center[1];
-            const chapter = await chapterDB.addChapter(newChapter);
-            res.status(201).json(chapter);
-          } else {
-            res.status(500).json({ error: "Please check city spelling." });
-          }
-        });
-    } catch (err) {
-      res.status(500).json({ error: "Mapbox request could not complete." });
-    }
+    // try {
+    //   axios
+    //     .get(
+    //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
+    //     )
+    //     .then(async (response) => {
+    //       if (response.data.features) {
+    //         newChapter.latitude = response.data.features[0].center[0];
+    //         newChapter.longitude = response.data.features[0].center[1];
+    //         const chapter = await chapterDB.addChapter(newChapter);
+    //         res.status(201).json(chapter);
+    //       } else {
+    //         res.status(500).json({ error: "Please check city spelling." });
+    //       }
+    //     });
+    // } catch (err) {
+    //   res.status(500).json({ error: "Mapbox request could not complete." });
+    // }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "Something went wrong, Please try again" });
   }
 });
