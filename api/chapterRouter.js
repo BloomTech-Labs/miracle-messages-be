@@ -4,12 +4,10 @@ const uploadToS3 = require("../middleware/uploadToS3.js");
 const chapterDB = require("../models/chapters-model.js");
 const chaptersPartnersDB = require("../models/chapters-partners-model.js");
 const partnerDB = require("../models/partners-model");
-const authenticated = require("../auth/restricted-middleware");
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
-const aws_link =
-  "https://miraclemessagesimages.s3.amazonaws.com/";
-const axios = require('axios');
-const authenticationRequired = require('../middleware/Okta');
+const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
+const axios = require("axios");
+const authenticationRequired = require("../middleware/Okta");
 
 /******************/
 // ** ALL THE GETS **
@@ -23,10 +21,14 @@ const authenticationRequired = require('../middleware/Okta');
 // ENDPOINT VERIFIED
 
 router.get("/", async (req, res) => {
+
+
+
+
   try {
     let chapters = await chapterDB.findChapters();
 
-    const promises = chapters.map(async chapter => {
+    const promises = chapters.map(async (chapter) => {
       let partners = await partnerDB.findById(chapter.id);
       chapter.partners = partners;
       return chapter;
@@ -36,11 +38,12 @@ router.get("/", async (req, res) => {
     res.status(200).json(chapters);
   } catch {
     res.status(500).json({
-      error: "there was a problem getting chapter or partner information"
+      error: "there was a problem getting chapter or partner information",
     });
   }
 });
 
+//TODO could use to assign specific volunteers to specific chapters
 /**
  * Method: GET
  * What: Getting a list of volunteers from chapter
@@ -49,26 +52,26 @@ router.get("/", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
-  const chapterId = req.params.id;
-  try {
-    const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
-      chapterId
-    );
-    //Checks if there are volunteers in chapter
-    if (volunteers.rows.length < 1) {
-      res
-        .status(404)
-        .json({ message: "There is no volunteers in this chapter" });
-    } else {
-      res.status(200).json(volunteers.rows);
-    }
-  } catch {
-    res
-      .status(500)
-      .json({ errorMessage: "There is a problem finding volunteers data" });
-  }
-});
+// router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
+//   const chapterId = req.params.id;
+//   try {
+//     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
+//       chapterId
+//     );
+//     //Checks if there are volunteers in chapter
+//     if (volunteers.rows.length < 1) {
+//       res
+//         .status(404)
+//         .json({ message: "There is no volunteers in this chapter" });
+//     } else {
+//       res.status(200).json(volunteers.rows);
+//     }
+//   } catch {
+//     res
+//       .status(500)
+//       .json({ errorMessage: "There is a problem finding volunteers data" });
+//   }
+// });
 
 /**
  * Method: GET
@@ -78,7 +81,7 @@ router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id", authenticationRequired, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const chapter = await chapterDB.findBy(req.params.id);
 
@@ -88,7 +91,7 @@ router.get("/:id", authenticationRequired, async (req, res) => {
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: "Error getting the chapter",
     });
   }
 });
@@ -101,18 +104,19 @@ router.get("/:id", authenticationRequired, async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-router.get("/:id/partners", authenticationRequired, async (req, res) => {
+router.get("/:id/partners", async (req, res) => {
   try {
     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
 
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error getting the chapter"
+      message: "Error getting the chapter",
     });
   }
 });
 
+//TODO could use in the future
 /**
  * Method: GET
  * What: Getting a specific volunteer from chapter
@@ -120,26 +124,27 @@ router.get("/:id/partners", authenticationRequired, async (req, res) => {
  * Returns: JSON of specific Chapter_Volunteer by their id's
  */
 // ENDPOINT VERIFIED
-router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
-  let chapterId = req.params.id;
-  let volunteerId = req.user_id;
-  try {
-    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-      volunteerId,
-      chapterId
-    );
-    res.status(200).json(isVolunteerInChapter);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error getting the chapter"
-    });
-  }
-});
+// router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
+//   let chapterId = req.params.id;
+//   let volunteerId = req.user_id;
+//   try {
+//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+//       volunteerId,
+//       chapterId
+//     );
+//     res.status(200).json(isVolunteerInChapter);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error getting the chapter",
+//     });
+//   }
+// });
 
 /********************/
 // ** ALL THE POSTS **
 /********************/
 
+//TODO adds chapter
 /**
  * Method: POST
  * What: Adds chapter into DB
@@ -148,9 +153,30 @@ router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
  * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
  * Returns: JSON of chapter or id
  */
-router.post("/", authenticationRequired, async (req, res) => {
+router.post("/", async (req, res) => {
+  const newChapter = req.body;
+  // let locationData;
+
+
+  // Gets the coordinates based of of city and state
+  const chapterCoordinates  = await axios
+  .get(`https://maps.googleapis.com/maps/api/geocode/json?address=${newChapter.city},+${newChapter.state}&key=${process.env.GOOGLE_MAPS_API}`)
+  .then(async res => {
+    return res.data.results[0].geometry.location
+  })
+  .catch( err => {
+    console.log('could not get lat & lng', err)
+  })
+
+  newChapter.latitude = chapterCoordinates.lat;
+  newChapter.longitude = chapterCoordinates.lng;
+
+
+
+
+
+
   try {
-    const newChapter = await req.body;
 
     //checking to see if any chapter images were added so we can upload it to the AWS bucket:
     if (req.files && req.files.chapter_img) {
@@ -165,7 +191,7 @@ router.post("/", authenticationRequired, async (req, res) => {
         res
           .status(500)
           .json({ error: "error uploading the chapter_img to AWS" });
-      }
+      } 
 
       // 3) we store the chapter image url in the database:
       //a) first get the name of the file
@@ -187,36 +213,51 @@ router.post("/", authenticationRequired, async (req, res) => {
       } catch (error) {
         res.status(500).json({ error: "error uploading the image to AWS" });
       }
-
+      
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
       const encodedReunionImgName = encodeURI(reunionImgName);
       newChapter.reunion_img_url = aws_link + encodedReunionImgName;
     }
 
+
+
+    // Adds Chapter to the Database
+    chapterDB.addChapter(newChapter)
+    .then( chapter => {
+      res.status(201).json(chapter)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({error: 'didnt work', err})
+    })
+
     //adding the newChapter object to the database
-    try {
-      axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`)
-      .then(async response => {
-        if (response.data.features) {
-          newChapter.latitude = response.data.features[0].center[0];
-          newChapter.longitude = response.data.features[0].center[1];
-          const chapter = await chapterDB.addChapter(newChapter);
-          res.status(201).json(chapter);
-        }
-        else {
-          res.status(500).json({ error: 'Please check city spelling.' })
-        }
-      })
-    }
-    catch (err) {
-      res.status(500).json({ error: 'Mapbox request could not complete.'})
-    }
+    // try {
+    //   axios
+    //     .get(
+    //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
+    //     )
+    //     .then(async (response) => {
+    //       if (response.data.features) {
+    //         newChapter.latitude = response.data.features[0].center[0];
+    //         newChapter.longitude = response.data.features[0].center[1];
+    //         const chapter = await chapterDB.addChapter(newChapter);
+    //         res.status(201).json(chapter);
+    //       } else {
+    //         res.status(500).json({ error: "Please check city spelling." });
+    //       }
+    //     });
+    // } catch (err) {
+    //   res.status(500).json({ error: "Mapbox request could not complete." });
+    // }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "Something went wrong, Please try again" });
   }
 });
 
+//TODO assigns a partner/sponsor to a chapter
 /**
  * Method: POST
  * What: Creates row in chapters_partners for specific chapter/partner
@@ -226,7 +267,7 @@ router.post("/", authenticationRequired, async (req, res) => {
  * Returns: ID of newly created row
  */
 // ENDPOINT VERIFIED
-router.post("/:id/partners", authenticationRequired, async (req, res) => {
+router.post("/:id/partners", async (req, res) => {
   try {
     const id = await chaptersPartnersDB.assignChapterPartner(
       req.body.partnerId,
@@ -241,6 +282,7 @@ router.post("/:id/partners", authenticationRequired, async (req, res) => {
   }
 });
 
+//TODO could use in the future
 /**
  * Method: POST
  * What: Adding volunteer into chapter
@@ -253,38 +295,38 @@ router.post("/:id/partners", authenticationRequired, async (req, res) => {
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 // ROUTE FIXED AND VERIFIED
-router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
-  let chapterId = req.params.id;
-  let volunteerId = req.body.user_id;
-  console.log(volunteerId)
-  try {
-    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-      volunteerId,
-      chapterId
-    );
-    console.log(isVolunteerInChapter);
-    //Checks if this volunteer is already in the chapter
-    if (isVolunteerInChapter.length < 1) {
-      const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
-        volunteerId,
-        chapterId
-      );
+// router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
+//   let chapterId = req.params.id;
+//   let volunteerId = req.body.user_id;
+//   console.log(volunteerId);
+//   try {
+//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+//       volunteerId,
+//       chapterId
+//     );
+//     console.log(isVolunteerInChapter);
+//     //Checks if this volunteer is already in the chapter
+//     if (isVolunteerInChapter.length < 1) {
+//       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
+//         volunteerId,
+//         chapterId
+//       );
 
-      res.status(200).json({
-        message: `You have successfully signed up for this chapter.`,
-        id: signedUp
-      });
-    } else {
-      res
-        .status(400)
-        .json({ message: "This volunteer is already in this chapter" });
-    }
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error assigning volunteer to the chapter", error });
-  }
-});
+//       res.status(200).json({
+//         message: `You have successfully signed up for this chapter.`,
+//         id: signedUp,
+//       });
+//     } else {
+//       res
+//         .status(400)
+//         .json({ message: "This volunteer is already in this chapter" });
+//     }
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ error: "error assigning volunteer to the chapter", error });
+//   }
+// });
 
 /********************/
 // ** ALL THE PUTS **
@@ -299,7 +341,7 @@ router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
-router.put("/:id", authenticationRequired, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
 
@@ -341,7 +383,7 @@ router.put("/:id", authenticationRequired, async (req, res) => {
     res.status(200).json(chapter);
   } catch (error) {
     res.status(500).json({
-      message: "Error updating the chapter"
+      message: "Error updating the chapter",
     });
   }
 });
@@ -361,7 +403,7 @@ router.put("/:id", authenticationRequired, async (req, res) => {
 // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
 //************************************************************
 // ROUTE VERIFIED
-router.delete("/:id", authenticationRequired, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const chapterId = req.params.id;
   let numPartners = 0;
 
@@ -373,7 +415,7 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
   } catch {
     res.status(500).json({
       "error message":
-        "There is a problem removing all chapter-partner relationships for this chapter"
+        "There is a problem removing all chapter-partner relationships for this chapter",
     });
   }
 
@@ -382,11 +424,11 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
     const numChapters = await chapterDB.removeChapter(chapterId);
     res.status(200).json({
       partners: `${numChapters} chapter deleted`,
-      chapters: `this chapter was removed from ${numPartners} partners`
+      chapters: `this chapter was removed from ${numPartners} partners`,
     });
   } catch {
     res.status(500).json({
-      "error message": "There is a problem removing this partner"
+      "error message": "There is a problem removing this partner",
     });
   }
 });
@@ -401,7 +443,7 @@ router.delete("/:id", authenticationRequired, async (req, res) => {
 //****************************************************************
 // THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
-router.delete("/:id/partners/:partnerid", authenticationRequired, async (req, res) => {
+router.delete("/:id/partners/:partnerid", async (req, res) => {
   try {
     const count = await chaptersPartnersDB.unassignChapterPartner(
       req.params.partnerid,
@@ -427,7 +469,7 @@ router.delete("/:id/partners/:partnerid", authenticationRequired, async (req, re
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
 /****************************************************************************/
-router.delete("/:id/volunteers/:volunteerid", authenticationRequired, async (req, res) => {
+router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
   try {
     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
       req.params.volunteerid,
@@ -442,6 +484,8 @@ router.delete("/:id/volunteers/:volunteerid", authenticationRequired, async (req
   }
 });
 
+//TODO could use in the future
+
 /**
  * Method: DEL
  * What: Unassigning a volunteer from chapter (Volunteer)
@@ -452,22 +496,22 @@ router.delete("/:id/volunteers/:volunteerid", authenticationRequired, async (req
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteer/", authenticationRequired, async (req, res) => {
-  let chapterId = req.params.id;
-  let volunteerId = req.user_id;
+// router.delete("/:id/volunteer/", authenticationRequired, async (req, res) => {
+//   let chapterId = req.params.id;
+//   let volunteerId = req.user_id;
 
-  try {
-    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      volunteerId,
-      chapterId
-    );
+//   try {
+//     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+//       volunteerId,
+//       chapterId
+//     );
 
-    res.status(200).json(count);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error removing zee dang volunteer from the chapter" });
-  }
-});
+//     res.status(200).json(count);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ error: "error removing zee dang volunteer from the chapter" });
+//   }
+// });
 
 module.exports = router;

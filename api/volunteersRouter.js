@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const volunteersDb = require("./volunteer-model");
-const authenticated = require("../auth/restricted-middleware");
+const volunteersDb = require("../models/volunteer-model.js");
+// const authenticated = require("../auth/restricted-middleware");
 
 /****************************************************************************/
 /*                 Get all volunteers 
 /****************************************************************************/
-router.get("/", authenticated,  async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const volunteers = await volunteersDb.find();
     res.status(200).json(volunteers);
@@ -18,17 +18,29 @@ router.get("/", authenticated,  async (req, res) => {
 });
 
 /****************************************************************************/
-/*         Insert Volunteer is in authRouter.js (Registering Volunteer))
+/*         Add Volunteer 
 /****************************************************************************/
+
+router.post("/", (req, res) => {
+  const volunteer = req.body;
+  volunteersDb
+    .add(volunteer)
+    .then(volunteer => {
+      res.status(201).json(volunteer);
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    })
+});
 
 /****************************************************************************/
 /*                 Delete Volunteer - Deprioritized LABS18
 /****************************************************************************/
-router.delete("/:id", authenticated, (req, res) => {});
+router.delete("/:id", (req, res) => {});
 /****************************************************************************/
 /*                 Update Volunteer - Deprioritized LABS18
 /****************************************************************************/
-router.put("/", authenticated, async (req, res) => {
+router.put("/", async (req, res) => {
   const volunteerId = req.body.user_id;
   const updatedVolunteer = req.body;
   try {
@@ -42,7 +54,7 @@ router.put("/", authenticated, async (req, res) => {
       res.status(404).json({ message: "The volunteer could not be found" });
     }
   } catch (err) {
-    res.status(500).json({ messgae: "Error updating the volunteer" });
+    res.status(500).json({ message: "Error updating the volunteer" });
   }
 });
 
