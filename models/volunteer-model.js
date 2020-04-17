@@ -11,14 +11,12 @@ function findBy(filter) {
     .where(filter);
 }
 
-function findEmail() {
-  return db("volunteers").select("id", "email");
+function findEmail(id) {
+  return db("volunteers").select("id", "email").where({ id }).first();
 }
 
 function findById(id) {
-  return db("volunteers")
-    .where({ id })
-    .first();
+  return db("volunteers").where({ id }).first();
 }
 
 function findDetailed(query) {
@@ -40,7 +38,7 @@ function updateVolunteer(id, volunteer) {
   return db("volunteers")
     .update(volunteer)
     .where("id", id) //* returns count of updated
-    .then(volunteer => {
+    .then((volunteer) => {
       return findById(id);
     });
 }
@@ -54,9 +52,7 @@ function updateVolunteer(id, volunteer) {
 /////delete////////////
 
 function deleteVolunteer(id) {
-  return db("volunteers")
-    .where({ id })
-    .del();
+  return db("volunteers").where({ id }).del();
 }
 
 // function deleteInterests(volunteerId) {
@@ -65,11 +61,9 @@ function deleteVolunteer(id) {
 //     .del();
 //}
 
-
 ////// insert //////////
 
 async function add(volunteer) {
-  
   return db("volunteers").insert(volunteer, "id");
 }
 
@@ -79,9 +73,7 @@ async function add(volunteer) {
 // }
 
 function addId(filter) {
-  return db("volunteers")
-    .first()
-    .where(filter);
+  return db("volunteers").first().where(filter);
 }
 
 module.exports = {
@@ -96,5 +88,5 @@ module.exports = {
   // addInterests,
   findDetailed,
   // deleteInterests,
-  findEmail
+  findEmail,
 };
