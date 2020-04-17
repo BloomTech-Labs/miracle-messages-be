@@ -21,6 +21,10 @@ const authenticationRequired = require("../middleware/Okta");
 // ENDPOINT VERIFIED
 
 router.get("/", async (req, res) => {
+
+
+
+
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -150,8 +154,29 @@ router.get("/:id/partners", async (req, res) => {
  * Returns: JSON of chapter or id
  */
 router.post("/", async (req, res) => {
+  const newChapter = req.body;
+  // let locationData;
+
+
+  // Gets the coordinates based of of city and state
+  const chapterCoordinates  = await axios
+  .get(`https://maps.googleapis.com/maps/api/geocode/json?address=${newChapter.city},+${newChapter.state}&key=${process.env.GOOGLE_MAPS_API}`)
+  .then(async res => {
+    return res.data.results[0].geometry.location
+  })
+  .catch( err => {
+    console.log('could not get lat & lng', err)
+  })
+
+  newChapter.latitude = chapterCoordinates.lat;
+  newChapter.longitude = chapterCoordinates.lng;
+
+
+
+
+
+
   try {
-    const newChapter = await req.body;
 
     //checking to see if any chapter images were added so we can upload it to the AWS bucket:
     if (req.files && req.files.chapter_img) {
@@ -166,7 +191,7 @@ router.post("/", async (req, res) => {
         res
           .status(500)
           .json({ error: "error uploading the chapter_img to AWS" });
-      }
+      } 
 
       // 3) we store the chapter image url in the database:
       //a) first get the name of the file
@@ -188,33 +213,46 @@ router.post("/", async (req, res) => {
       } catch (error) {
         res.status(500).json({ error: "error uploading the image to AWS" });
       }
-
+      
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
       const encodedReunionImgName = encodeURI(reunionImgName);
       newChapter.reunion_img_url = aws_link + encodedReunionImgName;
     }
 
+
+
+    // Adds Chapter to the Database
+    chapterDB.addChapter(newChapter)
+    .then( chapter => {
+      res.status(201).json(chapter)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({error: 'didnt work', err})
+    })
+
     //adding the newChapter object to the database
-    try {
-      axios
-        .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
-        )
-        .then(async (response) => {
-          if (response.data.features) {
-            newChapter.latitude = response.data.features[0].center[0];
-            newChapter.longitude = response.data.features[0].center[1];
-            const chapter = await chapterDB.addChapter(newChapter);
-            res.status(201).json(chapter);
-          } else {
-            res.status(500).json({ error: "Please check city spelling." });
-          }
-        });
-    } catch (err) {
-      res.status(500).json({ error: "Mapbox request could not complete." });
-    }
+    // try {
+    //   axios
+    //     .get(
+    //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
+    //     )
+    //     .then(async (response) => {
+    //       if (response.data.features) {
+    //         newChapter.latitude = response.data.features[0].center[0];
+    //         newChapter.longitude = response.data.features[0].center[1];
+    //         const chapter = await chapterDB.addChapter(newChapter);
+    //         res.status(201).json(chapter);
+    //       } else {
+    //         res.status(500).json({ error: "Please check city spelling." });
+    //       }
+    //     });
+    // } catch (err) {
+    //   res.status(500).json({ error: "Mapbox request could not complete." });
+    // }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: "Something went wrong, Please try again" });
   }
 });
