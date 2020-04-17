@@ -7,37 +7,35 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 router.post("/:id", (req, res) => {
   console.log("hello", req.body);
-  const  id  = req.body.id;
-  const email = req.body.email;
+  const { id, email } = req.body;
 
-  volunteersDb
-    .findEmail(id)
-    console.log("id", id)
-    // .then(ids => {
-      // console.log("volunteer", ids);
+  volunteersDb.findEmail(id);
+  console.log("id", id);
+  // .then(ids => {
+  // console.log("volunteer", ids);
 
-      sgMail
-        .sendMultiple({
-          to: [email],
-          from: "william@miraclemessages.org",
-          templateId: "d-df074a88557646bcbb042df464b7ca6c",
-          subject: "Thank you for your interest in Miracle Messages",
-          // substitutions: {
-          //   comment: req.body.post,
-          // },
-          // text: "Hello",
-          // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-        })
-        .then((email) => res.status(200).json(email))
-        .catch((err) =>
-          res.status(500).json({ message: "Could not send.", error: err })
-        );
-    // })
-    // .catch(({ message, stack, code }) =>
-    //   res
-    //     .status(500)
-    //     .json({ message: "Could not send email.", error: message, stack, code })
-    // );
+  sgMail
+    .sendMultiple({
+      to: [email],
+      from: "william@miraclemessages.org",
+      templateId: "d-df074a88557646bcbb042df464b7ca6c",
+      subject: "Thank you for your interest in Miracle Messages",
+      // substitutions: {
+      //   comment: req.body.post,
+      // },
+      // text: "Hello",
+      // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    })
+    .then((email) => res.status(200).json(email))
+    .catch((err) =>
+      res.status(500).json({ message: "Could not send.", error: err })
+    );
+  // })
+  // .catch(({ message, stack, code }) =>
+  //   res
+  //     .status(500)
+  //     .json({ message: "Could not send email.", error: message, stack, code })
+  // );
 });
 
 // const msg = {
