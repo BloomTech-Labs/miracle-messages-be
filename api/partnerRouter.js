@@ -33,7 +33,7 @@ router.get("/:id", async (req, res) => {
   } catch {
     res
       .status(500)
-      .json({ errorMessage: "There is a problem finding partners data" });
+      .json({ errorMessage: "There is a problem finding specific partners data" });
   }
 });
 

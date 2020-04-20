@@ -1,6 +1,7 @@
 const db = require("../config/dbConfig.js");
 
 /////////// Get queries //////////////////
+
 function find() {
   return db("volunteers").select("*");
 }
@@ -43,34 +44,17 @@ function updateVolunteer(id, volunteer) {
     });
 }
 
-// function updateInterest(volunteerId, change) {
-//   return db("interests")
-//     .where({ volunteersid: volunteerId })
-//     .update(change, "*");
-// }
-
 /////delete////////////
 
 function deleteVolunteer(id) {
   return db("volunteers").where({ id }).del();
 }
 
-// function deleteInterests(volunteerId) {
-//   return db("interests")
-//     .where({ volunteersid: volunteerId })
-//     .del();
-//}
-
 ////// insert //////////
 
 async function add(volunteer) {
   return db("volunteers").insert(volunteer, "id");
 }
-
-// async function addInterests(interests) {
-//   const interestid = await db("interests").insert(interests);
-//   return interestid;
-// }
 
 function addId(filter) {
   return db("volunteers").first().where(filter);
@@ -84,9 +68,6 @@ module.exports = {
   findById,
   deleteVolunteer,
   updateVolunteer,
-  // updateInterest,
-  // addInterests,
   findDetailed,
-  // deleteInterests,
   findEmail,
 };
