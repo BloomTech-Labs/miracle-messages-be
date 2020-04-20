@@ -160,16 +160,16 @@ router.post("/", async (req, res) => {
 
   // Gets the coordinates based of of city and state
   const chapterCoordinates  = await axios
-  .get(`https://maps.googleapis.com/maps/api/geocode/json?address=${newChapter.city},+${newChapter.state}&key=${process.env.GOOGLE_MAPS_API}`)
-  .then(async res => {
-    return res.data.results[0].geometry.location
+  .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city},${newChapter.state}.json?access_token=${process.env.MAPBOX_API}`)
+  .then(res => {
+    return res.data.features[0].geometry.coordinates
   })
   .catch( err => {
-    console.log('could not get lat & lng', err)
+    console.log('could not get lat & lng from mapbox', err)
   })
 
-  newChapter.latitude = chapterCoordinates.lat;
-  newChapter.longitude = chapterCoordinates.lng;
+  newChapter.latitude = chapterCoordinates[1];
+  newChapter.longitude = chapterCoordinates[0];
 
 
 
