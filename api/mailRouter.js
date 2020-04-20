@@ -9,7 +9,6 @@ router.post("/:id", (req, res) => {
   console.log("hello", req.body);
   const { id } = req.params;
   const { email } = req.body;
-
   volunteersDb.findEmail(id);
   console.log("id", id);
   // .then(ids => {
