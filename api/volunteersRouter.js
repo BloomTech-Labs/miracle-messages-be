@@ -1,6 +1,11 @@
 const express = require("express");
+const sgMail = require("@sendgrid/mail");
+
 const router = express.Router();
 const volunteersDb = require("../models/volunteer-model.js");
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 // const authenticated = require("../auth/restricted-middleware");
 
 /****************************************************************************/
@@ -20,13 +25,18 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 /*         Add Volunteer 
 /****************************************************************************/
-
+// Added Mail
 router.post("/", (req, res) => {
   const volunteer = req.body;
   volunteersDb
     .add(volunteer)
     .then(volunteer => {
-      res.status(201).json(volunteer);
+      res.status(201).json(volunteer)
+      const msg = {
+        to: volunteer.email,
+        from: 'Viola4lfe@gmail.com'
+      }
+      sgMail.send();
     })
     .catch((error) => {
       res.status(500).json(error);
