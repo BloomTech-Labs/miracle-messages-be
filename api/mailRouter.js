@@ -17,14 +17,16 @@ router.post("/:id", (req, res) => {
   sgMail
     .sendMultiple({
       to: [email],
-      from: "william@miraclemessages.org",
-      templateId: "d-df074a88557646bcbb042df464b7ca6c",
+      //TODO remove my email
+      from: "Viola4lfe@gmail.com",
+      //TODO Miracle Messages basic template test mock-up
+      templateId: "d-b41d19e43b5c471db65c9b8282d90b36",
       subject: "Thank you for your interest in Miracle Messages",
       // substitutions: {
       //   comment: req.body.post,
       // },
       // text: "Hello",
-      // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
     })
     .then((email) => res.status(200).json(email))
     .catch((err) =>
