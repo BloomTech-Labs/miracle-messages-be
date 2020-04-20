@@ -7,6 +7,7 @@ const partnerDB = require("../models/partners-model");
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 const axios = require("axios");
+//TODO to be implemented
 const authenticationRequired = require("../middleware/Okta");
 
 /******************/
@@ -21,10 +22,6 @@ const authenticationRequired = require("../middleware/Okta");
 // ENDPOINT VERIFIED
 
 router.get("/", async (req, res) => {
-
-
-
-
   try {
     let chapters = await chapterDB.findChapters();
 
@@ -43,7 +40,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//TODO could use to assign specific volunteers to specific chapters
+//TODO could use to assign specific volunteers to specific chapters: Keep for further review
 /**
  * Method: GET
  * What: Getting a list of volunteers from chapter
@@ -116,7 +113,7 @@ router.get("/:id/partners", async (req, res) => {
   }
 });
 
-//TODO could use in the future
+//TODO could use in the future; Keep for further review
 /**
  * Method: GET
  * What: Getting a specific volunteer from chapter
@@ -157,27 +154,22 @@ router.post("/", async (req, res) => {
   const newChapter = req.body;
   // let locationData;
 
-
   // Gets the coordinates based of of city and state
-  const chapterCoordinates  = await axios
-  .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city},${newChapter.state}.json?access_token=${process.env.MAPBOX_API}`)
-  .then(res => {
-    return res.data.features[0].geometry.coordinates
-  })
-  .catch( err => {
-    console.log('could not get lat & lng from mapbox', err)
-  })
+  const chapterCoordinates = await axios
+    .get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city},${newChapter.state}.json?access_token=${process.env.MAPBOX_API}`
+    )
+    .then((res) => {
+      return res.data.features[0].geometry.coordinates;
+    })
+    .catch((err) => {
+      console.log("could not get lat & lng from mapbox", err);
+    });
 
   newChapter.latitude = chapterCoordinates[1];
   newChapter.longitude = chapterCoordinates[0];
 
-
-
-
-
-
   try {
-
     //checking to see if any chapter images were added so we can upload it to the AWS bucket:
     if (req.files && req.files.chapter_img) {
       //uploading and storing chapter image to aws:
@@ -191,7 +183,7 @@ router.post("/", async (req, res) => {
         res
           .status(500)
           .json({ error: "error uploading the chapter_img to AWS" });
-      } 
+      }
 
       // 3) we store the chapter image url in the database:
       //a) first get the name of the file
@@ -213,47 +205,28 @@ router.post("/", async (req, res) => {
       } catch (error) {
         res.status(500).json({ error: "error uploading the image to AWS" });
       }
-      
+
       // storing the reunion image url in the newChapter object:
       const reunionImgName = await req.files.reunion_img.name;
       const encodedReunionImgName = encodeURI(reunionImgName);
       newChapter.reunion_img_url = aws_link + encodedReunionImgName;
     }
 
-
-
     // Adds Chapter to the Database
-    chapterDB.addChapter(newChapter)
-    .then( chapter => {
-      res.status(201).json(chapter)
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json({error: 'didnt work', err})
-    })
-
-    //adding the newChapter object to the database
-    // try {
-    //   axios
-    //     .get(
-    //       `https://api.mapbox.com/geocoding/v5/mapbox.places/${newChapter.city}.json?proximity=${newChapter.latitude},${newChapter.longitude}&access_token=${process.env.MAPBOX}`
-    //     )
-    //     .then(async (response) => {
-    //       if (response.data.features) {
-    //         newChapter.latitude = response.data.features[0].center[0];
-    //         newChapter.longitude = response.data.features[0].center[1];
-    //         const chapter = await chapterDB.addChapter(newChapter);
-    //         res.status(201).json(chapter);
-    //       } else {
-    //         res.status(500).json({ error: "Please check city spelling." });
-    //       }
-    //     });
-    // } catch (err) {
-    //   res.status(500).json({ error: "Mapbox request could not complete." });
-    // }
+    chapterDB
+      .addChapter(newChapter)
+      .then((chapter) => {
+        res.status(201).json(chapter);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ error: "failed to add new chapter", err });
+      });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: "Something went wrong, Please try again" });
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "Something went wrong, Please try again", error });
   }
 });
 
@@ -282,7 +255,7 @@ router.post("/:id/partners", async (req, res) => {
   }
 });
 
-//TODO could use in the future
+//TODO could use in the future. Keep for further review
 /**
  * Method: POST
  * What: Adding volunteer into chapter
@@ -341,6 +314,8 @@ router.post("/:id/partners", async (req, res) => {
 //**********************************************************************
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
+
+//TODO currently only Kevin's information can update a chapter
 router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
@@ -375,6 +350,7 @@ router.put("/:id", async (req, res) => {
       updatedChapter.reunion_img_url = aws_link + encodedReunionImgName;
     }
 
+    //TODO when implementing authentication this will need to be reviewed.
     const chapter = await chapterDB.updateChapter(
       req.params.id,
       updatedChapter
@@ -391,6 +367,8 @@ router.put("/:id", async (req, res) => {
 /********************/
 // ** ALL THE DELETES **
 /********************/
+
+//TODO Need to confirm these deletes
 
 /**
  * Method: DEL
@@ -435,13 +413,13 @@ router.delete("/:id", async (req, res) => {
 
 /**
  * Method: DEL
- * What: Unassigning a partner from chapter
+ * What: Un-assigning a partner from chapter
  * Endpoint: /api/chapter/:id
  * Requires: id of chapter
  * Returns: Nothing or ID
  */
 //****************************************************************
-// THIS IS FOR UNASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
+// THIS IS FOR UN-ASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
 router.delete("/:id/partners/:partnerid", async (req, res) => {
   try {
@@ -454,13 +432,13 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error unassigning zee dang partner from the chapter" });
+      .json({ error: "error un-assigning zee dang partner from the chapter" });
   }
 });
 
 /**
  * Method: DEL
- * What: Unassigning a volunteer from chapter (Admin)
+ * What: Un-assigning a volunteer from chapter (Admin)
  * Endpoint: /api/chapter/:id
  * Requires: id of chapter
  * Returns: Nothing or ID

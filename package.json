@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cypress:open": "cypress open",
     "test": "cross-env DB_ENV=testing jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js"
