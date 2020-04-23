@@ -21,8 +21,6 @@ exports.up = function (knex, Promise) {
 
     //Pending Requests
     tbl.boolean("approved").defaultTo(false);
-    tbl.onUpdate("CASCADE");
-    tbl.onDelete("CASCADE");
   });
 };
 

@@ -7,47 +7,50 @@ const Volunteers = require("../../models/volunteer-model.js");
 
 let token; //Global Variable token to be used all over test
 
-beforeAll(done => {
-  //register a volunteer
-  request(server)
-    .post("/api/volunteer/register")
-    .set("Content-Type", "application/json")
-    .send({
-      fname: "John2",
-      lname: "Smith",
-      email: "jsmith@.com",
-      password: "password",
-      phone: "+14802658966",
-      city: "Los Angeles",
-      state: "CA",
-      country: "United States",
-      comment: "No comment",
-      volunteering: true,
-      donating: true,
-      joinmm: false,
-      mediacoverage: false,
-      somethingelse: "Hello"
-    })
-    .end((err, res) => {
-      request(server)
-        .post("/api/volunteer/login")
-        .set("Content-Type", "application/json")
-        .send({
-          email: "jsmith@.com",
-          password: "password"
-        })
-        .end((err, response) => {
-          token = response.body.token; // save the token!
-          done();
-        });
-    });
-  //Logging in with the volunteer credentials above
-});
+//TODO revisit: can use this test suite to check authenticationRequired via Okta
 
-//Clears out volunteers database
-afterAll(async () => {
-  await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
-});
+
+// beforeAll(done => {
+//   //register a volunteer
+//   request(server)
+//     .post("/api/volunteer/register")
+//     .set("Content-Type", "application/json")
+//     .send({
+//       fname: "John2",
+//       lname: "Smith",
+//       email: "jsmith@.com",
+//       password: "password",
+//       phone: "+14802658966",
+//       city: "Los Angeles",
+//       state: "CA",
+//       country: "United States",
+//       comment: "No comment",
+//       volunteering: true,
+//       donating: true,
+//       joinmm: false,
+//       mediacoverage: false,
+//       somethingelse: "Hello"
+//     })
+//     .end((err, res) => {
+//       request(server)
+//         .post("/api/volunteer/login")
+//         .set("Content-Type", "application/json")
+//         .send({
+//           email: "jsmith@.com",
+//           password: "password"
+//         })
+//         .end((err, response) => {
+//           token = response.body.token; // save the token!
+//           done();
+//         });
+//     });
+//   //Logging in with the volunteer credentials above
+// });
+
+// //Clears out volunteers database
+// afterAll(async () => {
+//   await db.raw(`TRUNCATE TABLE volunteers RESTART IDENTITY CASCADE`);
+// });
 
 //Tests for authentication
 describe("GET /", () => {
