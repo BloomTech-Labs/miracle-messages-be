@@ -37,23 +37,26 @@ router.post("/", (req, res) => {
           //TODO remove my email
           from: "william@miraclemessages.org",
           //TODO Miracle Messages basic template test mock-up
-          // templateId: "d-b41d19e43b5c471db65c9b8282d90b36",
+          templateId: "d-df074a88557646bcbb042df464b7ca6c",
           //TODO review for sending dynamic templates
           // substitutions: {
           //   comment: req.body.post,
           // },
-
-          html: `<strong> ${req.body.post}</strong>`,
+          // subject: "Hello",
+          // html: `<strong> ${req.body.fname}</strong>`,
         })
         .then((email) => res.status(200).json(email))
         .catch((err) =>
-          res.status(500).json({ message: "Could not send.", error: err })
+          res.status(500).json({ message: "Could not send email.", error: err })
         );
     })
     .catch(({ message, stack, code }) =>
-      res
-        .status(500)
-        .json({ message: "Could not send email.", error: message, stack, code })
+      res.status(500).json({
+        message: "Could not add volunteer.",
+        error: message,
+        stack,
+        code,
+      })
     );
 });
 
