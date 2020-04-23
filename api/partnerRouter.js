@@ -33,7 +33,9 @@ router.get("/:id", async (req, res) => {
   } catch {
     res
       .status(500)
-      .json({ errorMessage: "There is a problem finding specific partners data" });
+      .json({
+        errorMessage: "There is a problem finding specific partners data",
+      });
   }
 });
 
@@ -69,7 +71,7 @@ router.delete("/:id", MW.validatePartnerId, async (req, res) => {
 });
 
 /****************************************************************************/
-/*      ADD A PARNTER ORGANIZATION TO THE DATABASE
+/*      ADD A PARTNER ORGANIZATION TO THE DATABASE
 /****************************************************************************/
 //TODO POST Requires an image/Need to re-visit: AWS
 router.post("/", MW.verifyPartnerData, async (req, res) => {
