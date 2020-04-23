@@ -43,7 +43,7 @@ router.post("/", (req, res) => {
           //   comment: req.body.post,
           // },
 
-          // html: `<strong> ${req.body.post}</strong>`,
+          html: `<strong> ${req.body.post}</strong>`,
         })
         .then((email) => res.status(200).json(email))
         .catch((err) =>
