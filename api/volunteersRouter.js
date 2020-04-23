@@ -21,9 +21,9 @@ router.get("/", async (req, res) => {
 });
 
 /****************************************************************************/
-/*         Add Volunteer 
+/*         Add Volunteer and send Email
 /****************************************************************************/
-// Added Mail
+
 router.post("/", (req, res) => {
   const volunteer = req.body;
   const { email } = req.body;
@@ -35,9 +35,9 @@ router.post("/", (req, res) => {
         .sendMultiple({
           to: [email],
           //TODO remove my email
-          from: "Viola4lfe@gmail.com",
+          from: "william@miraclemessages.org",
           //TODO Miracle Messages basic template test mock-up
-          templateId: "d-b41d19e43b5c471db65c9b8282d90b36",
+          // templateId: "d-b41d19e43b5c471db65c9b8282d90b36",
           //TODO review for sending dynamic templates
           // substitutions: {
           //   comment: req.body.post,
@@ -73,7 +73,7 @@ router.delete("/:id", (req, res) => {
     });
 });
 /****************************************************************************/
-/*                 Update Volunteer - Deprioritized LABS18
+/*                 Update Volunteer - De-prioritized LABS18
 /****************************************************************************/
 router.put("/", async (req, res) => {
   const volunteerId = req.body.user_id;

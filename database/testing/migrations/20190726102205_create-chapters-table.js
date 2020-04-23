@@ -1,5 +1,5 @@
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable("chapters", tbl => {
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable("chapters", (tbl) => {
     tbl.increments();
 
     tbl.integer("numvolunteers");
@@ -21,9 +21,11 @@ exports.up = function(knex, Promise) {
 
     //Pending Requests
     tbl.boolean("approved").defaultTo(false);
+    tbl.onUpdate("CASCADE");
+    tbl.onDelete("CASCADE");
   });
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema.dropTableIfExists("chapters");
 };

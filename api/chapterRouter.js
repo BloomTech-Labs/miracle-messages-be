@@ -446,6 +446,7 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
  */
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Admin
+        to be used for 
 /****************************************************************************/
 router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
   try {
