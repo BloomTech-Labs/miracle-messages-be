@@ -42,10 +42,11 @@ router.post("/", (req, res) => {
           // substitutions: {
           //   comment: req.body.post,
           // },
+          //TODO a subject is necessary for sending without a template
           // subject: "Hello",
           // html: `<strong> ${req.body.fname}</strong>`,
         })
-        .then((email) => res.status(200).json(email))
+        .then((email) => res.status(201).json(email))
         .catch((err) =>
           res.status(500).json({ message: "Could not send email.", error: err })
         );
@@ -76,10 +77,10 @@ router.delete("/:id", (req, res) => {
     });
 });
 /****************************************************************************/
-/*                 Update Volunteer - De-prioritized LABS18
+/*                 Update Volunteer - De-prioritized LABS18 - endpoint verified
 /****************************************************************************/
-router.put("/", async (req, res) => {
-  const volunteerId = req.body.user_id;
+router.put("/:id", async (req, res) => {
+  const volunteerId = req.params.id;
   const updatedVolunteer = req.body;
   try {
     const volunteer = await volunteersDb.updateVolunteer(

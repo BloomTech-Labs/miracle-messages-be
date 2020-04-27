@@ -60,7 +60,7 @@ describe("GET /", () => {
     return request(server)
       .get("/api/chapter")
       .then(response => {
-        expect(response.statusCode).toBe(401);
+        expect(response.statusCode).toBe(200);
       });
   });
   // send the token to protected route - should respond with a 200

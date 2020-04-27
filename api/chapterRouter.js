@@ -268,38 +268,38 @@ router.post("/:id/partners", async (req, res) => {
 //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
 //**********************************************************************
 // ROUTE FIXED AND VERIFIED
-// router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
-//   let chapterId = req.params.id;
-//   let volunteerId = req.body.user_id;
-//   console.log(volunteerId);
-//   try {
-//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-//       volunteerId,
-//       chapterId
-//     );
-//     console.log(isVolunteerInChapter);
-//     //Checks if this volunteer is already in the chapter
-//     if (isVolunteerInChapter.length < 1) {
-//       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
-//         volunteerId,
-//         chapterId
-//       );
+router.post("/:id/volunteer", async (req, res) => {
+  let chapterId = req.params.id;
+  let volunteerId = req.body;
+  console.log(volunteerId);
+  try {
+    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+      volunteerId,
+      chapterId
+    );
+    console.log(isVolunteerInChapter);
+    //Checks if this volunteer is already in the chapter
+    if (isVolunteerInChapter.length < 1) {
+      const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
+        volunteerId,
+        chapterId
+      );
 
-//       res.status(200).json({
-//         message: `You have successfully signed up for this chapter.`,
-//         id: signedUp,
-//       });
-//     } else {
-//       res
-//         .status(400)
-//         .json({ message: "This volunteer is already in this chapter" });
-//     }
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ error: "error assigning volunteer to the chapter", error });
-//   }
-// });
+      res.status(201).json({
+        message: `You have successfully signed up for this chapter.`,
+        id: signedUp,
+      });
+    } else {
+      res
+        .status(400)
+        .json({ message: "This volunteer is already in this chapter" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "error assigning volunteer to the chapter", error });
+  }
+});
 
 /********************/
 // ** ALL THE PUTS **

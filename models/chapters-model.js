@@ -5,7 +5,7 @@ module.exports = {
   findChapters,
   addChapter,
   updateChapter,
-  removeChapter
+  removeChapter,
 };
 
 //**** GET ALL CHAPTERS ******
@@ -42,3 +42,5 @@ function removeChapter(id) {
     .where({ id })
     .del();
 }
+
+
