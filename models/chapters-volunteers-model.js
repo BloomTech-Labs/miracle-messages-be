@@ -12,29 +12,27 @@ function findChapterVolunteers(id) {
 
 //given a volunteer id, remove all chapter relationships for that volunteer
 function removeVolFromAllChapters(volunteerId) {
-  return db("chapters_volunteers")
-    .where({ volunteersid: volunteerId })
-    .del();
+  return db("chapters_volunteers").where({ volunteersid: volunteerId }).del();
 }
 
 // //Get specific chapter volunteer row
-async function getSpecificChapterVolunteer(volunteerId, chapterId) {
-  console.log(volunteerId, chapterId)
-  return db("chapters_volunteers")
+async function getSpecificChapterVolunteer(oktaId, chapterId) {
+  console.log(oktaId, chapterId);
+  return db("chapters_okta_table")
     .where("chaptersid", chapterId)
-    .where("volunteersid", volunteerId);
+    .where("oktaid", oktaId);
 }
 
 // assign a volunteer to a Chapter to be displayed under the volunteers section
 //volunteers work with and support Miracle Messages
-async function assignChapterVolunteer(volunteerId, chapterId) {
+async function assignChapterVolunteer(oktaId, chapterId) {
   console.log("in the model");
-  console.log(volunteerId);
+  console.log(oktaId);
   console.log(chapterId);
-  return db("chapters_volunteers").insert(
+  return db("chapters_okta_table").insert(
     {
-      volunteersid: volunteerId,
-      chaptersid: chapterId
+      oktaid: oktaId,
+      chaptersid: chapterId,
     },
     "id"
   );
@@ -45,7 +43,7 @@ function removeSpecificChapterVolunteer(volunteerId, chapterId) {
   return db("chapters_volunteers")
     .where({
       volunteersid: volunteerId,
-      chaptersid: chapterId
+      chaptersid: chapterId,
     })
     .del();
 }
@@ -55,5 +53,5 @@ module.exports = {
   removeVolFromAllChapters,
   assignChapterVolunteer,
   removeSpecificChapterVolunteer,
-  getSpecificChapterVolunteer
+  getSpecificChapterVolunteer,
 };
