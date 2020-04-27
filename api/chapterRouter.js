@@ -270,7 +270,7 @@ router.post("/:id/partners", async (req, res) => {
 // ROUTE FIXED AND VERIFIED
 router.post("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
-  let volunteerId = req.body;
+  let volunteerId = req.body.user_id;
   console.log(volunteerId);
   try {
     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
