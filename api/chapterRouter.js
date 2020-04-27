@@ -270,7 +270,7 @@ router.post("/:id/partners", async (req, res) => {
 // ROUTE FIXED AND VERIFIED
 router.post("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
-  let volunteerId = req.body.user_id;
+  let volunteerId = req.body.id;
   console.log(volunteerId);
   try {
     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
@@ -297,7 +297,7 @@ router.post("/:id/volunteer", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning volunteer to the chapter", error });
+      .json({ errorMessage: "error assigning volunteer to the chapter", error });
   }
 });
 
