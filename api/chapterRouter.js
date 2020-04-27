@@ -270,18 +270,18 @@ router.post("/:id/partners", async (req, res) => {
 // ROUTE FIXED AND VERIFIED
 router.post("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
-  let volunteerId = req.body.id;
-  console.log(volunteerId);
+  let oktaId = req.body.oktaid;
+  console.log(oktaId);
   try {
     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-      volunteerId,
+      oktaId,
       chapterId
     );
     console.log(isVolunteerInChapter);
     //Checks if this volunteer is already in the chapter
     if (isVolunteerInChapter.length < 1) {
       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
-        volunteerId,
+        oktaId,
         chapterId
       );
 
