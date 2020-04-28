@@ -118,24 +118,24 @@ router.get("/:id/partners", async (req, res) => {
  * Method: GET
  * What: Getting a specific volunteer from chapter
  * Endpoint: /api/chapter/:id/volunteer
- * Returns: JSON of specific Chapter_Volunteer by their id's
+ * Returns: JSON of specific Chapter_Volunteer by their oktaid's
  */
 // ENDPOINT VERIFIED
-// router.get("/:id/volunteer", authenticationRequired, async (req, res) => {
-//   let chapterId = req.params.id;
-//   let volunteerId = req.user_id;
-//   try {
-//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-//       volunteerId,
-//       chapterId
-//     );
-//     res.status(200).json(isVolunteerInChapter);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Error getting the chapter",
-//     });
-//   }
-// });
+router.get("/:id/volunteer", async (req, res) => {
+  let chapterId = req.params.id;
+  let oktaId = req.body.oktaid;
+  try {
+    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+      oktaId,
+      chapterId
+    );
+    res.status(200).json(isVolunteerInChapter);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error getting the chapter",
+    });
+  }
+});
 
 /********************/
 // ** ALL THE POSTS **
@@ -295,9 +295,10 @@ router.post("/:id/volunteer", async (req, res) => {
         .json({ message: "This volunteer is already in this chapter" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ errorMessage: "error assigning volunteer to the chapter", error });
+    res.status(500).json({
+      errorMessage: "error assigning volunteer to the chapter",
+      error,
+    });
   }
 });
 
@@ -457,9 +458,7 @@ router.delete("/:id/volunteers/:oktaid", async (req, res) => {
 
     res.status(200).json(count);
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "error removing volunteer from chapter" });
+    res.status(500).json({ error: "error removing volunteer from chapter" });
   }
 });
 
@@ -487,9 +486,7 @@ router.delete("/:id/volunteer/", async (req, res) => {
 
     res.status(200).json(count);
   } catch (error) {
-    res
-      .status(500)
-      .json({ errorMessage: "error removing volunteer" });
+    res.status(500).json({ errorMessage: "error removing volunteer" });
   }
 });
 
