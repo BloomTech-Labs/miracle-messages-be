@@ -121,21 +121,21 @@ router.get("/:id/partners", async (req, res) => {
  * Returns: JSON of specific Chapter_Volunteer by their oktaid's
  */
 // ENDPOINT VERIFIED
-router.get("/:id/volunteer", async (req, res) => {
-  let chapterId = req.params.id;
-  let oktaId = req.body.oktaid;
-  try {
-    const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-      oktaId,
-      chapterId
-    );
-    res.status(200).json(isVolunteerInChapter);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error getting the chapter",
-    });
-  }
-});
+// router.get("/:id/volunteer", async (req, res) => {
+//   let chapterId = req.params.id;
+//   let oktaId = req.body.oktaid;
+//   try {
+//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+//       oktaId,
+//       chapterId
+//     );
+//     res.status(200).json(isVolunteerInChapter);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error getting the chapter",
+//     });
+//   }
+// });
 
 /********************/
 // ** ALL THE POSTS **
@@ -431,9 +431,13 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
 
     res.status(200).json(count);
   } catch (error) {
+<<<<<<< HEAD
     res
       .status(500)
       .json({ error: "Error removing partner from Chapter" });
+=======
+    res.status(500).json({ error: "error removing partner from chapter" });
+>>>>>>> bb8230aa7718cce466caa6dd21aba09c9599050a
   }
 });
 
@@ -474,7 +478,7 @@ router.delete("/:id/volunteers/:oktaid", async (req, res) => {
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-router.delete("/:id/volunteer/", async (req, res) => {
+router.delete("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
   let oktaId = req.body.oktaid;
 
