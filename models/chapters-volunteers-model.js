@@ -38,11 +38,7 @@ async function assignChapterVolunteer(oktaId, chapterId) {
   );
 }
 
-<<<<<<< HEAD
-//unassign a Partner from a Chapter.
-=======
 //remove a volunteer from a Chapter.
->>>>>>> bb8230aa7718cce466caa6dd21aba09c9599050a
 function removeSpecificChapterVolunteer(oktaId, chapterId) {
   return db("chapters_okta_table")
     .where({
