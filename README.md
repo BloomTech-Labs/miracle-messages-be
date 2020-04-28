@@ -91,7 +91,7 @@ Set up Postgres and create databases for both the development server (miracle_be
 ## Setup Development and Testing Environment
 
 1. Clone Repo
-2. "npm install OR yarn install"
+2. "yarn install -- both FE and BE use yarn to avoid conflict"
 
 **Migrations/Seeds for Development Environment**
 
@@ -100,7 +100,7 @@ If you don't want to install seeds
 1. To migrate to the dev database "npx knex migrate:latest"
 
 FOLLOW THIS STEP BY STEP
-
+//TODO update this section to include 00-cleanup.js and 
 1. "npx knex migrate:up" -- Adds table into postgres db
 2. "npx knex seed:run --specific=001-chapters.js" -- Adds seed into table
 3. "npx knex migrate:up"
@@ -142,6 +142,7 @@ method url: **/api/volunteer/register**
 http method: **[POST]**
 
 **Body**
+//TODO Replace all with Postman API docs link
 
 | name      | type     | required | description                         |  
 | --------  | -------  | ------- | ----------------------------------   |
