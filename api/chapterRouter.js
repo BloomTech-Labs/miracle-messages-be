@@ -251,7 +251,7 @@ router.post("/:id/partners", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning partner to the chapter", error });
+      .json({ errorMessage: "error assigning partner to the chapter", error });
   }
 });
 
@@ -431,7 +431,13 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
 
     res.status(200).json(count);
   } catch (error) {
+<<<<<<< HEAD
+    res
+      .status(500)
+      .json({ error: "Error removing partner from Chapter" });
+=======
     res.status(500).json({ error: "error removing partner from chapter" });
+>>>>>>> bb8230aa7718cce466caa6dd21aba09c9599050a
   }
 });
 
