@@ -39,10 +39,10 @@ async function assignChapterVolunteer(oktaId, chapterId) {
 }
 
 //unassign a Partner from a Chapter.
-function removeSpecificChapterVolunteer(volunteerId, chapterId) {
-  return db("chapters_volunteers")
+function removeSpecificChapterVolunteer(oktaId, chapterId) {
+  return db("chapters_okta_table")
     .where({
-      volunteersid: volunteerId,
+      oktaid: oktaId,
       chaptersid: chapterId,
     })
     .del();

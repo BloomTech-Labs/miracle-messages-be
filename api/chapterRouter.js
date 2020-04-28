@@ -251,7 +251,7 @@ router.post("/:id/partners", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error assigning partner to the chapter", error });
+      .json({ errorMessage: "error assigning partner to the chapter", error });
   }
 });
 
@@ -433,7 +433,7 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error un-assigning zee dang partner from the chapter" });
+      .json({ error: "Error removing partner from Chapter" });
   }
 });
 
@@ -476,7 +476,7 @@ router.delete("/:id/volunteers/:oktaid", async (req, res) => {
 /****************************************************************************/
 router.delete("/:id/volunteer/", async (req, res) => {
   let chapterId = req.params.id;
-  let oktaId = req.body.oktaId;
+  let oktaId = req.body.oktaid;
 
   try {
     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
