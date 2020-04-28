@@ -25,19 +25,19 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 /*                 Get all partners of one specific chapter; uses chapter_partners which is not currently utilized.               */
 /****************************************************************************/
-// router.get("/:id", async (req, res) => {
-//   const chapterId = req.params.id;
-//   try {
-//     const partners = await partnersDb.findById(chapterId);
-//     res.status(200).json(partners);
-//   } catch {
-//     res
-//       .status(500)
-//       .json({
-//         errorMessage: "There is a problem finding specific partners data",
-//       });
-//   }
-// });
+router.get("/:id", async (req, res) => {
+  const chapterId = req.params.id;
+  try {
+    const partners = await partnersDb.findById(chapterId);
+    res.status(200).json(partners);
+  } catch {
+    res
+      .status(500)
+      .json({
+        errorMessage: "There is a problem finding specific partners data",
+      });
+  }
+});
 
 /****************************************************************************/
 /*      Delete a partner - will also also delete it from each chapter:        */
