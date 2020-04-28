@@ -48,17 +48,22 @@ module.exports = {
   testing: {
     client: "pg",
     connection: {
-      host: process.env.POSTGRESS_TEST_HOST,
-      port: process.env.POSTGRESS_TEST_PORT,
-      user: process.env.POSTGRESS_TEST_USER,
-      password: process.env.POSTGRESS_TEST_PASSWORD,
-      database: process.env.POSTGRESS_TEST_DATABASE,
+      host: process.env.POSTGRESS_DEV_HOST,
+      port: process.env.POSTGRESS_DEV_PORT,
+      user: process.env.POSTGRESS_DEV_USER,
+      password: process.env.POSTGRESS_DEV_PASSWORD,
+      database: process.env.POSTGRESS_DEV_DATABASE,
+      // host: process.env.POSTGRESS_TEST_HOST,
+      // port: process.env.POSTGRESS_TEST_PORT,
+      // user: process.env.POSTGRESS_TEST_USER,
+      // password: process.env.POSTGRESS_TEST_PASSWORD,
+      // database: process.env.POSTGRESS_TEST_DATABASE,
     },
 
     useNullAsDefault: true,
 
     migrations: {
-      directory: "./database/testing/migrations",
+      directory: "./database/development/migrations",
     },
     seeds: {
       directory: "./database/development/seeds",
