@@ -315,7 +315,7 @@ router.post("/:id/volunteer", async (req, res) => {
 //********* UPDATING THE INFO FOR A CHAPTER  *************/
 //**********************************************************************
 
-//TODO currently only Kevin's information can update a chapter
+//TODO currently only specific roles (which roles) can update a chapter
 router.put("/:id", async (req, res) => {
   try {
     const updatedChapter = await req.body;
@@ -419,7 +419,7 @@ router.delete("/:id", async (req, res) => {
  * Returns: Nothing or ID
  */
 //****************************************************************
-// THIS IS FOR UN-ASSIGNING A SPECIFIC PARTNER ORG FROM A CHAPTER *
+// THIS IS FOR REMOVING A SPECIFIC PARTNER ORG FROM A CHAPTER *
 //***************************************************************
 router.delete("/:id/partners/:partnerid", async (req, res) => {
   try {
@@ -448,10 +448,10 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
 /*      Delete a volunteer from a specific chapter - Admin
         to be used for 
 /****************************************************************************/
-router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
+router.delete("/:id/volunteers/:oktaid", async (req, res) => {
   try {
     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      req.params.volunteerid,
+      req.params.oktaid,
       req.params.id //chapterId
     );
 
@@ -459,7 +459,7 @@ router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ error: "error unassigning zee dang partner from the chapter" });
+      .json({ error: "error removing volunteer from chapter" });
   }
 });
 
@@ -475,22 +475,22 @@ router.delete("/:id/volunteers/:volunteerid", async (req, res) => {
 /****************************************************************************/
 /*      Delete a volunteer from a specific chapter - Volunteer
 /****************************************************************************/
-// router.delete("/:id/volunteer/", authenticationRequired, async (req, res) => {
-//   let chapterId = req.params.id;
-//   let volunteerId = req.user_id;
+router.delete("/:id/volunteer/", async (req, res) => {
+  let chapterId = req.params.id;
+  let oktaId = req.body.oktaId;
 
-//   try {
-//     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-//       volunteerId,
-//       chapterId
-//     );
+  try {
+    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+      oktaId,
+      chapterId
+    );
 
-//     res.status(200).json(count);
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ error: "error removing zee dang volunteer from the chapter" });
-//   }
-// });
+    res.status(200).json(count);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ errorMessage: "error removing volunteer" });
+  }
+});
 
 module.exports = router;
