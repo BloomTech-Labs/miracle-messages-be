@@ -437,34 +437,7 @@ router.delete("/:id/partners/:partnerid", async (req, res) => {
 
 /**
  * Method: DEL
- * What: Un-assigning a volunteer from chapter (Admin)
- * Endpoint: /api/chapter/:id
- * Requires: id of chapter
- * Returns: Nothing or ID
- * UNTESTED DON'T KNOW IF IT WORKS YET
- */
-/****************************************************************************/
-/*      Delete a volunteer from a specific chapter - Admin
-        to be used for 
-/****************************************************************************/
-router.delete("/:id/volunteers/:oktaid", async (req, res) => {
-  try {
-    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      req.params.oktaid,
-      req.params.id //chapterId
-    );
-
-    res.status(200).json(count);
-  } catch (error) {
-    res.status(500).json({ error: "error removing volunteer from chapter" });
-  }
-});
-
-//TODO could use in the future
-
-/**
- * Method: DEL
- * What: Unassigning a volunteer from chapter (Volunteer)
+ * What: Unassigning a volunteer from chapter
  * Endpoint: /api/chapter/:id
  * Requires: id of chapter
  * Returns: Nothing or ID
