@@ -25,13 +25,13 @@ router.get("/", async (req, res) => {
 /****************************************************************************/
 
 router.post("/", (req, res) => {
-  const volunteer = req.body;
+  const vounteer = req.body;
   const { email } = req.body;
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   volunteersDb
     .add(volunteer)
     .then((savedVolunteer) => {
-      sgMail
+      sgMail 
         .sendMultiple({
           to: [email],
           //TODO remove my email

@@ -2,8 +2,6 @@ exports.up = function(knex) {
   return knex.schema.createTable("chapters_volunteers", tbl => {
     //TODO may need to add this to prevent duplicate rows tbl.unique(['chaptersid', 'volunteersid']);
 
-    tbl.increments();
-
     tbl
       .integer("chaptersid")
       .unsigned()
@@ -14,13 +12,19 @@ exports.up = function(knex) {
       .onUpdate("CASCADE");
 
     tbl
-      .integer("volunteersid")
+      .string("volunteersid")
       .unsigned()
       .notNullable()
-      .references("id")
+      .references("oktaid")
       .inTable("volunteers")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
+    tbl.boolean("appoved")
+      .defaultTo(false)
+    tbl.boolean("isAdmin")
+      .defaultTo(false)
+
+    tbl.primary(["chaptersid","volunteersid"])
   });
 };
 
