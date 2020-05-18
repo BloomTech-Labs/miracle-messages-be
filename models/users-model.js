@@ -2,27 +2,54 @@ const db = require('../config/dbConfig.js');
 
 module.exports = {
   add,
-  find,
-  findBy,
-  findById
+  getUsers,
+  findById,
+  updateUser,
+  deleteUser
 };
 
-function find() {
-  return db('users').select('id', 'username', 'password');
+function getUsers(filter) {
+  if(!filter){
+    return db('volunteers')
+  } else {
+    return db('volunteers').where(filter).first();
+  }
+  
 }
 
-function findBy(filter) {
-  return db('users').where(filter);
-}
-
-async function add(user) {
-  const [id] = await db('users').insert(user, 'id');
-
-  return findById(id);
+async function add(volunteer) {
+  const [oktaid] = await db('volunteers').insert(volunteer, '*');
+  return await findById(oktaid)
 }
 
 function findById(id) {
-  return db('users')
-    .where({ id })
+  return db('volunteers')
+    .where(id)
     .first();
+}
+
+
+//destructures the update info and places default values 
+//submits update info and returns user
+async function updateUser(updateInfo, currentInfo, id) {
+  const { 
+    email = currentInfo.email,
+    fname = currentInfo.fname,
+    lname = currentInfo.lname,
+    profile_img_url = currentInfo.profile_img_url,
+    city = currentInfo.city,
+    state = currentInfo.state,
+    country = currentInfo.country } = updateInfo
+  const update = {email, fname, lname, profile_img_url, city, state, country}
+
+  await db('volunteers').update(update).where("oktaid", id)
+
+  return await findById({"oktaid" : id})
+}
+
+
+function deleteUser(id) {
+  return db('volunteers')
+    .where("oktaid", id)
+    .del();
 }

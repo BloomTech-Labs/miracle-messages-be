@@ -12,6 +12,7 @@ const authenticationRequired = require("./middleware/Okta.js");
 const chaptersRouter = require("./api/chapterRouter.js");
 const partnerRouter = require("./api/partnerRouter");
 const volunteersRouter = require("./api/volunteersRouter.js");
+const userRouter = require("./api/userRouter.js")
 
 server.use(helmet());
 server.use(cors());
@@ -23,11 +24,11 @@ server.use(express.json());
 server.get("/", (req, res) => {
   res.status(200).json({ hello: "World!" });
 });
-
+server.use("/api/user", userRouter);
 // server.use("/api/upload", uploadRouter);
-server.use("/api/volunteer", volunteersRouter);
-server.use("/api/chapter", chaptersRouter);
-server.use("/api/partner", partnerRouter);
+// server.use("/api/volunteer", volunteersRouter);
+// server.use("/api/chapter", chaptersRouter);
+// server.use("/api/partner", partnerRouter);
 // server.use("/api/form", formRouter);
 
 /**************************************/

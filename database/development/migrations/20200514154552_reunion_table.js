@@ -22,8 +22,9 @@ exports.up = function(knex) {
         tbl.double("latitude").notNullable();
         tbl.string("city", 128).notNullable();
         tbl.string("state", 128).notNullable();
-        tbl.text("story");
-        tbl.string("link_to_media").notNullable();
+        tbl.text("story").notNullable();
+        tbl.string("link_to_media");
+        tbl.string("reunion_img").defaultTo("https://images.unsplash.com/photo-1517346665566-17b938c7f3ad?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
         tbl.boolean("approved")
             .defaultTo(false)
     });
