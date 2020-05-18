@@ -8,12 +8,13 @@ module.exports = {
   updateUser
 };
 
-function find() {
-  return db('volunteers').select('id', 'username', 'password');
-}
-
-function findBy(filter) {
-  return db('volunteers').where(filter);
+function getUsers(filter) {
+  if(!filter){
+    return db('volunteers')
+  } else {
+    return db('volunteers').where(filter);
+  }
+  
 }
 
 async function add(volunteer) {
@@ -28,11 +29,15 @@ function findById(id) {
 }
 
 async function updateUser(updateInfo, currentInfo, id) {
-  const { profile_img_url = currentInfo.profile_img_url,
+  const { 
+    email = currentInfo.email,
+    fname = currentInfo.fname,
+    lname = currentInfo.lname,
+    profile_img_url = currentInfo.profile_img_url,
     city = currentInfo.city,
     state = currentInfo.state,
     country = currentInfo.country } = updateInfo
-  const update = {profile_img_url,city, state, country}
+  const update = {email, fname, lname, profile_img_url, city, state, country}
 
   await db('volunteers').update(update).where("oktaid", id)
 
