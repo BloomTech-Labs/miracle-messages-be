@@ -4,6 +4,7 @@ exports.up = function (knex, Promise) {
     tbl.string("fname", 128).notNullable();
     tbl.string("lname", 128).notNullable();
     tbl.string("email", 128).notNullable().unique();
+    tbl.string("profile_img_url")
     tbl.string("city", 64)
     tbl.string("state", 32)
     tbl.string("country", 32)

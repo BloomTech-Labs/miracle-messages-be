@@ -12,42 +12,31 @@ exports.seed = function (knex) {
       city: "Browns Mills",
       state: "NJ",
       country: "United States",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012H6R0ZK7-3822657a594c-512"
     },
     {
       oktaid: "testtesttest2",
       fname: "Colin",
       lname: "de Vries",
-      email: "colindevries325@gmail.com",
-      city: "??",
-      state: "??",
-      country: "United States",
+      email: "colindevries325@gmail.com"
     },
     {
       oktaid: "testtesttest3",
       fname: "Shun",
       lname: "Chiang",
-      email: "yuushamenma@gmail.com",
-      city: "??",
-      state: "??",
-      country: "United States",
+      email: "yuushamenma@gmail.com"
     },
     {
       oktaid: "testtesttest4",
       fname: "Samuel",
       lname: "Ardis",
-      email: "ardis.productions@gmail.com",
-      city: "??",
-      state: "??",
-      country: "United States",
+      email: "ardis.productions@gmail.com"
     },
     {
       oktaid: "testtesttest5",
       fname: "Tricia",
       lname: "Dislers",
-      email: "triciadislers@gmail.com",
-      city: "??",
-      state: "??",
-      country: "United States",
+      email: "triciadislers@gmail.com"
     },
     {
       oktaid: "testtesttest6",
@@ -62,10 +51,7 @@ exports.seed = function (knex) {
       oktaid: "testtesttest7",
       fname: "Charlie",
       lname: "DiFranco",
-      email: "charlie.difranco2@gmail.com",
-      city: "??",
-      state: "??",
-      country: "United States",
+      email: "charlie.difranco2@gmail.com"
     }
   ]);
 })
