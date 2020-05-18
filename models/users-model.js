@@ -2,17 +2,17 @@ const db = require('../config/dbConfig.js');
 
 module.exports = {
   add,
-  find,
-  findBy,
+  getUsers,
   findById,
-  updateUser
+  updateUser,
+  deleteUser
 };
 
 function getUsers(filter) {
   if(!filter){
     return db('volunteers')
   } else {
-    return db('volunteers').where(filter);
+    return db('volunteers').where(filter).first();
   }
   
 }
@@ -28,6 +28,9 @@ function findById(id) {
     .first();
 }
 
+
+//destructures the update info and places default values 
+//submits update info and returns user
 async function updateUser(updateInfo, currentInfo, id) {
   const { 
     email = currentInfo.email,
@@ -41,5 +44,12 @@ async function updateUser(updateInfo, currentInfo, id) {
 
   await db('volunteers').update(update).where("oktaid", id)
 
-  return await findById(id)
+  return await findById({"oktaid" : id})
+}
+
+
+function deleteUser(id) {
+  return db('volunteers')
+    .where("oktaid", id)
+    .del();
 }

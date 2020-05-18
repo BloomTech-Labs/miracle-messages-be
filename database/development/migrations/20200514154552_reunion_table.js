@@ -24,6 +24,7 @@ exports.up = function(knex) {
         tbl.string("state", 128).notNullable();
         tbl.text("story");
         tbl.string("link_to_media").notNullable();
+        tbl.string("reunion_img").notNullable();
         tbl.boolean("approved")
             .defaultTo(false)
     });
