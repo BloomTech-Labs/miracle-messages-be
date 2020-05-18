@@ -1,105 +1,101 @@
-// const express = require("express");
-// const router = express.Router();
-// const uploadToS3 = require("../middleware/uploadToS3.js");
-// const chapterDB = require("../models/chapters-model.js");
-// const chaptersPartnersDB = require("../models/chapters-partners-model.js");
-// const partnerDB = require("../models/partners-model");
-// const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
-// const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
-// const axios = require("axios");
-// //TODO to be implemented
-// const authenticationRequired = require("../middleware/Okta");
+const express = require("express");
+const router = express.Router();
+const uploadToS3 = require("../middleware/uploadToS3.js");
+const chapterDB = require("../models/chapters-model.js");
+const chaptersPartnersDB = require("../models/chapters-partners-model.js");
+const partnerDB = require("../models/partners-model");
+const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
+const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
+const axios = require("axios");
+//TODO to be implemented
+const authenticationRequired = require("../middleware/Okta");
 
-// /******************/
-// // ** ALL THE GETS **
-// /******************/
-// /**
-//  * Method: GET
-//  * What: Getting all chapters
-//  * Endpoint: /api/chapter
-//  * Returns: Json of all chapters with related partners
-//  */
-// // ENDPOINT VERIFIED
+/******************/
+// ** ALL THE GETS **
+/******************/
+/**
+ * Method: GET
+ * What: Getting all chapters
+ * Endpoint: /api/chapter
+ * Returns: Json of all chapters with related partners
+ */
+// ENDPOINT VERIFIED
 
-// router.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
+  try {
+    let chapters = await chapterDB.findChapters();
+
+    // const promises = chapters.map(async (chapter) => {
+    //   let partners = await partnerDB.findById(chapter.id);
+    //   chapter.partners = partners;
+    //   return chapter;
+    // });
+
+    // chapters = await Promise.all(promises);
+    res.status(200).json(chapters);
+  } catch {
+    res.status(500).json({
+      error: "there was a problem getting chapter",
+    });
+  }
+});
+
+//TODO could use to assign specific volunteers to specific chapters: Keep for further review
+/**
+ * Method: GET
+ * What: Getting a list of volunteers from chapter
+ * Endpoint: /api/chapter/:id/volunteers
+ * Returns: Json of all volunteers related to a specific chapter
+ */
+// ENDPOINT VERIFIED
+
+// router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
+//   const chapterId = req.params.id;
 //   try {
-//     let chapters = await chapterDB.findChapters();
-
-//     const promises = chapters.map(async (chapter) => {
-//       let partners = await partnerDB.findById(chapter.id);
-//       chapter.partners = partners;
-//       return chapter;
-//     });
-
-//     chapters = await Promise.all(promises);
-//     res.status(200).json(chapters);
+//     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
+//       chapterId
+//     );
+//     //Checks if there are volunteers in chapter
+//     if (volunteers.rows.length < 1) {
+//       res
+//         .status(404)
+//         .json({ message: "There is no volunteers in this chapter" });
+//     } else {
+//       res.status(200).json(volunteers.rows);
+//     }
 //   } catch {
-//     res.status(500).json({
-//       error: "there was a problem getting chapter or partner information",
-//     });
+//     res
+//       .status(500)
+//       .json({ errorMessage: "There is a problem finding volunteers data" });
 //   }
 // });
 
-// //TODO could use to assign specific volunteers to specific chapters: Keep for further review
-// /**
-//  * Method: GET
-//  * What: Getting a list of volunteers from chapter
-//  * Endpoint: /api/chapter/:id/volunteers
-//  * Returns: Json of all volunteers related to a specific chapter
-//  */
-// // ENDPOINT VERIFIED
+/**
+ * Method: GET
+ * What: Getting a specific chapter
+ * Endpoint: /api/chapter/:id
+ * Returns: JSON a specific chapter by id
+ */
+// ENDPOINT VERIFIED
 
-// // router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
-// //   const chapterId = req.params.id;
-// //   try {
-// //     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
-// //       chapterId
-// //     );
-// //     //Checks if there are volunteers in chapter
-// //     if (volunteers.rows.length < 1) {
-// //       res
-// //         .status(404)
-// //         .json({ message: "There is no volunteers in this chapter" });
-// //     } else {
-// //       res.status(200).json(volunteers.rows);
-// //     }
-// //   } catch {
-// //     res
-// //       .status(500)
-// //       .json({ errorMessage: "There is a problem finding volunteers data" });
-// //   }
-// // });
+router.get("/:id", async (req, res) => {
+  try {
+    const chapter = await chapterDB.findBy(req.params.id);
+    res.status(200).json(chapter);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error getting the chapter",
+    });
+  }
+});
 
-// /**
-//  * Method: GET
-//  * What: Getting a specific chapter
-//  * Endpoint: /api/chapter/:id
-//  * Returns: JSON a specific chapter by id
-//  */
-// // ENDPOINT VERIFIED
-
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const chapter = await chapterDB.findBy(req.params.id);
-
-//     let partners = await partnerDB.findById(chapter.id);
-
-//     chapter.partners = partners;
-//     res.status(200).json(chapter);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Error getting the chapter",
-//     });
-//   }
-// });
-
-// /**
-//  * Method: GET
-//  * What: Getting partners from chapter
-//  * Endpoint: /api/chapter/:id/partners
-//  * Returns: JSON of all partners specific to a chapter
-//  */
-// // ENDPOINT VERIFIED
+/**
+ * Method: GET
+ * What: Getting partners from chapter
+ * Endpoint: /api/chapter/:id/partners
+ * Returns: JSON of all partners specific to a chapter
+ */
+// ENDPOINT VERIFIED
 
 // router.get("/:id/partners", async (req, res) => {
 //   try {
@@ -113,43 +109,43 @@
 //   }
 // });
 
-// //TODO could use in the future; Keep for further review
-// /**
-//  * Method: GET
-//  * What: Getting a specific volunteer from chapter
-//  * Endpoint: /api/chapter/:id/volunteer
-//  * Returns: JSON of specific Chapter_Volunteer by their oktaid's
-//  */
-// // ENDPOINT VERIFIED
-// // router.get("/:id/volunteer", async (req, res) => {
-// //   let chapterId = req.params.id;
-// //   let oktaId = req.body.oktaid;
-// //   try {
-// //     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
-// //       oktaId,
-// //       chapterId
-// //     );
-// //     res.status(200).json(isVolunteerInChapter);
-// //   } catch (error) {
-// //     res.status(500).json({
-// //       message: "Error getting the chapter",
-// //     });
-// //   }
-// // });
+//TODO could use in the future; Keep for further review
+/**
+ * Method: GET
+ * What: Getting a specific volunteer from chapter
+ * Endpoint: /api/chapter/:id/volunteer
+ * Returns: JSON of specific Chapter_Volunteer by their oktaid's
+ */
+// ENDPOINT VERIFIED
+// router.get("/:id/volunteer", async (req, res) => {
+//   let chapterId = req.params.id;
+//   let oktaId = req.body.oktaid;
+//   try {
+//     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
+//       oktaId,
+//       chapterId
+//     );
+//     res.status(200).json(isVolunteerInChapter);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error getting the chapter",
+//     });
+//   }
+// });
 
-// /********************/
-// // ** ALL THE POSTS **
-// /********************/
+/********************/
+// ** ALL THE POSTS **
+/********************/
 
-// //TODO adds chapter
-// /**
-//  * Method: POST
-//  * What: Adds chapter into DB
-//  * Endpoint: /api/chapter
-//  * Requires: `req.body: longitude, latitude, city, title, state, email, chapter_img_url, established_date, description, email
-//  * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
-//  * Returns: JSON of chapter or id
-//  */
+//TODO adds chapter
+/**
+ * Method: POST
+ * What: Adds chapter into DB
+ * Endpoint: /api/chapter
+ * Requires: `req.body: longitude, latitude, city, title, state, email, chapter_img_url, established_date, description, email
+ * Optional: `req.body: numvolunteers, numreunions, msg_recorded, msg_delivered, reunion_img_url, story, facebook
+ * Returns: JSON of chapter or id
+ */
 // router.post("/", async (req, res) => {
 //   const newChapter = req.body;
 //   // let locationData;
@@ -193,7 +189,7 @@
 //       //so it can be appended to the s3 bucket link:
 //       const encodedChapterImgName = encodeURI(chapterImgName);
 //       //c) we append the encoded name to the s3 bucket link to get the location of the
-//       newChapter.chapter_img_url = aws_link + encodedChapterImgName;
+//       newChapter.cha1pter_img_url = aws_link + encodedChapterImgName;
 //     }
 
 //     if (req.files && req.files.reunion_img) {
@@ -230,16 +226,16 @@
 //   }
 // });
 
-// //TODO assigns a partner/sponsor to a chapter
-// /**
-//  * Method: POST
-//  * What: Creates row in chapters_partners for specific chapter/partner
-//  * Endpoint: /api/chapter/:id/partners
-//  * Requires: req.body: partnerId
-//  *           req.params.id
-//  * Returns: ID of newly created row
-//  */
-// // ENDPOINT VERIFIED
+//TODO assigns a partner/sponsor to a chapter
+/**
+ * Method: POST
+ * What: Creates row in chapters_partners for specific chapter/partner
+ * Endpoint: /api/chapter/:id/partners
+ * Requires: req.body: partnerId
+ *           req.params.id
+ * Returns: ID of newly created row
+ */
+// ENDPOINT VERIFIED
 // router.post("/:id/partners", async (req, res) => {
 //   try {
 //     const id = await chaptersPartnersDB.assignChapterPartner(
@@ -255,19 +251,19 @@
 //   }
 // });
 
-// //TODO could use in the future. Keep for further review
-// /**
-//  * Method: POST
-//  * What: Adding volunteer into chapter
-//  * Endpoint: /api/chapter
-//  * Requires: req.user_id: volunteerId
-//  *           req.params.id : chapterId
-//  * Returns: ID of the created chapter_volunteers row
-//  */
-// //**********************************************************************
-// //********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
-// //**********************************************************************
-// // ROUTE FIXED AND VERIFIED
+//TODO could use in the future. Keep for further review
+/**
+ * Method: POST
+ * What: Adding volunteer into chapter
+ * Endpoint: /api/chapter
+ * Requires: req.user_id: volunteerId
+ *           req.params.id : chapterId
+ * Returns: ID of the created chapter_volunteers row
+ */
+//**********************************************************************
+//********* SIGNING UP AS A VOLUNTEER TO A CHAPTER   *************/
+//**********************************************************************
+// ROUTE FIXED AND VERIFIED
 // router.post("/:id/volunteer", async (req, res) => {
 //   let chapterId = req.params.id;
 //   let oktaId = req.body.oktaid;
@@ -302,21 +298,21 @@
 //   }
 // });
 
-// /********************/
-// // ** ALL THE PUTS **
-// /********************/
+/********************/
+// ** ALL THE PUTS **
+/********************/
 
-// /**
-//  * Method: PUT
-//  * Endpoint: /api/chapter/:id
-//  * Requires: req.user_id: volunteerId
-//  * Returns: ID of the created chapter_volunteers row
-//  */
-// //**********************************************************************
-// //********* UPDATING THE INFO FOR A CHAPTER  *************/
-// //**********************************************************************
+/**
+ * Method: PUT
+ * Endpoint: /api/chapter/:id
+ * Requires: req.user_id: volunteerId
+ * Returns: ID of the created chapter_volunteers row
+ */
+//**********************************************************************
+//********* UPDATING THE INFO FOR A CHAPTER  *************/
+//**********************************************************************
 
-// //TODO currently only specific roles (which roles) can update a chapter
+//TODO currently only specific roles (which roles) can update a chapter
 // router.put("/:id", async (req, res) => {
 //   try {
 //     const updatedChapter = await req.body;
@@ -365,23 +361,23 @@
 //   }
 // });
 
-// /********************/
-// // ** ALL THE DELETES **
-// /********************/
+/********************/
+// ** ALL THE DELETES **
+/********************/
 
-// //TODO Need to confirm these deletes
+//TODO Need to confirm these deletes
 
-// /**
-//  * Method: DEL
-//  * What: Deleting a chapter
-//  * Endpoint: /api/chapter/:id
-//  * Requires: id of chapter
-//  * Returns: Nothing or ID
-//  */
-// //************************************************************
-// // THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
-// //************************************************************
-// // ROUTE VERIFIED
+/**
+ * Method: DEL
+ * What: Deleting a chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
+//************************************************************
+// THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
+//************************************************************
+// ROUTE VERIFIED
 // router.delete("/:id", async (req, res) => {
 //   const chapterId = req.params.id;
 //   let numPartners = 0;
@@ -412,16 +408,16 @@
 //   }
 // });
 
-// /**
-//  * Method: DEL
-//  * What: Un-assigning a partner from chapter
-//  * Endpoint: /api/chapter/:id
-//  * Requires: id of chapter
-//  * Returns: Nothing or ID
-//  */
-// //****************************************************************
-// // THIS IS FOR REMOVING A SPECIFIC PARTNER ORG FROM A CHAPTER *
-// //***************************************************************
+/**
+ * Method: DEL
+ * What: Un-assigning a partner from chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
+//****************************************************************
+// THIS IS FOR REMOVING A SPECIFIC PARTNER ORG FROM A CHAPTER *
+//***************************************************************
 // router.delete("/:id/partners/:partnerid", async (req, res) => {
 //   try {
 //     const count = await chaptersPartnersDB.unassignChapterPartner(
@@ -435,16 +431,16 @@
 //   }
 // });
 
-// /**
-//  * Method: DEL
-//  * What: Unassigning a volunteer from chapter
-//  * Endpoint: /api/chapter/:id
-//  * Requires: id of chapter
-//  * Returns: Nothing or ID
-//  */
-// /****************************************************************************/
-// /*      Delete a volunteer from a specific chapter - Volunteer
-// /****************************************************************************/
+/**
+ * Method: DEL
+ * What: Unassigning a volunteer from chapter
+ * Endpoint: /api/chapter/:id
+ * Requires: id of chapter
+ * Returns: Nothing or ID
+ */
+/****************************************************************************/
+/*      Delete a volunteer from a specific chapter - Volunteer
+/****************************************************************************/
 // router.delete("/:id/volunteer", async (req, res) => {
 //   let chapterId = req.params.id;
 //   let oktaId = req.body.oktaid;
@@ -461,4 +457,4 @@
 //   }
 // });
 
-// module.exports = router;
+module.exports = router;

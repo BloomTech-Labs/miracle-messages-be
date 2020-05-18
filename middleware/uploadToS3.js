@@ -14,8 +14,8 @@ const uploadToS3 = (file, res) => {
     secretAccessKey: S3_SECRET_ACCESS_KEY,
     Bucket: S3_BUCKET_NAME,
   });
-
-  const uploadData = s3Bucket.createBucket(() => {
+  // const uploadData = 
+  s3Bucket.createBucket(() => {
     const params = {
       Bucket: S3_BUCKET_NAME,
       Key: file.name,
