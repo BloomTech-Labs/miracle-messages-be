@@ -17,7 +17,6 @@ function findBy(filter) {
 
 async function add(volunteer) {
   const [oktaid] = await db('volunteers').insert(volunteer, '*');
-  console.log("add okta=", oktaid)
   return await findById(oktaid)
 }
 
