@@ -4,7 +4,8 @@ module.exports = {
   add,
   find,
   findBy,
-  findById
+  findById,
+  updateUser
 };
 
 function find() {
@@ -24,4 +25,16 @@ function findById(id) {
   return db('volunteers')
     .where(id)
     .first();
+}
+
+async function updateUser(updateInfo, currentInfo, id) {
+  const { profile_img_url = currentInfo.profile_img_url,
+    city = currentInfo.city,
+    state = currentInfo.state,
+    country = currentInfo.country } = updateInfo
+  const update = {profile_img_url,city, state, country}
+
+  await db('volunteers').update(update).where("oktaid", id)
+
+  return await findById(id)
 }

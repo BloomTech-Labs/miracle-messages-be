@@ -33,5 +33,24 @@ router.post("/login", async (req, res) => {
  })
 
 
+ router.put("/update", async (req, res) => {
+     const update = req.body
+     const user = await users.findById({oktaid: req.body.oktaid})
+     if(user){
+        console.log("user",user)
+        console.log("update",update)
+        if(update.city || update.state || update.country|| update.profile_img_url){
+            users.updateUser(update, user, user.oktaid).then(updated => {
+                res.status(201).json(updated)
+            }).catch(err => res.status(401).json({"Error on update": err}))
+        } else {
+            res.status(400).json({"Error": "Please provide something to update"})
+        }
+     } else {
+         res.status(400).json({"Error": "No User found with matching id"})
+     }
+ })
+
+
 
  module.exports = router
