@@ -49,26 +49,26 @@ router.get("/", async (req, res) => {
  */
 // ENDPOINT VERIFIED
 
-// router.get("/:id/volunteers", authenticationRequired, async (req, res) => {
-//   const chapterId = req.params.id;
-//   try {
-//     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
-//       chapterId
-//     );
-//     //Checks if there are volunteers in chapter
-//     if (volunteers.rows.length < 1) {
-//       res
-//         .status(404)
-//         .json({ message: "There is no volunteers in this chapter" });
-//     } else {
-//       res.status(200).json(volunteers.rows);
-//     }
-//   } catch {
-//     res
-//       .status(500)
-//       .json({ errorMessage: "There is a problem finding volunteers data" });
-//   }
-// });
+router.get("/:id/volunteers", async (req, res) => {
+  const chapterId = req.params.id;
+  try {
+    const volunteers = await chaptersVolunteersDB.findChapterVolunteers(
+      chapterId
+    );
+    //Checks if there are volunteers in chapter
+    if (volunteers.rows.length < 1) {
+      res
+        .status(404)
+        .json({ message: "There is no volunteers in this chapter" });
+    } else {
+      res.status(200).json(volunteers.rows);
+    }
+  } catch {
+    res
+      .status(500)
+      .json({ errorMessage: "There is a problem finding volunteers data" });
+  }
+});
 
 /**
  * Method: GET
@@ -91,23 +91,22 @@ router.get("/:id", async (req, res) => {
 
 /**
  * Method: GET
- * What: Getting partners from chapter
- * Endpoint: /api/chapter/:id/partners
- * Returns: JSON of all partners specific to a chapter
+ * What: Getting reunions from chapter
+ * Endpoint: /api/chapter/:id/reunions
+ * Returns: JSON of all reunions specific to a chapter
  */
 // ENDPOINT VERIFIED
 
-// router.get("/:id/partners", async (req, res) => {
-//   try {
-//     const chapter = await chaptersPartnersDB.findChapterPartners(req.params.id);
+router.get("/:id/reunions", async (req, res) => {
+  const chapterId = req.params.id;
+  try {
+    const reunions = await chapters_reunionsDB.findChapterReunions(chapterId);
 
-//     res.status(200).json(chapter);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Error getting the chapter",
-//     });
-//   }
-// });
+    res.status(200).json(reunions);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting the chapter", error });
+  }
+});
 
 //TODO could use in the future; Keep for further review
 /**
