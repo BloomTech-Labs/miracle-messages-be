@@ -10,10 +10,11 @@ exports.up = function(knex, Promise) {
     tbl.integer("msg_recorded");
     tbl.integer("msg_delivered");
     tbl.string("chapter_img_url").notNullable();
-    tbl.string("established_date");
+    tbl.datetime("established_date").defaultTo(knex.fn.now(0));
     tbl.text("description");
     tbl.string("email").notNullable();
     tbl.string("facebook");
+    tbl.string("requestedBy").notNullable();
 
     //Pending Requests
     tbl.boolean("approved").defaultTo(false);

@@ -3,7 +3,7 @@ exports.up = function(knex) {
     return knex.schema.createTable("reunions", tbl => {
         tbl.increments()
         tbl
-        .integer('chapter_id')
+        .integer('chapterid')
         .unsigned()
         .notNullable()
         .references("id")
@@ -24,7 +24,7 @@ exports.up = function(knex) {
         tbl.string("state", 128).notNullable();
         tbl.text("story").notNullable();
         tbl.string("link_to_media");
-        tbl.string("reunion_img").defaultTo("https://images.unsplash.com/photo-1517346665566-17b938c7f3ad?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
+        tbl.string("reunion_img").defaultTo("https://media.graytvinc.com/images/690*433/Cliff+gets+new+home.JPG");
         tbl.boolean("approved")
             .defaultTo(false)
     });

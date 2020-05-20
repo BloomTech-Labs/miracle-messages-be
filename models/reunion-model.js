@@ -15,8 +15,9 @@ function find() {
 
 //Find all reunions of a chapter 
 function findById(id) {
+  console.log("chapter id in model:", id)
   return db("reunions")
-    .where({ "chapter_id": id });
+    .where({ "chapterid": id });
 }
 
 //Remove a reunion 
@@ -28,8 +29,8 @@ function remove(id) {
 
 //add a reunion 
 function addReunion(reunion) {
-  return db("reunion")
-    .insert(reunion, "id");
+  return db("reunions")
+    .insert(reunion, "id")
 }
 
 //update a reunion 

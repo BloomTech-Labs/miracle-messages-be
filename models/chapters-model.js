@@ -25,8 +25,7 @@ function findBy(id) {
 
 // add chapter
 function addChapter(chapter) {
-  const value = db('chapters').insert(chapter, 'id');
-  return value;
+  return db('chapters').insert(chapter, 'id');
 }
 
 // update chapter
