@@ -11,7 +11,7 @@ const authenticationRequired = require("./middleware/Okta.js");
 // const uploadRouter = require("./api/uploadRouter");
 
 const chaptersRouter = require("./api/chapterRouter.js");
-const partnerRouter = require("./api/partnerRouter");
+const reunionRouter = require("./api/reunionRouter");
 const volunteersRouter = require("./api/volunteersRouter.js");
 const userRouter = require("./api/userRouter.js")
 
@@ -29,7 +29,7 @@ server.use("/api/user", userRouter);
 // server.use("/api/upload", uploadRouter);
 // server.use("/api/volunteer", volunteersRouter);
 server.use("/api/chapter", chaptersRouter);
-// server.use("/api/partner", partnerRouter);
+server.use("/api/reunion", reunionRouter);
 // server.use("/api/form", formRouter);
 
 /**************************************/
