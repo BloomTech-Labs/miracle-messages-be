@@ -3,9 +3,9 @@ const db = require("../config/dbConfig");
 //given a chapter ID, find all volunteers assigned to the Chapter:
 // ✔
 function findChapterVolunteers(id) {
-  console.log(id)
+  // console.log(id)
   return db.raw(
-    `SELECT c.id, c.city, cv.volunteersid, v.profile_img_url, v.fname, v.lname FROM chapters c
+    `SELECT c.id, cv.volunteersid, v.profile_img_url, v.fname, v.lname FROM chapters c
         INNER JOIN chapters_volunteers cv ON c.id = cv.chaptersid
         INNER JOIN volunteers v ON cv.volunteersid = v.oktaid
         WHERE c.id = ${id}`

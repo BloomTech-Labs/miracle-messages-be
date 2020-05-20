@@ -32,7 +32,7 @@ router.get("/:id/volunteers", async (req, res) => {
   try {
     const volunteers = await chaptersVolunteersDB.findChapterVolunteers(chapterId);
     //Checks if there are volunteers in chapter
-    console.log(volunteers)
+    // console.log(volunteers)
     if (volunteers.rows.length < 1) { res.status(404).json({ message: "There is no volunteers in this chapter" });}
     else { res.status(200).json(volunteers.rows); }
   } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteers data" });}
@@ -57,7 +57,7 @@ router.get("/:id", async (req, res) => {
 router.get("/:id/reunions", async (req, res) => {
   const chapterId = req.params.id;
   try {
-    console.log("chapterID on endpoint:", chapterId)
+    // console.log("chapterID on endpoint:", chapterId)
     const reunions = await reunionDB.findById(chapterId);
     res.status(200).json(reunions);
   } catch (error) {
@@ -67,7 +67,7 @@ router.get("/:id/reunions", async (req, res) => {
 
 
 
-// Returns volunteers to a chapter
+// Returns a specific volunteer to a chapter
 // ✔
 router.get("/:id/volunteer", async (req, res) => {
   let chapterId = req.params.id;
