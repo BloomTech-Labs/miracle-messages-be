@@ -19,7 +19,7 @@ exports.up = function(knex) {
       .inTable("volunteers")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    tbl.boolean("appoved")
+    tbl.boolean("approved")
       .defaultTo(false)
     tbl.boolean("isAdmin")
       .defaultTo(false)

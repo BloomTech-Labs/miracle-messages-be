@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const users = require("../models/users-model.js");
+const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
+const uploadToS3 = require("../middleware/uploadToS3.js");
 
 
 //gets user that's logged in
@@ -42,6 +44,7 @@ router.post("/login", async (req, res) => {
         if(user){ res.status(200).json(user)} 
         //if user is not found it will submit them to the db
         else {
+
             //deconstructing the request for submission
             const newUser = {};
             newUser.oktaid = req.body._embedded.user.id;
@@ -66,13 +69,22 @@ router.post("/login", async (req, res) => {
 // finally it passes the update info, found user info, and their id into the function 
  router.put("/update", async (req, res) => {
      const update = req.body
+     if (req.files && req.files.profile_img) {   
+        const { profile_img } = await req.files;
+        try {
+          await uploadToS3(profile_img, res);
+        } catch (error) {
+          res.status(500).json({ error: "error uploading the image to AWS" });
+        }
+        const profileImgName = await req.files.profile_img.name;
+        const encodedProfileImgName = encodeURI(profileImgName);
+         update.profile_img_url = aws_link + encodedProfileImgName;
+    }
      const user = await users.findById({oktaid: req.body.oktaid})
      if(user){
-        console.log("user",user)
-        console.log("update",update)
         if(update.fname || update.lname || update.email || update.city || update.state || update.country|| update.profile_img_url) {
-            users.updateUser(update, user, user.oktaid).then(updated => {
-                console.log("updated:", updated)
+           
+            users.updateUser(update, user, user.oktaid).then(updated => {            
                 res.status(201).json({"user": updated})
             })
             .catch(err => { 

@@ -8,12 +8,12 @@ module.exports = {
   removeChapter,
 };
 
-//**** GET ALL CHAPTERS ******
+// get all chapters
 function findChapters() {
   return db('chapters');
 }
 
-//**** FIND SPECIFIC CHAPTER BY CHAPTER ID ******
+// get specific chapter
 
 function findBy(id) {
   const chapter = db('chapters')
@@ -23,20 +23,19 @@ function findBy(id) {
   return chapter;
 }
 
-//**** ADD A CHAPTER  ******
+// add chapter
 function addChapter(chapter) {
-  const value = db('chapters').insert(chapter, 'id');
-  return value;
+  return db('chapters').insert(chapter, 'id');
 }
 
-//**** UPDATE CHAPTER ******
+// update chapter
 function updateChapter(id, changes) {
   return db('chapters')
     .where({ id })
     .update(changes);
 }
 
-//**** REMOVE CHAPTER ******
+// delete chapter
 function removeChapter(id) {
   return db('chapters')
     .where({ id })
