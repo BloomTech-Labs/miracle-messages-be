@@ -47,10 +47,10 @@ router.post("/login", async (req, res) => {
 
             //deconstructing the request for submission
             const newUser = {};
-            newUser.oktaid = req.body._embedded.user.id;
-            newUser.email = req.body._embedded.profile.login;
-            newUser.fname = req.body._embedded.profile.firstName;
-            newUser.lname = req.body._embedded.profile.lastName;
+            newUser.oktaid = req.body.oktaid;
+            newUser.email = req.body.email;
+            newUser.fname = req.body.firstName;
+            newUser.lname = req.body.lastName;
 
             //submits the new user, and returns their info
             users.add(newUser)
