@@ -13,8 +13,9 @@ const authenticationRequired = require("../middleware/Okta");
 
 // Returns: all chapters
 // ✔
-router.get("/", async (req, res) => {
+router.get("/", (req, res) => {
   try {
+    
     let chapters = await chapterDB.findChapters();
     res.status(200).json(chapters);
   } catch {
@@ -89,7 +90,7 @@ router.get("/:id/volunteer", async (req, res) => {
 
 // create new chapter
 // ✔
-router.post("/", async (req, res) => {
+router.post("/", authenticationRequired, async (req, res) => {
   const newChapter = req.body;
   // let locationData;
 
@@ -174,7 +175,7 @@ router.post("/", async (req, res) => {
 
 // Creates new reunion connected to chapter
 // ✔
-router.post("/:id/reunions", async (req, res) => {
+router.post("/:id/reunions", authenticationRequired, async (req, res) => {
   
   const newReunion = req.body
   newReunion.chapterid = req.params.id
@@ -221,7 +222,7 @@ if (req.files && req.files.reunion_img) {
 });
 
 //registers a user to a chapter to await approval
-router.post("/:id/volunteer", async (req, res) => {
+router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
   let chapterId = req.params.id;
   let oktaId = req.body.oktaid;
   try {
@@ -317,100 +318,32 @@ router.post("/:id/volunteer", async (req, res) => {
 //   }
 // });
 
-/********************/
-// ** ALL THE DELETES **
-/********************/
 
-//TODO Need to confirm these deletes
+//deletes chapter from db
+router.delete("/:id", authenticationRequired, (req, res) => {
+  const chapterId = req.params.id;
+    chapterDB.removeChapter(chapterId)
+    .then( chapter => {res.status(200).json({ "Message": "Chapter successfully deleted."})})
+    .catch(err => {res.status(500).json({"Error": "There was an error deleting this chapter"})})
 
-/**
- * Method: DEL
- * What: Deleting a chapter
- * Endpoint: /api/chapter/:id
- * Requires: id of chapter
- * Returns: Nothing or ID
- */
-//************************************************************
-// THIS IS FOR DELETING A CHAPTER FROM THE DATABASE */
-//************************************************************
-// ROUTE VERIFIED
-// router.delete("/:id", async (req, res) => {
-//   const chapterId = req.params.id;
-//   let numPartners = 0;
 
-//   //Need to validate that chapter id exists.//////////////////////////
+});
 
-//   // First, we delete all chapter-partner relationships from chapters_partners
-//   try {
-//     numPartners = await chaptersPartnersDB.removeChapterPartner(chapterId);
-//   } catch {
-//     res.status(500).json({
-//       "error message":
-//         "There is a problem removing all chapter-partner relationships for this chapter",
-//     });
-//   }
+//Delete a volunteer from a specific chapter 
+router.delete("/:id/volunteer", authenticationRequired, async (req, res) => {
+  let chapterId = req.params.id;
+  let oktaId = req.body.oktaid;
 
-//   //Next, Delete the chapter from chatpers table:
-//   try {
-//     const numChapters = await chapterDB.removeChapter(chapterId);
-//     res.status(200).json({
-//       partners: `${numChapters} chapter deleted`,
-//       chapters: `this chapter was removed from ${numPartners} partners`,
-//     });
-//   } catch {
-//     res.status(500).json({
-//       "error message": "There is a problem removing this partner",
-//     });
-//   }
-// });
+  try {
+    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+      oktaId,
+      chapterId
+    );
 
-/**
- * Method: DEL
- * What: Un-assigning a partner from chapter
- * Endpoint: /api/chapter/:id
- * Requires: id of chapter
- * Returns: Nothing or ID
- */
-//****************************************************************
-// THIS IS FOR REMOVING A SPECIFIC PARTNER ORG FROM A CHAPTER *
-//***************************************************************
-// router.delete("/:id/partners/:partnerid", async (req, res) => {
-//   try {
-//     const count = await chaptersPartnersDB.unassignChapterPartner(
-//       req.params.partnerid,
-//       req.params.id
-//     );
-
-//     res.status(200).json(count);
-//   } catch (error) {
-//     res.status(500).json({ error: "error removing partner from chapter" });
-//   }
-// });
-
-/**
- * Method: DEL
- * What: Unassigning a volunteer from chapter
- * Endpoint: /api/chapter/:id
- * Requires: id of chapter
- * Returns: Nothing or ID
- */
-/****************************************************************************/
-/*      Delete a volunteer from a specific chapter - Volunteer
-/****************************************************************************/
-// router.delete("/:id/volunteer", async (req, res) => {
-//   let chapterId = req.params.id;
-//   let oktaId = req.body.oktaid;
-
-//   try {
-//     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-//       oktaId,
-//       chapterId
-//     );
-
-//     res.status(200).json(count);
-//   } catch (error) {
-//     res.status(500).json({ errorMessage: "error removing volunteer" });
-//   }
-// });
+    res.status(200).json(count);
+  } catch (error) {
+    res.status(500).json({ errorMessage: "error removing volunteer" });
+  }
+});
 
 module.exports = router;
