@@ -3,10 +3,11 @@ const router = express.Router();
 const users = require("../models/users-model.js");
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 const uploadToS3 = require("../middleware/uploadToS3.js");
+const authenticationRequired = require("../middleware/Okta");
 
 
 //gets user that's logged in
-router.get("/", (req, res) => {
+router.get("/",  authenticationRequired, (req, res) => {
     const oktaid = req.body.oktaid
     if(oktaid){
         users.getUsers({"oktaid": oktaid})
@@ -20,7 +21,7 @@ router.get("/", (req, res) => {
 })
 
 // retreives a list of all users if the okta id is whitelisted as an admin
-router.get("/admin", (req, res) => {
+router.get("/admin",  authenticationRequired, (req, res) => {
     const oktaid = req.body.oktaid
     if(oktaid === "testtesttest1"){
         users.getUsers()
@@ -67,7 +68,7 @@ router.post("/login", async (req, res) => {
 // first it finds user by their id, and stores it as a variable
 // then it checks to make sure the use is submitting info thto be updated
 // finally it passes the update info, found user info, and their id into the function 
- router.put("/update", async (req, res) => {
+ router.put("/update",  authenticationRequired, async (req, res) => {
      const update = req.body
      if (req.files && req.files.profile_img) {   
         const { profile_img } = await req.files;
@@ -100,7 +101,7 @@ router.post("/login", async (req, res) => {
 
 
  //Finds user by their id, and then deletes them from the db. This only affects data we have stored, and not anything related to their okta
- router.delete("/delete", async (req, res) => {
+ router.delete("/delete",  authenticationRequired, async (req, res) => {
      const oktaid = req.body.oktaid
      try{
          //finds user

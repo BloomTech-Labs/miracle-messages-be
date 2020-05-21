@@ -15,9 +15,7 @@ function authenticationRequired(req, res, next) {
   
   const match = authHeader.match(/Bearer (.+)/);
 
-  if (!match) {
-    return res.status(401).end();
-  }
+  if (!match) { return res.status(401).json({"error": "there was no match"}); }
 
   const accessToken = match[1];
   const expectedAudience = "api://default";
@@ -31,7 +29,7 @@ function authenticationRequired(req, res, next) {
     })
     .catch(err => {
       console.warn("token failed validation")
-      res.status(401).send(err.message);
+      res.status(401).json({"error": "something went wrong", err});
     });
 }
 
