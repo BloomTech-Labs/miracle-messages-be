@@ -26,14 +26,10 @@ server.get("/", (req, res) => {
   res.status(200).json({ hello: "World!" });
 });
 server.use("/api/user", userRouter);
-// server.use("/api/upload", uploadRouter);
 server.use("/api/chapter", chaptersRouter);
 server.use("/api/reunion", reunionRouter);
-// server.use("/api/form", formRouter);
 
-/**************************************/
-/*      Custom Middleware             */
-/**************************************/
+// custom logging function 
 function logger(req, res, next) {
   const now = new Date().toISOString();
   console.log(`A ${req.method} request to '${req.url}'at ${now}`);
