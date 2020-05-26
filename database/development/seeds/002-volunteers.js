@@ -6,8 +6,7 @@ exports.seed = function (knex) {
   return knex("volunteers").insert([
     {
       oktaid: "testtesttest1",
-      fname: "Ronald",
-      lname: "McIntyre",
+      name: "Ronald McIntyre",
       email: "r.campbell.mcintyre@gmail.com",
       city: "Browns Mills",
       state: "NJ",
@@ -16,42 +15,43 @@ exports.seed = function (knex) {
     },
     {
       oktaid: "testtesttest2",
-      fname: "Colin",
-      lname: "de Vries",
-      email: "colindevries325@gmail.com"
+      name: "Colin de Vries",
+      email: "colindevries325@gmail.com",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012BRKJN4E-f68576ae20c9-512"
     },
     {
       oktaid: "testtesttest3",
-      fname: "Shun",
-      lname: "Chiang",
-      email: "yuushamenma@gmail.com"
+      name: "Shun Chiang",
+      email: "yuushamenma@gmail.com",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012JQ2UCKV-efd94e6ccb6e-512"
     },
     {
       oktaid: "testtesttest4",
-      fname: "Samuel",
-      lname: "Ardis",
-      email: "ardis.productions@gmail.com"
+      name: "Samuel Ardis",
+      email: "ardis.productions@gmail.com",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012BRSBECW-5a9a45765a13-512"
     },
     {
       oktaid: "testtesttest5",
-      fname: "Tricia",
-      lname: "Dislers",
-      email: "triciadislers@gmail.com"
+      name: "Tricia Dislers",
+      email: "triciadislers@gmail.com",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012H6L1M7F-e27e5d3c1cb0-512"
     },
     {
       oktaid: "testtesttest6",
-      fname: "Alexander",
-      lname: "Karren",
+      name: "Alexander Karren",
       email: "alex@karren.com",
       city: "Salt Lake City",
       state: "Utah",
       country: "United States",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012JHYAT26-8fba223ad62c-512"
     },
     {
       oktaid: "testtesttest7",
-      fname: "Charlie",
-      lname: "DiFranco",
-      email: "charlie.difranco2@gmail.com"
+      name: "Charlie DiFranco",
+      email: "charlie.difranco2@gmail.com",
+      profile_img_url: "https://ca.slack-edge.com/ESZCHB482-W012QNVLLHJ-733a40b8d717-512"
+      
     }
   ]);
 })

@@ -9,6 +9,7 @@ const authenticationRequired = require("../middleware/Okta");
 //gets user that's logged in
 router.get("/",  authenticationRequired, (req, res) => {
     const oktaid = req.body.oktaid
+    console.log(req.jwt)
     if(oktaid){
         users.getUsers({"oktaid": oktaid})
         .then(user => {
@@ -50,8 +51,7 @@ router.post("/login", async (req, res) => {
             const newUser = {};
             newUser.oktaid = req.body.oktaid;
             newUser.email = req.body.email;
-            newUser.fname = req.body.firstName;
-            newUser.lname = req.body.lastName;
+            newUser.name = req.body.Name;
 
             //submits the new user, and returns their info
             users.add(newUser)
@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
     }
      const user = await users.findById({oktaid: req.body.oktaid})
      if(user){
-        if(update.fname || update.lname || update.email || update.city || update.state || update.country|| update.profile_img_url) {
+        if(update.name|| update.email || update.city || update.state || update.country|| update.profile_img_url) {
            
             users.updateUser(update, user, user.oktaid).then(updated => {            
                 res.status(201).json({"user": updated})

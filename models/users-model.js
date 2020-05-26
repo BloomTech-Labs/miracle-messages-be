@@ -34,13 +34,12 @@ function findById(id) {
 async function updateUser(updateInfo, currentInfo, id) {
   const { 
     email = currentInfo.email,
-    fname = currentInfo.fname,
-    lname = currentInfo.lname,
+    name = currentInfo.name,
     profile_img_url = currentInfo.profile_img_url,
     city = currentInfo.city,
     state = currentInfo.state,
     country = currentInfo.country } = updateInfo
-  const update = {email, fname, lname, profile_img_url, city, state, country}
+  const update = {email, name, profile_img_url, city, state, country}
 
   await db('volunteers').update(update).where("oktaid", id)
 

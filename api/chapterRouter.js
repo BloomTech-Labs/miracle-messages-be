@@ -13,7 +13,7 @@ const authenticationRequired = require("../middleware/Okta");
 
 // Returns: all chapters
 // ✔
-router.get("/", async (req, res) => {
+router.get("/", authenticationRequired, async (req, res) => {
   try {
     
     let chapters = await chapterDB.findChapters();
