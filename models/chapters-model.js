@@ -9,8 +9,8 @@ module.exports = {
 };
 
 // get all chapters
-function findChapters() {
-  return db('chapters');
+function findChapters(query) {
+  return db('chapters').orderBy(query.sortBy || "city", query.dir || "asc");
 }
 
 // get specific chapter

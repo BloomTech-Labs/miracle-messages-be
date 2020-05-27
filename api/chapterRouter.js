@@ -15,7 +15,7 @@ const authenticationRequired = require("../middleware/Okta");
 // ✔
 router.get("/", async (req, res) => {
   try { 
-    let chapters = await chapterDB.findChapters();
+    let chapters = await chapterDB.findChapters(req.query);
     res.status(200).json(chapters);
   } catch {
     res.status(500).json({
