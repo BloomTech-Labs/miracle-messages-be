@@ -4,11 +4,12 @@ const users = require("../models/users-model.js");
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 const uploadToS3 = require("../middleware/uploadToS3.js");
 const authenticationRequired = require("../middleware/Okta");
+const userInfo = require("../middleware/userInfo")
 
 
 //gets user that's logged in
-router.get("/",  authenticationRequired, (req, res) => {
-    const oktaid = req.body.oktaid
+router.get("/",  authenticationRequired, userInfo,(req, res) => {
+    const oktaid = req.userInfo.sub
     console.log(req.jwt)
     if(oktaid){
         users.getUsers({"oktaid": oktaid})
@@ -21,10 +22,10 @@ router.get("/",  authenticationRequired, (req, res) => {
     }
 })
 
-// retreives a list of all users if the okta id is whitelisted as an admin
-router.get("/admin",  authenticationRequired, (req, res) => {
-    const oktaid = req.body.oktaid
-    if(oktaid === "testtesttest1"){
+// retreives a list of all users if the okta id is whitelisted as an CEO
+router.get("/CEO",  authenticationRequired, (req, res) => {
+    const groups = req.jwt.claims.groups
+    if(groups.includes("CEO")){
         users.getUsers()
         .then(users => {
             res.status(200).json({users})
@@ -38,10 +39,10 @@ router.get("/admin",  authenticationRequired, (req, res) => {
 
 //Endpoint to check if user has already been registered in the database upon login
 //if user currently doesnt exist it will add them to the db 
-router.post("/login", async (req, res) => {
+router.post("/login",authenticationRequired, userInfo, async (req, res) => {
     try{
         //checks if use has previously logged in via oktaid 
-        const user = await users.findById({oktaid: req.body._embedded.user.id})
+        const user = await users.findById({oktaid: req.userInfo.sub})
         //if user is found it will return the user
         if(user){ res.status(200).json(user)} 
         //if user is not found it will submit them to the db
@@ -49,9 +50,9 @@ router.post("/login", async (req, res) => {
 
             //deconstructing the request for submission
             const newUser = {};
-            newUser.oktaid = req.body.oktaid;
-            newUser.email = req.body.email;
-            newUser.name = req.body.Name;
+            newUser.oktaid = req.userInfo.sub;
+            newUser.email = req.userInfo.email;
+            newUser.name = req.userInfo.name;
 
             //submits the new user, and returns their info
             users.add(newUser)
@@ -68,7 +69,7 @@ router.post("/login", async (req, res) => {
 // first it finds user by their id, and stores it as a variable
 // then it checks to make sure the use is submitting info thto be updated
 // finally it passes the update info, found user info, and their id into the function 
- router.put("/update",  authenticationRequired, async (req, res) => {
+ router.put("/update",  authenticationRequired, userInfo, async (req, res) => {
      const update = req.body
      if (req.files && req.files.profile_img) {   
         const { profile_img } = await req.files;
@@ -81,7 +82,7 @@ router.post("/login", async (req, res) => {
         const encodedProfileImgName = encodeURI(profileImgName);
          update.profile_img_url = aws_link + encodedProfileImgName;
     }
-     const user = await users.findById({oktaid: req.body.oktaid})
+     const user = await users.findById({oktaid: req.userInfo.sub})
      if(user){
         if(update.name|| update.email || update.city || update.state || update.country|| update.profile_img_url) {
            
@@ -101,8 +102,8 @@ router.post("/login", async (req, res) => {
 
 
  //Finds user by their id, and then deletes them from the db. This only affects data we have stored, and not anything related to their okta
- router.delete("/delete",  authenticationRequired, async (req, res) => {
-     const oktaid = req.body.oktaid
+ router.delete("/delete",  authenticationRequired, userInfo, async (req, res) => {
+     const oktaid = req.userInfo.sub
      try{
          //finds user
         const user = await users.findById({oktaid: oktaid})

@@ -5,7 +5,8 @@ module.exports = {
   findById,
   remove,
   addReunion,
-  updateReunion
+  updateReunion,
+  findByChapterId
 };
 
 //Find all reunions
@@ -13,12 +14,21 @@ function find() {
   return db("reunions");
 }
 
-//Find all reunions of a chapter 
 function findById(id) {
+  console.log("chapter id in model:", id)
+  return db("reunions")
+    .where({ "id": id });
+}
+
+//Find all reunions of a chapter 
+function findByChapterId(id) {
   console.log("chapter id in model:", id)
   return db("reunions")
     .where({ "chapterid": id });
 }
+
+
+
 
 //Remove a reunion 
 function remove(id) {

@@ -7,7 +7,7 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('reunions').insert([
         {chapterid: 1, 
-          volunteersid: "testtesttest1",
+          volunteersid: "00ud5cf5v0zK8zYCG4x6",
            longitude: -120.440928,
             latitude: 34.951242,
              city: "Santa Maria",

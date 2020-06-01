@@ -6,7 +6,7 @@ exports.seed = function(knex) {
       return knex("chapters").insert([
         {
           city: "San Francisco",
-          title: "San Francisco",
+          title: "Dolores Street Community Services",
           state: "CA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -18,12 +18,12 @@ exports.seed = function(knex) {
           longitude: -122.431297,
           latitude: 37.773972,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
 
         },
         {
           city: "Los Angeles",
-          title: "Los Angeles",
+          title: "University of Southern California",
           state: "CA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -39,7 +39,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Riverside",
-          title: "Riverside",
+          title: "Mt. Rubidoux Church",
           state: "CA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -51,11 +51,11 @@ exports.seed = function(knex) {
           longitude: -117.377022,
           latitude: 33.98053,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         },
         {
           city: "Seattle",
-          title: "Seattle",
+          title: "Northgate Community Center",
           state: "WA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -71,7 +71,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Fort Lauderdale",
-          title: "Fort Lauderdale",
+          title: "Fort Lauderdale College",
           state: "FL",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -83,11 +83,11 @@ exports.seed = function(knex) {
           longitude: -80.137314,
           latitude: 26.122438,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         },
         {
           city: "Miami",
-          title: "Miami",
+          title: "First United Methodist Church of Miami",
           state: "FL",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -99,11 +99,11 @@ exports.seed = function(knex) {
           longitude: -80.191788,
           latitude: 25.761681,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         },
         {
           city: "San Antonio",
-          title: "San Antonio",
+          title: "Gill Community Center",
           state: "TX",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -119,7 +119,7 @@ exports.seed = function(knex) {
         },
         {
           city: "New York",
-          title: "New York",
+          title: "Metropolitan College of New York",
           state: "NY",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -135,7 +135,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Boston",
-          title: "Boston",
+          title: "Massachusetts College of Art and Design",
           state: "MA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -151,7 +151,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Phoenix",
-          title: "Phoenix",
+          title: "Paradise Valley Community Center",
           state: "AZ",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -163,7 +163,7 @@ exports.seed = function(knex) {
           longitude: -112.074036,
           latitude: 33.448376,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         }
       ]);
    });

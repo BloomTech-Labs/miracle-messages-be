@@ -5,7 +5,7 @@ exports.seed = function (knex) {
   .then(function() {
   return knex("volunteers").insert([
     {
-      oktaid: "testtesttest1",
+      oktaid: "00ud5cf5v0zK8zYCG4x6",
       name: "Ronald McIntyre",
       email: "r.campbell.mcintyre@gmail.com",
       city: "Browns Mills",
