@@ -260,32 +260,6 @@ router.post("/", authenticationRequired, userInfo, async (req, res) => {
   newChapter.longitude = chapterCoordinates[0];
 
   try {
-    //checking to see if any chapter images were added so we can upload it to the AWS bucket:
-    // if (req.files && req.files.chapter_img) {
-    //   //uploading and storing chapter image to aws:
-    //   //1) we grab the file:
-    //   const { chapter_img } = await req.files;
-
-    //   //2) we try to upload
-    //   try {
-    //     uploadToS3(chapter_img, res);
-    //   } catch (error) {
-    //     res
-    //       .status(500)
-    //       .json({ error: "error uploading the chapter_img to AWS" });
-    //   }
-
-    //   // 3) we store the chapter image url in the database:
-    //   //a) first get the name of the file
-    //   const chapterImgName = await req.files.chapter_img.name;
-
-    //   //b) then we encode the name i.e replace spaces etc with special characters to make it URL compatible
-    //   //so it can be appended to the s3 bucket link:
-    //   const encodedChapterImgName = encodeURI(chapterImgName);
-    //   //c) we append the encoded name to the s3 bucket link to get the location of the
-    //   newChapter.chapter_img_url = aws_link + encodedChapterImgName;
-    // }
-
     if (req.files && req.files.chapter_img) {
       //uploading and storing the reunion image to aws:
       const { chapter_img } = await req.files;
@@ -406,8 +380,6 @@ router.post("/:id/volunteer", authenticationRequired, userInfo, async (req, res)
 //update chapter info
 // ✔
 router.put("/:id",authenticationRequired, userInfo, adminCheck, async (req, res) => {
-  const groups = req.jwt.claims.groups
-  if(groups.includes("Admins")){
   try {
     const updatedChapter = req.body;
     const current = await chapterDB.findBy(req.params.id)
@@ -462,17 +434,73 @@ router.put("/:id",authenticationRequired, userInfo, adminCheck, async (req, res)
   } catch (error) {
     console.log(error)
     res.status(500).json({
-      message: "Error updating the chapter",
+      "Message": "Error updating the chapter",
       error
     });
   }
-}
-else {
-  res.status(401).json({"Error":"User logged in must be an admin"})
-}
 
 });
 
+//update reunion
+router.put("/:id/reunion",authenticationRequired, userInfo, adminCheck, async (req, res) => {
+  try {
+    const updatedReunion = req.body;
+    const current = await reunionDB.findById(req.params.id)
+    if(updatedReunion.city && updatedReunion.state) {
+      const reunionCoordinates = await axios
+    .get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${updatedReunion.city},${updatedReunion.state}.json?access_token=${process.env.MAPBOX_API}`
+    )
+    .then((res) => {
+      return res.data.features[0].geometry.coordinates;
+    })
+    .catch((err) => {
+      console.log("could not get lat & lng from mapbox", err)
+      res.status(500).json({"Error": "could not get lat & lng from mapbox", err})
+    });
+      
+      updatedReunion.latitude = reunionCoordinates[1];
+      updatedReunion.longitude = reunionCoordinates[0];
+    }
+
+    if (req.files && req.files.reunion_img) {
+      const { reunion_img } = await req.files;
+      try {
+        uploadToS3(reunion_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
+      const reunionImgName = await req.files.reunion_img.name;
+      const encodedReunionImgName = encodeURI(reunionImgName);
+      updatedReunion.reunion_img = aws_link + encodedReunionImgName;
+    }
+   
+    if(updatedReunion.longitude 
+      || updatedReunion.title 
+      || updatedReunion.reunion_img 
+      || updatedReunion.title 
+      || updatedReunion.story 
+      || updatedReunion.link_to_media){
+      
+      const reunion = await reunionDB.updateReunion(
+          req.body.reunionId,
+          updatedReunion,
+          current
+        )
+        res.status(200).json(reunion);
+      }
+    else {
+      res.status(401).json({"Error": "Please Submit something to change"})
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      "Message": "Error updating the reunion",
+      error
+    });
+  }
+
+});
 //deletes chapter from db
 router.delete("/:id", authenticationRequired, userInfo, adminCheck, (req, res) => {
     const chapterId = req.params.id;
@@ -498,7 +526,7 @@ router.delete("/:id/volunteer", authenticationRequired, adminCheck, async (req, 
     }
 });
 
-//deletes a reunion registered to specified 
+//deletes a reunion registered to specified chapter
 router.delete("/:id/reunion",authenticationRequired, adminCheck, async (req, res) => {
   const { reunionId } = req.body
  

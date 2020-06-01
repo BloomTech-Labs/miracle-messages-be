@@ -54,7 +54,7 @@ function updateChapter(id, changes, current) {
     chapter_img_url = current.chapter_img_url,
     description = current.description,
     email = current.email,
-    facebook = current.email
+    facebook = current.facebook
   } = changes
   const update = {longitude,
     latitude,
