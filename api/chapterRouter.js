@@ -16,15 +16,69 @@ const adminCheck = require("../middleware/Admin")
 // Returns: all chapters
 // ✔
 router.get("/", async (req, res) => {
-  try { 
+  try {  
     let chapters = await chapterDB.findChapters(req.query);
-    res.status(200).json(chapters);
+     let newChapters = chapters.map( async (e) => {
+        e.volunteers = await chaptersVolunteersDB.findChapterVolunteers(e.id)
+        e.leaders = await chaptersVolunteersDB.findLeaders(e.id)
+        count = await chaptersVolunteersDB.memberCount(e.id)
+        e.memberCount = parseInt(count.count)
+        return e
+     })
+  
+    Promise.all(newChapters).then(values => res.status(200).json(values))
+    
   } catch {
     res.status(500).json({
       error: "there was a problem getting chapter",
     });
   }
 });
+
+//see pending chapters
+router.get("/pending", authenticationRequired, userInfo, adminCheck, async (req, res) => {
+  try { 
+    let chapters = await chapterDB.findPendingChapters();
+    console.log(chapters)
+    if(chapters.length >= 1) {
+      res.status(200).json(chapters);
+    } else {
+      res.status(201).json({"Message":"There are no pending chapters at this time"})
+    }
+  } catch {
+    res.status(500).json({
+      error: "there was a problem getting chapter",
+    });
+  }
+});
+
+
+//approve pending chapter
+router.put("/:id/approve", authenticationRequired, userInfo, async (req,res)=> {
+  const chapterId = req.params.id
+  const groups = req.jwt.claims.groups
+ 
+  if(groups.includes("Admins")){
+    const chapter = await chapterDB.findBy(chapterId)
+    if(chapter.approved === false) {
+      chapterDB.approveChapter(chapterId)
+    .then(chapter => {
+      res.status(201).json({"Message": "Chapter Successfully approved"})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({err, "Message": "Something went wrong and chapter could not be approved right now"})
+    })
+    } else {
+      res.status(201).json({"Message": "Chapter was already Approved!"})
+    }
+    
+  }
+  else {
+    res.status(401).json({"Error": "User must be an admin to approve chapters"})
+  }
+
+} )
 
 //Returns: JSON a specific chapter by id
 // ✔
@@ -48,6 +102,109 @@ router.get("/:id/volunteers", async (req, res) => {
     else { res.status(200).json(volunteers.rows); }
   } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteers data" });}
 });
+
+
+router.get("/:id/pendingVolunteers", authenticationRequired, userInfo,  adminCheck, async (req, res) => {
+  const chapterId = req.params.id;
+  try {
+    const volunteers = await chaptersVolunteersDB.findPendingChapterVolunteers(chapterId);
+    //Checks if there are volunteers in chapter
+    if (volunteers.length < 1) { res.status(404).json({ message: "There are no pending volunteers for this chapter" });}
+    else { res.status(200).json(volunteers); }
+  } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteers data" });}
+});
+
+
+
+router.put("/:id/approveVolunteer", authenticationRequired, userInfo,  adminCheck, async (req,res)=> {
+  const chapterId = req.params.id
+  const oktaId = req.body.oktaId
+  
+    const volunteer = await chaptersVolunteersDB.getSpecificChapterVolunteer(oktaId, chapterId)
+    if(volunteer.approved === false) {
+      chaptersVolunteersDB.approveVolunteer(oktaId, chapterId)
+    .then(volunteer => {
+      res.status(201).json({"Message": "Volunteer Successfully approved"})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({err, "Message": "Something went wrong and volunteer could not be approved right now"})
+    })
+    } else {
+      res.status(201).json({"Message": "Volunteer was already Approved!"})
+    }
+
+} )
+
+
+router.put("/:id/requestLeader", authenticationRequired, userInfo, async (req,res) => {
+  const chapterId = req.params.id
+  const oktaId = req.userInfo.sub
+  
+    const volunteer = await chaptersVolunteersDB.getSpecificChapterVolunteer(oktaId, chapterId)
+    if(volunteer.isAdmin === false && volunteer.approved === true) {
+      chaptersVolunteersDB.requestLeader(oktaId, chapterId)
+    .then(volunteer => {
+      res.status(201).json({"Message": "Volunteer Successfully Requested to become leader"})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({err, "Message": "Something went wrong and volunteer could not make the request right now"})
+    })
+    } else {
+      res.status(201).json({"Message": "Volunteer is either already an admin, or is not approved for this chapter"})
+    }
+})
+
+
+router.get("/:id/pendingLeader", authenticationRequired, userInfo, adminCheck, async (req, res) => {
+  const chapterId = req.params.id;
+  try {
+    const leaders = await chaptersVolunteersDB.findPendingChapterLeaders(chapterId);
+    if (leaders.length < 1) { res.status(404).json({ message: "There are no pending chapter leaders for this chapter" });}
+    else { res.status(200).json(leaders); }
+  } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteer data" });}
+})
+
+router.put("/:id/approveLeader",  authenticationRequired, userInfo, adminCheck, async (req, res) => {
+  const chapterId = req.params.id
+  const oktaId = req.body.oktaId
+  
+    const volunteer = await chaptersVolunteersDB.getSpecificChapterVolunteer(oktaId, chapterId)
+    if(volunteer.isAdmin === false && volunteer.requestedAdmin === true) {
+      chaptersVolunteersDB.approveLeader(oktaId, chapterId)
+    .then(volunteer => {
+      res.status(201).json({"Message": "Volunteer is now a chapter leader"})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({err, "Message": "Something went wrong and volunteer could not be approved right now"})
+    })
+    } else {
+      res.status(201).json({"Message": "Volunteer is already a leader!"})
+    }
+
+})
+
+router.put("/:id/declineLeader",  authenticationRequired, userInfo, adminCheck, async (req, res) => {
+  const chapterId = req.params.id
+  const oktaId = req.body.oktaId
+  
+    const volunteer = await chaptersVolunteersDB.getSpecificChapterVolunteer(oktaId, chapterId)
+    if(volunteer.isAdmin === false && volunteer.requestedAdmin === true) {
+      chaptersVolunteersDB.declineLeader(oktaId, chapterId)
+    .then(volunteer => {
+      res.status(201).json({"Message": "Volunteer was declined ;-;"})
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({err, "Message": "Something went wrong and volunteer could not be declined right now"})
+    })
+    } else {
+      res.status(201).json({"Message": "Volunteer is either currently a chapter leader, or didn't request to become a leader"})
+    }
+})
+
 
 // Returns: JSON of all reunions specific to a chapter 
 // ✔
@@ -104,30 +261,30 @@ router.post("/", authenticationRequired, userInfo, async (req, res) => {
 
   try {
     //checking to see if any chapter images were added so we can upload it to the AWS bucket:
-    if (req.files && req.files.chapter_img) {
-      //uploading and storing chapter image to aws:
-      //1) we grab the file:
-      const { chapter_img } = await req.files;
+    // if (req.files && req.files.chapter_img) {
+    //   //uploading and storing chapter image to aws:
+    //   //1) we grab the file:
+    //   const { chapter_img } = await req.files;
 
-      //2) we try to upload
-      try {
-        uploadToS3(chapter_img, res);
-      } catch (error) {
-        res
-          .status(500)
-          .json({ error: "error uploading the chapter_img to AWS" });
-      }
+    //   //2) we try to upload
+    //   try {
+    //     uploadToS3(chapter_img, res);
+    //   } catch (error) {
+    //     res
+    //       .status(500)
+    //       .json({ error: "error uploading the chapter_img to AWS" });
+    //   }
 
-      // 3) we store the chapter image url in the database:
-      //a) first get the name of the file
-      const chapterImgName = await req.files.chapter_img.name;
+    //   // 3) we store the chapter image url in the database:
+    //   //a) first get the name of the file
+    //   const chapterImgName = await req.files.chapter_img.name;
 
-      //b) then we encode the name i.e replace spaces etc with special characters to make it URL compatible
-      //so it can be appended to the s3 bucket link:
-      const encodedChapterImgName = encodeURI(chapterImgName);
-      //c) we append the encoded name to the s3 bucket link to get the location of the
-      newChapter.chapter_img_url = aws_link + encodedChapterImgName;
-    }
+    //   //b) then we encode the name i.e replace spaces etc with special characters to make it URL compatible
+    //   //so it can be appended to the s3 bucket link:
+    //   const encodedChapterImgName = encodeURI(chapterImgName);
+    //   //c) we append the encoded name to the s3 bucket link to get the location of the
+    //   newChapter.chapter_img_url = aws_link + encodedChapterImgName;
+    // }
 
     if (req.files && req.files.chapter_img) {
       //uploading and storing the reunion image to aws:
@@ -222,8 +379,7 @@ router.post("/:id/volunteer", authenticationRequired, userInfo, async (req, res)
       chapterId
     );
     //Checks if this volunteer is already in the chapter
-    
-    if (isVolunteerInChapter.length < 1) {
+    if (!isVolunteerInChapter) {
       const signedUp = await chaptersVolunteersDB.assignChapterVolunteer(
         oktaId,
         chapterId
@@ -239,9 +395,10 @@ router.post("/:id/volunteer", authenticationRequired, userInfo, async (req, res)
         .json({ message: "This volunteer is already in this chapter" });
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       errorMessage: "error assigning volunteer to the chapter",
-      error,
+      error
     });
   }
 });
@@ -292,7 +449,7 @@ router.put("/:id",authenticationRequired, userInfo, adminCheck, async (req, res)
       || updatedChapter.facebook 
       || updatedChapter.email){
       
-        const chapter = await chapterDB.updateChapter(
+      const chapter = await chapterDB.updateChapter(
           req.params.id,
           updatedChapter,
           current
@@ -318,16 +475,10 @@ else {
 
 //deletes chapter from db
 router.delete("/:id", authenticationRequired, userInfo, adminCheck, (req, res) => {
-  const groups = req.jwt.claims.groups
-  if(groups.includes("Admins")){
     const chapterId = req.params.id;
       chapterDB.removeChapter(chapterId)
       .then( chapter => {res.status(200).json({ "Message": "Chapter successfully deleted."})})
       .catch(err => {res.status(500).json({"Error": "There was an error deleting this chapter"})})
-  }
-  else {
-    res.status(401).json({"Error":"User logged in must be an admin"})
-  }
 
 });
 
@@ -335,8 +486,6 @@ router.delete("/:id", authenticationRequired, userInfo, adminCheck, (req, res) =
 router.delete("/:id/volunteer", authenticationRequired, adminCheck, async (req, res) => {
   const chapterId = req.params.id;
   const oktaId = req.body.oktaid;
-  const groups = req.jwt.claims.groups
-  if(groups.includes("Admins")){
     try {
      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
         oktaId,
@@ -347,10 +496,6 @@ router.delete("/:id/volunteer", authenticationRequired, adminCheck, async (req, 
     } catch (error) {
      res.status(500).json({ errorMessage: "error removing volunteer" });
     }
-  } 
-  else {
-    res.status(401).json({"Error":"User logged in must be an admin"})
-  }
 });
 
 //deletes a reunion registered to specified 

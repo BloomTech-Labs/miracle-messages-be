@@ -6,13 +6,27 @@ module.exports = {
   addChapter,
   updateChapter,
   removeChapter,
+  findPendingChapters,
+  approveChapter
 };
 
 // get all chapters
 function findChapters(query) {
-  return db('chapters').orderBy(query.sortBy || "city", query.dir || "asc");
+  return db('chapters')
+  .orderBy(query.sortBy || "city", query.dir || "asc")
+  .where("approved", true);
 }
 
+function findPendingChapters() {
+  return db('chapters')
+  .where("approved", false);
+}
+
+function approveChapter(id){
+  return db('chapters')
+  .where("id", id)
+  .update("approved", true)
+}
 // get specific chapter
 
 function findBy(id) {
