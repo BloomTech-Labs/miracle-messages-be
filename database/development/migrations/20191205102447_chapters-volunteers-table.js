@@ -21,8 +21,11 @@ exports.up = function(knex) {
       .onDelete("CASCADE");
     tbl.boolean("approved")
       .defaultTo(false)
+    tbl.boolean("requestedAdmin")
+      .defaultTo(false)
     tbl.boolean("isAdmin")
       .defaultTo(false)
+    
 
     tbl.primary(["chaptersid","volunteersid"])
   });

@@ -21,10 +21,11 @@ function removeVolFromAllChapters(volunteerId) {
 // ✔
 async function getSpecificChapterVolunteer(oktaId, chapterId) {
   return db("chapters_volunteers as CV")
-    .select("CV.chaptersid", "V.name", "V.email", "V.city", "V.state", "V.country", "CV.approved")
+    .select("CV.chaptersid", "V.name", "V.email", "V.city", "V.state", "V.country", "CV.approved", "CV.isAdmin")
     .join("volunteers as V", "CV.volunteersid", "V.oktaid")
     .where("chaptersid", chapterId)
-    .andWhere("volunteersid", oktaId);
+    .andWhere("volunteersid", oktaId)
+    .first()
 }
 
 // assign a volunteer to a Chapter to be displayed under the volunteers section

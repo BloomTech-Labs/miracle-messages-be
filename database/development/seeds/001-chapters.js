@@ -18,7 +18,7 @@ exports.seed = function(knex) {
           longitude: -122.431297,
           latitude: 37.773972,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
 
         },
         {
@@ -51,7 +51,7 @@ exports.seed = function(knex) {
           longitude: -117.377022,
           latitude: 33.98053,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         },
         {
           city: "Seattle",
@@ -83,7 +83,7 @@ exports.seed = function(knex) {
           longitude: -80.137314,
           latitude: 26.122438,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         },
         {
           city: "Miami",
@@ -99,7 +99,7 @@ exports.seed = function(knex) {
           longitude: -80.191788,
           latitude: 25.761681,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         },
         {
           city: "San Antonio",
@@ -163,7 +163,7 @@ exports.seed = function(knex) {
           longitude: -112.074036,
           latitude: 33.448376,
           approved: true,
-          requestedBy: "testestest1"
+          requestedBy: "00ud5cf5v0zK8zYCG4x6"
         }
       ]);
    });

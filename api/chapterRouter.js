@@ -10,6 +10,7 @@ const axios = require("axios");
 //TODO to be implemented
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo")
+const adminCheck = require("../middleware/Admin")
 
 
 // Returns: all chapters
@@ -25,6 +26,15 @@ router.get("/", async (req, res) => {
   }
 });
 
+//Returns: JSON a specific chapter by id
+// ✔
+router.get("/:id", async (req, res) => {
+  const chapterId = req.params.id
+  try {
+    const chapter = await chapterDB.findBy(chapterId);
+    res.status(200).json(chapter);
+  } catch (error) { res.status(500).json({ message: "Error getting the chapter",});}
+});
 
 // Returns: Json of all volunteers related to a specific chapter
 // ✔
@@ -39,34 +49,18 @@ router.get("/:id/volunteers", async (req, res) => {
   } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteers data" });}
 });
 
-
-
-//Returns: JSON a specific chapter by id
-// ✔
-router.get("/:id", async (req, res) => {
-  const chapterId = req.params.id
-  try {
-    const chapter = await chapterDB.findBy(chapterId);
-    res.status(200).json(chapter);
-  } catch (error) { res.status(500).json({ message: "Error getting the chapter",});}
-});
-
-
-
 // Returns: JSON of all reunions specific to a chapter 
 // ✔
 router.get("/:id/reunions", async (req, res) => {
   const chapterId = req.params.id;
   try {
     // console.log("chapterID on endpoint:", chapterId)
-    const reunions = await reunionDB.findById(chapterId);
+    const reunions = await reunionDB.findByChapterId(chapterId);
     res.status(200).json(reunions);
   } catch (error) {
     res.status(500).json({ message: "Error getting the chapter", error });
   }
 });
-
-
 
 // Returns a specific volunteer to a chapter
 // ✔
@@ -86,12 +80,11 @@ router.get("/:id/volunteer", async (req, res) => {
   }
 });
 
-
-
 // create new chapter
 // ✔
-router.post("/", authenticationRequired, async (req, res) => {
+router.post("/", authenticationRequired, userInfo, async (req, res) => {
   const newChapter = req.body;
+  newChapter.requestedBy = req.userInfo.sub
   // let locationData;
 
   // Gets the coordinates based of of city and state
@@ -169,9 +162,6 @@ router.post("/", authenticationRequired, async (req, res) => {
       .json({ error: "Something went wrong, Please try again", error });
   }
 });
-
-
-
 
 // Creates new reunion connected to chapter
 // ✔
@@ -258,7 +248,7 @@ router.post("/:id/volunteer", authenticationRequired, userInfo, async (req, res)
 
 //update chapter info
 // ✔
-router.put("/:id",authenticationRequired, userInfo, async (req, res) => {
+router.put("/:id",authenticationRequired, userInfo, adminCheck, async (req, res) => {
   const groups = req.jwt.claims.groups
   if(groups.includes("Admins")){
   try {
@@ -326,9 +316,8 @@ else {
 
 });
 
-
 //deletes chapter from db
-router.delete("/:id", authenticationRequired, userInfo, (req, res) => {
+router.delete("/:id", authenticationRequired, userInfo, adminCheck, (req, res) => {
   const groups = req.jwt.claims.groups
   if(groups.includes("Admins")){
     const chapterId = req.params.id;
@@ -343,7 +332,7 @@ router.delete("/:id", authenticationRequired, userInfo, (req, res) => {
 });
 
 //Delete a volunteer from a specific chapter 
-router.delete("/:id/volunteer", authenticationRequired, userInfo, async (req, res) => {
+router.delete("/:id/volunteer", authenticationRequired, adminCheck, async (req, res) => {
   const chapterId = req.params.id;
   const oktaId = req.body.oktaid;
   const groups = req.jwt.claims.groups
@@ -363,5 +352,24 @@ router.delete("/:id/volunteer", authenticationRequired, userInfo, async (req, re
     res.status(401).json({"Error":"User logged in must be an admin"})
   }
 });
+
+//deletes a reunion registered to specified 
+router.delete("/:id/reunion",authenticationRequired, adminCheck, async (req, res) => {
+  const { reunionId } = req.body
+ 
+    const reunionSpecified = await reunionDB.findById(reunionId)
+    console.log(reunionSpecified.length)
+    if(reunionSpecified.length >= 1){
+      reunionDB.remove(reunionId)
+      .then(del => {res.status(201).json({"Message":"Reunion Successfully Deleted"})})
+      .catch(err => {
+        console.log(err)
+        res.status(500).json({"Error": "Something went wrong", err})
+      })
+    } else {
+      res.status(401).json({"Error":"Reunion doesn't exist to delete"})
+    }
+  
+} )
 
 module.exports = router;
