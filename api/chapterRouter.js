@@ -9,6 +9,7 @@ const axios = require("axios");
 
 //TODO to be implemented
 const authenticationRequired = require("../middleware/Okta");
+const userInfo = require("../middleware/userInfo")
 
 
 // Returns: all chapters
