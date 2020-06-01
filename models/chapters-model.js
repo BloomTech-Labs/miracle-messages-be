@@ -29,11 +29,38 @@ function addChapter(chapter) {
 }
 
 // update chapter
-function updateChapter(id, changes) {
+function updateChapter(id, changes, current) {
+  const { longitude = current.longitude,
+    latitude = current.latitude,
+    city = current.city,
+    title = current.title,
+    state = current.state,
+    msg_recorded = current.msg_recorded,
+    msg_delivered = current.msg_delivered,
+    chapter_img_url = current.chapter_img_url,
+    description = current.description,
+    email = current.email,
+    facebook = current.email
+  } = changes
+  const update = {longitude,
+    latitude,
+    city,
+    title, 
+    state, 
+    msg_delivered, 
+    msg_recorded, 
+    chapter_img_url, 
+    description,
+    email,
+    facebook}
+
   return db('chapters')
     .where({ id })
-    .update(changes);
+    .update(update)
+    
+    
 }
+
 
 // delete chapter
 function removeChapter(id) {

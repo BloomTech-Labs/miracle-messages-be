@@ -6,7 +6,7 @@ exports.seed = function(knex) {
       return knex("chapters").insert([
         {
           city: "San Francisco",
-          title: "San Francisco",
+          title: "Dolores Street Community Services",
           state: "CA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -23,7 +23,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Los Angeles",
-          title: "Los Angeles",
+          title: "University of Southern California",
           state: "CA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -39,7 +39,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Riverside",
-          title: "Riverside",
+          title: "Mt. Rubidoux Church",
           state: "CA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -55,7 +55,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Seattle",
-          title: "Seattle",
+          title: "Northgate Community Center",
           state: "WA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -71,7 +71,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Fort Lauderdale",
-          title: "Fort Lauderdale",
+          title: "Fort Lauderdale College",
           state: "FL",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -87,7 +87,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Miami",
-          title: "Miami",
+          title: "First United Methodist Church of Miami",
           state: "FL",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -103,7 +103,7 @@ exports.seed = function(knex) {
         },
         {
           city: "San Antonio",
-          title: "San Antonio",
+          title: "Gill Community Center",
           state: "TX",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -119,7 +119,7 @@ exports.seed = function(knex) {
         },
         {
           city: "New York",
-          title: "New York",
+          title: "Metropolitan College of New York",
           state: "NY",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -135,7 +135,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Boston",
-          title: "Boston",
+          title: "Massachusetts College of Art and Design",
           state: "MA",
           msg_recorded: 0,
           msg_delivered: 0,
@@ -151,7 +151,7 @@ exports.seed = function(knex) {
         },
         {
           city: "Phoenix",
-          title: "Phoenix",
+          title: "Paradise Valley Community Center",
           state: "AZ",
           msg_recorded: 0,
           msg_delivered: 0,

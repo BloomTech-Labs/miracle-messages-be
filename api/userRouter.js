@@ -8,8 +8,8 @@ const userInfo = require("../middleware/userInfo")
 
 
 //gets user that's logged in
-router.get("/",  authenticationRequired, (req, res) => {
-    const oktaid = req.body.oktaid
+router.get("/",  authenticationRequired, userInfo,(req, res) => {
+    const oktaid = req.userInfo.sub
     console.log(req.jwt)
     if(oktaid){
         users.getUsers({"oktaid": oktaid})
@@ -69,7 +69,7 @@ router.post("/login",authenticationRequired, userInfo, async (req, res) => {
 // first it finds user by their id, and stores it as a variable
 // then it checks to make sure the use is submitting info thto be updated
 // finally it passes the update info, found user info, and their id into the function 
- router.put("/update",  authenticationRequired, async (req, res) => {
+ router.put("/update",  authenticationRequired, userInfo, async (req, res) => {
      const update = req.body
      if (req.files && req.files.profile_img) {   
         const { profile_img } = await req.files;
@@ -102,7 +102,7 @@ router.post("/login",authenticationRequired, userInfo, async (req, res) => {
 
 
  //Finds user by their id, and then deletes them from the db. This only affects data we have stored, and not anything related to their okta
- router.delete("/delete",  authenticationRequired, async (req, res) => {
+ router.delete("/delete",  authenticationRequired, userInfo, async (req, res) => {
      const oktaid = req.userInfo.sub
      try{
          //finds user

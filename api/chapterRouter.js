@@ -222,9 +222,9 @@ if (req.files && req.files.reunion_img) {
 });
 
 //registers a user to a chapter to await approval
-router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
+router.post("/:id/volunteer", authenticationRequired, userInfo, async (req, res) => {
   let chapterId = req.params.id;
-  let oktaId = req.body.oktaid;
+  let oktaId = req.userInfo.sub;
   try {
     const isVolunteerInChapter = await chaptersVolunteersDB.getSpecificChapterVolunteer(
       oktaId,
@@ -255,94 +255,102 @@ router.post("/:id/volunteer", authenticationRequired, async (req, res) => {
   }
 });
 
-/********************/
-// ** ALL THE PUTS **
-/********************/
+//update chapter info
+// ✔
+router.put("/:id",authenticationRequired, userInfo, async (req, res) => {
+  try {
+    const updatedChapter = req.body;
+    const current = await chapterDB.findBy(req.params.id)
+    if(updatedChapter.city && updatedChapter.state) {
+      const chapterCoordinates = await axios
+    .get(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${updatedChapter.city},${updatedChapter.state}.json?access_token=${process.env.MAPBOX_API}`
+    )
+    .then((res) => {
+      return res.data.features[0].geometry.coordinates;
+    })
+    .catch((err) => {
+      console.log("could not get lat & lng from mapbox", err)
+      res.status(500).json({"Error": "could not get lat & lng from mapbox", err})
+    });
+      
+      updatedChapter.latitude = chapterCoordinates[1];
+      updatedChapter.longitude = chapterCoordinates[0];
+    }
 
-/**
- * Method: PUT
- * Endpoint: /api/chapter/:id
- * Requires: req.user_id: volunteerId
- * Returns: ID of the created chapter_volunteers row
- */
-//**********************************************************************
-//********* UPDATING THE INFO FOR A CHAPTER  *************/
-//**********************************************************************
-
-//TODO currently only specific roles (which roles) can update a chapter
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const updatedChapter = await req.body;
-
-//     if (req.files && req.files.chapter_img) {
-//       //uploading and storing chapter image to aws:
-//       const { chapter_img } = await req.files;
-//       try {
-//         uploadToS3(chapter_img, res);
-//       } catch (error) {
-//         res.status(500).json({ error: "error uploading the image to AWS" });
-//       }
-
-//       // storing the chapter image url i database
-//       const chapterImgName = await req.files.chapter_img.name;
-//       const encodedChapterImgName = encodeURI(chapterImgName);
-//       updatedChapter.chapter_img_url = aws_link + encodedChapterImgName;
-//     }
-
-//     if (req.files && req.files.reunion_img) {
-//       //uploading and storing the reunion image to aws:
-//       const { reunion_img } = await req.files;
-//       try {
-//         uploadToS3(reunion_img, res);
-//       } catch (error) {
-//         res.status(500).json({ error: "error uploading the image to AWS" });
-//       }
-
-//       // storing the reunion image url in the newChapter object:
-//       const reunionImgName = await req.files.reunion_img.name;
-//       const encodedReunionImgName = encodeURI(reunionImgName);
-//       updatedChapter.reunion_img_url = aws_link + encodedReunionImgName;
-//     }
-
-//     //TODO when implementing authentication this will need to be reviewed.
-//     const chapter = await chapterDB.updateChapter(
-//       req.params.id,
-//       updatedChapter
-//     );
-
-//     res.status(200).json(chapter);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Error updating the chapter",
-//     });
-//   }
-// });
+    if (req.files && req.files.chapter_img) {
+      //uploading and storing chapter image to aws:
+      const { chapter_img } = await req.files;
+      try {
+        uploadToS3(chapter_img, res);
+      } catch (error) {
+        res.status(500).json({ error: "error uploading the image to AWS" });
+      }
+      // storing the chapter image url i database
+      const chapterImgName = await req.files.chapter_img.name;
+      const encodedChapterImgName = encodeURI(chapterImgName);
+      updatedChapter.chapter_img_url = aws_link + encodedChapterImgName;
+    }
+   
+    if(updatedChapter.longitude 
+      || updatedChapter.title 
+      || updatedChapter.chapter_img 
+      || updatedChapter.description 
+      || updatedChapter.facebook 
+      || updatedChapter.email){
+      
+        const chapter = await chapterDB.updateChapter(
+          req.params.id,
+          updatedChapter,
+          current
+        )
+        res.status(200).json(chapter);
+      }
+    else {
+      res.status(401).json({"Error": "Please Submit something to change"})
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      message: "Error updating the chapter",
+      error
+    });
+  }
+});
 
 
 //deletes chapter from db
-router.delete("/:id", authenticationRequired, (req, res) => {
-  const chapterId = req.params.id;
-    chapterDB.removeChapter(chapterId)
-    .then( chapter => {res.status(200).json({ "Message": "Chapter successfully deleted."})})
-    .catch(err => {res.status(500).json({"Error": "There was an error deleting this chapter"})})
-
+router.delete("/:id", authenticationRequired, userInfo, (req, res) => {
+  if(groups.includes("Admins")){
+    const chapterId = req.params.id;
+      chapterDB.removeChapter(chapterId)
+      .then( chapter => {res.status(200).json({ "Message": "Chapter successfully deleted."})})
+      .catch(err => {res.status(500).json({"Error": "There was an error deleting this chapter"})})
+  }
+  else {
+    res.status(401).json({"Error":"User logged in must be an admin"})
+  }
 
 });
 
 //Delete a volunteer from a specific chapter 
-router.delete("/:id/volunteer", authenticationRequired, async (req, res) => {
+router.delete("/:id/volunteer", authenticationRequired, userInfo, async (req, res) => {
   let chapterId = req.params.id;
   let oktaId = req.body.oktaid;
+  if(groups.includes("Admins")){
+    try {
+     const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
+        oktaId,
+       chapterId
+     );
 
-  try {
-    const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
-      oktaId,
-      chapterId
-    );
-
-    res.status(200).json(count);
-  } catch (error) {
-    res.status(500).json({ errorMessage: "error removing volunteer" });
+     res.status(200).json(count);
+    } catch (error) {
+     res.status(500).json({ errorMessage: "error removing volunteer" });
+    }
+  } 
+  else {
+    res.status(401).json({"Error":"User logged in must be an admin"})
   }
 });
 
