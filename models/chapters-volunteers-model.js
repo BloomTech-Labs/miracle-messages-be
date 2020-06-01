@@ -2,14 +2,83 @@ const db = require("../config/dbConfig");
 
 //given a chapter ID, find all volunteers assigned to the Chapter:
 // ✔
-function findChapterVolunteers(id) {
-  // console.log(id)
-  return db.raw(
-    `SELECT c.id, cv.volunteersid, v.profile_img_url, v.name FROM chapters c
-        INNER JOIN chapters_volunteers cv ON c.id = cv.chaptersid
-        INNER JOIN volunteers v ON cv.volunteersid = v.oktaid
-        WHERE c.id = ${id} AND  cv.approved = true`
-  ).catch(error => console.log("error:", error))
+// function findChapterVolunteers(id) {
+//   return db.raw(
+//     `SELECT c.id, cv.volunteersid, v.profile_img_url, v.name FROM chapters c
+//         INNER JOIN chapters_volunteers cv ON c.id = cv.chaptersid
+//         INNER JOIN volunteers v ON cv.volunteersid = v.oktaid
+//         WHERE c.id = ${id} AND  cv.approved = true`
+//   )
+// }
+async function findChapterVolunteers(chapterId) {
+  return db("chapters_volunteers as CV")
+    .select("V.name","profile_img_url", "V.email")
+    .join("volunteers as V", "CV.volunteersid", "V.oktaid")
+    .where("CV.chaptersid", chapterId)
+    .andWhere("CV.approved", true)
+    .andWhere("CV.isAdmin", false)
+ 
+}
+
+function memberCount(chapterId){
+  return db("chapters_volunteers as CV")
+  .count("V.name")
+  .join("volunteers as V", "CV.volunteersid", "V.oktaid")
+  .where("CV.chaptersid", chapterId)
+  .andWhere("CV.approved", true)
+  .first()
+}
+
+
+function findLeaders(chapterId) {
+  return db("chapters_volunteers as CV")
+  .select("V.name","profile_img_url", "V.email")
+  .join("volunteers as V", "CV.volunteersid", "V.oktaid")
+  .where("CV.chaptersid", chapterId)
+    .andWhere("CV.isAdmin", true)
+}
+
+
+
+function findPendingChapterVolunteers(id) {
+  return db('chapters_volunteers')
+    .where("chaptersid", id)
+    .andWhere("approved", false)
+}
+
+function approveVolunteer(oktaId, chapterId) {
+  return db("chapters_volunteers")
+    .where("volunteersid", oktaId)
+    .andWhere("chaptersid", chapterId)
+    .update("approved", true)
+}
+
+
+function requestLeader(oktaId, chapterId) {
+  return db("chapters_volunteers")
+    .where("volunteersid", oktaId)
+    .andWhere("chaptersid", chapterId)
+    .update("requestedAdmin", true)
+}
+
+function findPendingChapterLeaders(id) {
+  return db('chapters_volunteers')
+  .where("chaptersid", id)
+  .andWhere("requestedAdmin", true)
+}
+
+function approveLeader(oktaId, chapterId) {
+  return db("chapters_volunteers")
+    .where("volunteersid", oktaId)
+    .andWhere("chaptersid", chapterId)
+    .update({"requestedAdmin": false, "isAdmin": true})
+}
+
+function declineLeader(oktaId, chapterId) {
+  return db("chapters_volunteers")
+    .where("volunteersid", oktaId)
+    .andWhere("chaptersid", chapterId)
+    .update({"requestedAdmin": false})
 }
 
 //given a volunteer id, remove all chapter relationships for that volunteer
@@ -54,4 +123,12 @@ module.exports = {
   assignChapterVolunteer,
   removeSpecificChapterVolunteer,
   getSpecificChapterVolunteer,
+  findPendingChapterVolunteers,
+  approveVolunteer,
+  requestLeader,
+  findPendingChapterLeaders,
+  approveLeader,
+  declineLeader,
+  findLeaders,
+  memberCount
 };

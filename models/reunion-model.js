@@ -15,7 +15,7 @@ function find() {
 }
 
 function findById(id) {
-  console.log("chapter id in model:", id)
+  // console.log("chapter id in model:", id)
   return db("reunions")
     .where({ "id": id });
 }
@@ -44,10 +44,31 @@ function addReunion(reunion) {
 }
 
 //update a reunion 
-function updateReunion(id, changes) {
-  return db("reunion")
+function updateReunion(id, changes, current) {
+  const { longitude = current.longitude,
+    latitude = current.latitude,
+    city = current.city,
+    title = current.title,
+    state = current.state,
+    link_to_media = current.link_to_media,
+    reunion_img = current.reunion_img,
+    story = current.story,
+  
+  } = changes
+  const update = {longitude,
+    latitude,
+    city,
+    title, 
+    state, 
+    link_to_media, 
+    reunion_img, 
+    story
+    }
+
+  return db("reunions")
     .where({ id })
-    .update(changes);
+    .update(update)
+    .catch(err => console.log(err))
 }
 
 

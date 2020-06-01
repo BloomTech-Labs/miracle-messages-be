@@ -35,7 +35,7 @@ exports.seed = function(knex) {
           longitude: -118.243683,
           latitude: 34.052235,
           approved: true,
-          requestedBy: "testestest2"
+          requestedBy: "00uc4zemuUeyaDfEd4x6"
         },
         {
           city: "Riverside",
@@ -67,7 +67,7 @@ exports.seed = function(knex) {
           longitude: -122.332069,
           latitude: 47.606209,
           approved: true,
-          requestedBy: "testestest3"
+          requestedBy: "00uc4zemuUeyaDfEd4x6"
         },
         {
           city: "Fort Lauderdale",
@@ -115,7 +115,7 @@ exports.seed = function(knex) {
           longitude: -98.493629,
           latitude: 29.424122,
           approved: true,
-          requestedBy: "testestest2"
+          requestedBy: "00ucjaxelCFMx6uiO4x6"
         },
         {
           city: "New York",
@@ -131,7 +131,7 @@ exports.seed = function(knex) {
           longitude: -74.005974,
           latitude: 40.712776,
           approved: true,
-          requestedBy: "testestest3"
+          requestedBy: "00ucjaxelCFMx6uiO4x6"
         },
         {
           city: "Boston",
@@ -147,7 +147,7 @@ exports.seed = function(knex) {
           longitude: -71.058884,
           latitude: 42.360081,
           approved: true,
-          requestedBy: "testestest2"
+          requestedBy: "00ud5eh8zUduV6GTR4x6"
         },
         {
           city: "Phoenix",
