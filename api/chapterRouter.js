@@ -175,10 +175,11 @@ router.post("/", authenticationRequired, async (req, res) => {
 
 // Creates new reunion connected to chapter
 // ✔
-router.post("/:id/reunions", authenticationRequired, async (req, res) => {
+router.post("/:id/reunions", authenticationRequired, userInfo, async (req, res) => {
   
   const newReunion = req.body
   newReunion.chapterid = req.params.id
+  newReunion.volunteersid = req.userInfo.sub
 
 
 const reunionCoordinates = await axios
@@ -217,7 +218,7 @@ if (req.files && req.files.reunion_img) {
   } catch (error) {
     res
       .status(500)
-      .json({ errorMessage: "error assigning partner to the chapter", error });
+      .json({ errorMessage: "error submitting reunion to the chapter", error });
   }
 });
 
@@ -258,6 +259,8 @@ router.post("/:id/volunteer", authenticationRequired, userInfo, async (req, res)
 //update chapter info
 // ✔
 router.put("/:id",authenticationRequired, userInfo, async (req, res) => {
+  const groups = req.jwt.claims.groups
+  if(groups.includes("Admins")){
   try {
     const updatedChapter = req.body;
     const current = await chapterDB.findBy(req.params.id)
@@ -316,11 +319,17 @@ router.put("/:id",authenticationRequired, userInfo, async (req, res) => {
       error
     });
   }
+}
+else {
+  res.status(401).json({"Error":"User logged in must be an admin"})
+}
+
 });
 
 
 //deletes chapter from db
 router.delete("/:id", authenticationRequired, userInfo, (req, res) => {
+  const groups = req.jwt.claims.groups
   if(groups.includes("Admins")){
     const chapterId = req.params.id;
       chapterDB.removeChapter(chapterId)
@@ -335,8 +344,9 @@ router.delete("/:id", authenticationRequired, userInfo, (req, res) => {
 
 //Delete a volunteer from a specific chapter 
 router.delete("/:id/volunteer", authenticationRequired, userInfo, async (req, res) => {
-  let chapterId = req.params.id;
-  let oktaId = req.body.oktaid;
+  const chapterId = req.params.id;
+  const oktaId = req.body.oktaid;
+  const groups = req.jwt.claims.groups
   if(groups.includes("Admins")){
     try {
      const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(

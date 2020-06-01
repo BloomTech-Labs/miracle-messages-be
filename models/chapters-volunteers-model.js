@@ -8,7 +8,7 @@ function findChapterVolunteers(id) {
     `SELECT c.id, cv.volunteersid, v.profile_img_url, v.name FROM chapters c
         INNER JOIN chapters_volunteers cv ON c.id = cv.chaptersid
         INNER JOIN volunteers v ON cv.volunteersid = v.oktaid
-        WHERE c.id = ${id}`
+        WHERE c.id = ${id} AND  cv.approved = true`
   ).catch(error => console.log("error:", error))
 }
 
@@ -20,7 +20,6 @@ function removeVolFromAllChapters(volunteerId) {
 //Get specific chapter volunteer 
 // ✔
 async function getSpecificChapterVolunteer(oktaId, chapterId) {
-  console.log("volunteersid:", oktaId,"chapterId:", chapterId);
   return db("chapters_volunteers as CV")
     .select("CV.chaptersid", "V.name", "V.email", "V.city", "V.state", "V.country", "CV.approved")
     .join("volunteers as V", "CV.volunteersid", "V.oktaid")
@@ -31,7 +30,6 @@ async function getSpecificChapterVolunteer(oktaId, chapterId) {
 // assign a volunteer to a Chapter to be displayed under the volunteers section
 //volunteers work with and support Miracle Messages
 async function assignChapterVolunteer(oktaId, chapterId) {
-  console.log("volunteersid:", oktaId, "chapterId:", chapterId);
   return db("chapters_volunteers").insert(
     {
       "volunteersid": oktaId,
