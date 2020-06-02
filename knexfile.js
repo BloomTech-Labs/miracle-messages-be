@@ -23,7 +23,7 @@ module.exports = {
   development: {
     client: "pg",
     useNullAsDefault: true,
-    connection: process.env.DEV_DB,
+    connection: "http://localhost:5432",
     pool: {
       min: 2,
       max: 10,
