@@ -41,7 +41,7 @@ router.get("/CEO",  authenticationRequired, (req, res) => {
 //if user currently doesnt exist it will add them to the db 
 router.post("/login",authenticationRequired, userInfo, async (req, res) => {
     try{
-        //checks if use has previously logged in via oktaid 
+        //checks if use has previously logged in via oktaid 1
         const user = await users.findById({oktaid: req.userInfo.sub})
         //if user is found it will return the user
         if(user){ res.status(200).json(user)} 
