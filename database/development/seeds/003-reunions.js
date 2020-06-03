@@ -514,8 +514,8 @@ exports.seed = async function(knex) {
         {
           chapterid: '1',
           volunteersid: '00ucjaxelCFMx6uiO4x6',
-          longitude: '51.0447331',
-          latitude: '-114.0718831',
+          longitude: '-114.0718831',
+          latitude: '51.0447331',
           city: 'Calgary',
           state: 'Alberta',
           title: 'Brooks',
@@ -527,8 +527,8 @@ exports.seed = async function(knex) {
         {
           chapterid: '2',
           volunteersid: '00ud5cf5v0zK8zYCG4x6',
-          longitude: '51.0447331',
-          latitude: '-114.0718831',
+          longitude: '-114.0718831',
+          latitude: '51.0447331',
           city: 'Calgary',
           state: 'Alberta',
           title: 'Maxwell',
@@ -540,8 +540,8 @@ exports.seed = async function(knex) {
         {
           chapterid: '1',
           volunteersid: '00uc4zemuUeyaDfEd4x6',
-          longitude: '51.0447331',
-          latitude: '-114.0718831',
+          longitude: '-114.0718831',
+          latitude: '51.0447331',
           city: 'Calgary',
           state: 'Alberta',
           title: 'Speaker',
