@@ -7,10 +7,10 @@ const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo")
 
 
+
 //gets user that's logged in
 router.get("/",  authenticationRequired, userInfo,(req, res) => {
     const oktaid = req.userInfo.sub
-    console.log(req.jwt)
     if(oktaid){
         users.getUsers({"oktaid": oktaid})
         .then(user => {

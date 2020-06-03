@@ -60,7 +60,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
@@ -76,7 +76,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
@@ -92,7 +92,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
@@ -108,7 +108,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
@@ -124,7 +124,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
@@ -140,7 +140,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",
@@ -156,7 +156,7 @@ exports.seed = function(knex) {
           msg_recorded: 0,
           msg_delivered: 0,
           chapter_img_url:
-            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/isaac%20avila%202.jpg",
+            "https://labs14-miracle-messages-image-upload.s3.amazonaws.com/sterling-davis-4iXagiKXn3Y-unsplash_low.jpg",
           email: "kevin@miraclemessages.org, jess@miraclemessages.org",
           description:
             "We record messages at local service partners under the direction of our General Manager, Gabby Cordell. ",

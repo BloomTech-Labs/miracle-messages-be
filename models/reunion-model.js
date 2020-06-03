@@ -6,7 +6,9 @@ module.exports = {
   remove,
   addReunion,
   updateReunion,
-  findByChapterId
+  findByChapterId,
+  findPendingReunions,
+  approveReunion
 };
 
 //Find all reunions
@@ -17,7 +19,8 @@ function find() {
 function findById(id) {
   // console.log("chapter id in model:", id)
   return db("reunions")
-    .where({ "id": id });
+    .where({ "id": id })
+    .first()
 }
 
 //Find all reunions of a chapter 
@@ -25,6 +28,19 @@ function findByChapterId(id) {
   console.log("chapter id in model:", id)
   return db("reunions")
     .where({ "chapterid": id });
+}
+
+
+function findPendingReunions(chapterId) {
+  return db("reunions")
+    .where({ "chapterid": chapterId })
+    .andWhere({"approved": false})
+}
+
+function approveReunion(id) {
+  return db("reunions")
+    .where({ id })
+    .update({"approved": true})
 }
 
 
