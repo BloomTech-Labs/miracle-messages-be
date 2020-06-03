@@ -21,8 +21,13 @@ router.get("/", async (req, res) => {
      let newChapters = chapters.map( async (e) => {
         e.volunteers = await chaptersVolunteersDB.findChapterVolunteers(e.id)
         e.leaders = await chaptersVolunteersDB.findLeaders(e.id)
-        count = await chaptersVolunteersDB.memberCount(e.id)
-        e.memberCount = parseInt(count.count)
+        memberCount = await chaptersVolunteersDB.memberCount(e.id)
+        reunionCount = await reunionDB.reunionCount(e.id)
+
+        
+        e.memberCount = parseInt(memberCount.count)
+        e.reunionCount = parseInt(reunionCount.count)
+    
         return e
      })
   

@@ -8,7 +8,8 @@ module.exports = {
   updateReunion,
   findByChapterId,
   findPendingReunions,
-  approveReunion
+  approveReunion,
+  reunionCount
 };
 
 //Find all reunions
@@ -28,6 +29,14 @@ function findByChapterId(id) {
   console.log("chapter id in model:", id)
   return db("reunions")
     .where({ "chapterid": id });
+}
+
+function reunionCount(chapterId){
+  return db("reunions")
+  .count("id")
+  .where("chapterid", chapterId)
+  .andWhere("approved", true)
+  .first()
 }
 
 
