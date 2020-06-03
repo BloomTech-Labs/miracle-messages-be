@@ -6,7 +6,11 @@ async function adminCheck(req, res, next){
     const groups = req.jwt.claims.groups
     const chapterId = req.params.id
     const oktaId = req.userInfo.sub
-
+    
+    
+    if(groups.includes("CEO")){
+        next()
+    }
     if(!req.params.id){
         if(groups.includes("Admins")){
             next()

@@ -211,13 +211,52 @@ router.put("/:id/declineLeader",  authenticationRequired, userInfo, adminCheck, 
 router.get("/:id/reunions", async (req, res) => {
   const chapterId = req.params.id;
   try {
-    // console.log("chapterID on endpoint:", chapterId)
     const reunions = await reunionDB.findByChapterId(chapterId);
     res.status(200).json(reunions);
   } catch (error) {
-    res.status(500).json({ message: "Error getting the chapter", error });
+    res.status(500).json({ "Error": "Error getting the reunions", error });
   }
 });
+
+
+
+router.get("/:id/reunion", async (req,res)=> {
+  const { reunionId } = req.body
+  try {
+    const reunion = await reunionDB.findById(reunionId)
+    res.status(200).json(reunion);
+  } catch (error) {
+    res.status(500).json({ "Error": "Error retrieving pending reunions", error})
+  }
+})
+
+router.get("/:id/pendingReunions",  authenticationRequired, userInfo, adminCheck, async (req,res)=> {
+  const chapterId = req.params.id
+  try {
+    const pending = await reunionDB.findPendingReunions(chapterId)
+    res.status(200).json(pending);
+  } catch (error) {
+    res.status(500).json({ "Error": "Error retrieving pending reunions", error})
+  }
+})
+
+router.put("/:id/approveReunion",  authenticationRequired, userInfo, adminCheck, async (req,res) => {
+  const { reunionId } = req.body
+  try {
+    const reunion = await reunionDB.findById(reunionId)
+    if (reunion.approved === false) {
+      const approved = await reunionDB.approveReunion(reunionId)
+      res.status(200).json({ "Message": "Reunion successfully approved",approved})
+    } else {
+      res.status(401).json({ "Error": "This reunion is either already approved or doesn't exist"})
+    }
+    
+  } catch (error) {
+    res.status(500).json({ "Error":"There was an error approving this reunion", error})
+  }
+
+
+})
 
 // Returns a specific volunteer to a chapter
 // ✔
@@ -261,8 +300,7 @@ router.post("/", authenticationRequired, userInfo, async (req, res) => {
 
   try {
     if (req.files && req.files.chapter_img) {
-      //uploading and storing the reunion image to aws:
-      const { chapter_img } = await req.files;
+      const { chapter_img }  = await req.files;
 
       try {
         uploadToS3(chapter_img, res);
@@ -318,8 +356,7 @@ newReunion.latitude = reunionCoordinates[1];
 newReunion.longitude = reunionCoordinates[0];
 
 if (req.files && req.files.reunion_img) {
-  //uploading and storing the reunion image to aws:
-  const { reunion_img } = await req.files;
+  const { reunion_img }  = await req.files;
 
   try {
     uploadToS3(reunion_img, res);
@@ -401,7 +438,6 @@ router.put("/:id",authenticationRequired, userInfo, adminCheck, async (req, res)
     }
 
     if (req.files && req.files.chapter_img) {
-      //uploading and storing chapter image to aws:
       const { chapter_img } = await req.files;
       try {
         uploadToS3(chapter_img, res);
@@ -464,7 +500,7 @@ router.put("/:id/reunion",authenticationRequired, userInfo, adminCheck, async (r
     }
 
     if (req.files && req.files.reunion_img) {
-      const { reunion_img } = await req.files;
+      const  { reunion_img }  = await req.files;
       try {
         uploadToS3(reunion_img, res);
       } catch (error) {
