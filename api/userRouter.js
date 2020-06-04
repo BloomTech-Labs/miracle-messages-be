@@ -5,6 +5,7 @@ const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 const uploadToS3 = require("../middleware/uploadToS3.js");
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo")
+const adminCheck = require("../middleware/Admin")
 
 
 
@@ -23,18 +24,12 @@ router.get("/",  authenticationRequired, userInfo,(req, res) => {
 })
 
 // retreives a list of all users if the okta id is whitelisted as an CEO
-router.get("/CEO",  authenticationRequired, (req, res) => {
-    const groups = req.jwt.claims.groups
-    if(groups.includes("CEO")){
+router.get("/CEO",  authenticationRequired, userInfo, adminCheck, (req, res) => {
         users.getUsers()
         .then(users => {
             res.status(200).json({users})
         })
         .catch(err => res.status(201).json({"Error Message": err}))
-    } else {
-        res.status(401).json({"Error Message": "Non Admin ID submitted"})
-    }
-
 })
 
 //Endpoint to check if user has already been registered in the database upon login

@@ -26,9 +26,9 @@ function findById(id) {
 
 //Find all reunions of a chapter 
 function findByChapterId(id) {
-  console.log("chapter id in model:", id)
   return db("reunions")
-    .where({ "chapterid": id });
+    .where({ "chapterid": id })
+    .catch(error => console.log(error))
 }
 
 function reunionCount(chapterId){
@@ -48,7 +48,7 @@ function findPendingReunions(chapterId) {
 
 function approveReunion(id) {
   return db("reunions")
-    .where({ id })
+    .where({ "id": id })
     .update({"approved": true})
 }
 
@@ -58,7 +58,7 @@ function approveReunion(id) {
 //Remove a reunion 
 function remove(id) {
   return db("reunions")
-    .where({ id })
+    .where({ "id": id })
     .del();
 }
 

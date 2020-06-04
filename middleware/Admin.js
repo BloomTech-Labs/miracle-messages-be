@@ -3,6 +3,7 @@ const cvDB = require("../models/chapters-volunteers-model")
 
 
 async function adminCheck(req, res, next){
+   
     const groups = req.jwt.claims.groups
     const chapterId = req.params.id
     const oktaId = req.userInfo.sub
@@ -10,22 +11,27 @@ async function adminCheck(req, res, next){
     
     if(groups.includes("CEO")){
         next()
-    }
-    if(!req.params.id){
-        if(groups.includes("Admins")){
-            next()
-        }
-    }
-    const volunteer = await cvDB.getSpecificChapterVolunteer(oktaId, chapterId)
-    if(!volunteer){
-        res.status(401).json({"Error":"User Does not exist"})
-    }
-    if(groups.includes("Admins") && volunteer.isAdmin ){
+    } else if(groups.includes("Admins") && !chapterId){
         next()
+    } else if (groups.includes("Admins") && chapterId) {
+        const volunteer = await cvDB.getSpecificChapterVolunteer(oktaId, chapterId)
+        if(!volunteer){
+            res.status(401).json({"Error":"User Does not exist"})
+        }
+        if(volunteer.isAdmin ){
+            next()
+        }else {
+        res.status(401).json({"Error":"User logged in must be an admin"})
+        }
+    
     }else {
-    res.status(401).json({"Error":"User logged in must be an admin"})
+        res.status(401).json({"Error":"User logged in must be an admin"})
     }
 
+    
+   
+   
+   
     
 };
 

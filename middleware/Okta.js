@@ -20,10 +20,13 @@ function authenticationRequired(req, res, next) {
   const accessToken = match[1];
   const expectedAudience = "api://default";
   req.accessToken= accessToken
+ 
   return oktaJwtVerifier
     .verifyAccessToken(accessToken, expectedAudience)
     .then(jwt => {
+  
       req.jwt = jwt;
+   
       next();
     })
     .catch(err => {
