@@ -13,8 +13,10 @@ router.get("/:chapterId", async (req, res) => {
     try {
       const volunteers = await chaptersVolunteersDB.findChapterVolunteers(chapterId);
       const leaders = await chaptersVolunteersDB.findLeaders(chapterId)
-      if (volunteers.length < 1 && leaders.length < 1) { res.status(404).json({ message: "There is no volunteers in this chapter" });}
-      else { res.status(200).json({volunteers, leaders}); }
+      // if (volunteers.length < 1 && leaders.length < 1) { res.status(200).json({ "Message": "There is no volunteers in this chapter" });}
+      // else { 
+        res.status(200).json({volunteers, leaders}); 
+      // }
     } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteers data" });}
   });
 

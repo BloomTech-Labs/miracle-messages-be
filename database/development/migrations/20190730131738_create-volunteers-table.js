@@ -7,6 +7,7 @@ exports.up = function (knex, Promise) {
     tbl.string("city", 64)
     tbl.string("state", 32)
     tbl.string("country", 32)
+    tbl.text("bio", 1000)
     tbl.datetime("date", { precision: 4 }).defaultTo(knex.fn.now(0));
   });
 };

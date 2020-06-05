@@ -46,6 +46,10 @@ router.get("/:chapterid", async (req, res) => {
     const chapter = await chapterDB.findBy(chapterId);
     chapter.volunteers = await chaptersVolunteersDB.findChapterVolunteers(chapter.id)
     chapter.leaders = await chaptersVolunteersDB.findLeaders(chapter.id)
+    memberCount = await chaptersVolunteersDB.memberCount(chapter.id)
+    reunionCount = await reunionDB.reunionCount(chapter.id)
+    chapter.memberCount = parseInt(memberCount.count)
+    chapter.reunionCount = parseInt(reunionCount.count)
 
     res.status(200).json(chapter);
   } catch (error) { res.status(500).json({ message: "Error getting the chapter",});}
