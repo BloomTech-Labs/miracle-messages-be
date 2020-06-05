@@ -9,7 +9,7 @@ exports.up = function(knex, Promise) {
     tbl.string("state", 128).notNullable();
     tbl.integer("msg_recorded");
     tbl.integer("msg_delivered");
-    tbl.string("chapter_img_url")
+    tbl.string("chapter_img_url").defaultTo("https://miraclemessagesimages.s3.amazonaws.com/default_photo.jpg")
     tbl.datetime("established_date").defaultTo(knex.fn.now(0));
     tbl.text("description");
     tbl.string("email").notNullable();
