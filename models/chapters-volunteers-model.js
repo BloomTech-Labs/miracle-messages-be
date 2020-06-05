@@ -35,7 +35,7 @@ function memberCount(chapterId){
 
 function findLeaders(chapterId) {
   return db("chapters_volunteers as CV")
-  .select("V.name","profile_img_url", "V.email")
+  .select("V.name","profile_img_url", "V.email", "V.bio")
   .join("volunteers as V", "CV.volunteersid", "V.oktaid")
   .where("CV.chaptersid", chapterId)
     .andWhere("CV.isAdmin", true)
