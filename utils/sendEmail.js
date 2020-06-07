@@ -2,7 +2,7 @@ const sgMail = require("@sendgrid/mail");
 
 // sendEmail returns a boolean reflecting the success status of sendgrid
 
-module.exports = function sendEmail(type, email) {
+module.exports = function sendEmail(type, email,) {
     let success = false;
     let subject;
     let bodyText;
@@ -12,7 +12,7 @@ module.exports = function sendEmail(type, email) {
         // to Kevin – chapter POST that needs to be approved
         case "NEW_CHAPTER":
             subject = "A new chapter is awaiting your approval"
-            bodyText = "CHANGE LATER - a new chapter is awaiting your approval"
+            bodyText = `There is a new Chapter requested by ${info.name} awaiting your approval in - ${info.City}, ${info.State}`
             break;
         // to Kevin - reunion POST that needs to be approved
         case "NEW_REUNION":

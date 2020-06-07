@@ -64,10 +64,13 @@ function requestLeader(oktaId, chapterId) {
     .update("requestedAdmin", true)
 }
 
-function findPendingChapterLeaders(id) {
-  return db('chapters_volunteers')
-  .where("chaptersid", id)
-  .andWhere("requestedAdmin", true)
+function findPendingChapterLeaders() {
+  return db('chapters_volunteers as CV')
+  .select("CV.chaptersid", "C.title as ChapterTitle", "C.city as ChapterCity", "C.state as ChapterState", "V.name", "V.email", "V.profile_img_url", "V.city as VolunteerCity", "V.state as VolunteerState",  "CV.approved", "CV.isAdmin")
+  .join("volunteers as V", "CV.volunteersid", "V.oktaid")
+  .join("chapters as C", "CV.chaptersid", "C.id")
+  .where("requestedAdmin", true)
+  .catch(error => console.log(error))
 }
 
 function approveLeader(oktaId, chapterId) {

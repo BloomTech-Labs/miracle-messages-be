@@ -3,6 +3,7 @@ const router = express.Router();
 const chapterDB = require("../models/chapters-model.js");
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const reunionDB = require("../models/reunion-model.js");
+const usersDB = require("../models/users-model")
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo")
 const adminCheck = require("../middleware/Admin")
@@ -12,15 +13,19 @@ const adminCheck = require("../middleware/Admin")
 router.get("/chapters", authenticationRequired, userInfo, adminCheck, async (req, res) => {
   try { 
     let chapters = await chapterDB.findPendingChapters();
-    console.log(chapters)
-    if(chapters.length >= 1) {
-      res.status(200).json(chapters);
+    if(chapters.length) {
+         let newChapters = await chapters.map(async (e) => {
+          e.requestedBy = await usersDB.findById(e.requestedBy)
+          return e
+        })
+ 
+        Promise.all(newChapters).then(values => res.status(201).json(values))
     } else {
       res.status(201).json({"Message":"There are no pending chapters at this time"})
     }
-  } catch {
+  } catch(error) {
     res.status(500).json({
-      error: "there was a problem getting chapter",
+      error: "there was a problem getting chapter", error
     });
   }
 });
@@ -35,12 +40,12 @@ router.get("/:chapterid/Volunteers", authenticationRequired, userInfo,  adminChe
 });
 
 
-router.get("/:chapterid/Leaders", authenticationRequired, userInfo, adminCheck, async (req, res) => {
-  const chapterId = req.params.chapterid;
+router.get("/Leaders", authenticationRequired, userInfo, adminCheck, async (req, res) => {
   try {
-    const leaders = await chaptersVolunteersDB.findPendingChapterLeaders(chapterId);
-    if (leaders.length < 1) { res.status(404).json({ message: "There are no pending chapter leaders for this chapter" });}
-    else { res.status(200).json(leaders); }
+    const leaders = await chaptersVolunteersDB.findPendingChapterLeaders();
+    if (leaders.length < 1) {  res.status(404).json({ message: "There are no pending chapter leaders at this time" });}
+    else { 
+      res.status(200).json(leaders);}
   } catch { res.status(500).json({ errorMessage: "There is a problem finding volunteer data" });}
 })
 
@@ -59,7 +64,8 @@ router.get("/:chapterid/Reunions",  authenticationRequired, userInfo, adminCheck
 
 //approve pending chapter
 router.put("/:chapterid/approveChapter", authenticationRequired, userInfo, async (req,res)=> {
-  const chapterId = req.params.id
+
+  const chapterId = req.params.chapterid
   const groups = req.jwt.claims.groups
  
   if(groups.includes("CEO")){
