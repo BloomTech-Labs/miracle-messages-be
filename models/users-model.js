@@ -43,7 +43,7 @@ async function updateUser(updateInfo, currentInfo, id) {
 
   await db('volunteers').update(update).where("oktaid", id)
 
-  return await findById({"oktaid" : id})
+  return await findById(id)
 }
 
 
