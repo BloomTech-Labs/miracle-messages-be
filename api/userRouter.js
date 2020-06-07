@@ -37,7 +37,7 @@ router.get("/CEO",  authenticationRequired, userInfo, adminCheck, (req, res) => 
 router.post("/login",authenticationRequired, userInfo, async (req, res) => {
     try{
         //checks if use has previously logged in via oktaid 1
-        const user = await users.findById({oktaid: req.userInfo.sub})
+        const user = await users.findById(req.userInfo.sub)
         //if user is found it will return the user
         if(user){ res.status(200).json(user)} 
         //if user is not found it will submit them to the db
