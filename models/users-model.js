@@ -24,7 +24,7 @@ async function add(volunteer) {
 
 function findById(id) {
   return db('volunteers')
-    .where(id)
+    .where("oktaid", id)
     .first();
 }
 
