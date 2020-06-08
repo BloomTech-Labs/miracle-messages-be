@@ -1,6 +1,5 @@
 const OktaJwtVerifier = require("@okta/jwt-verifier");
 
-// Pulls from {okta}
 const oktaJwtVerifier = new OktaJwtVerifier({
   issuer: `https://${process.env.OKTA_DOMAIN}/oauth2/default`,
   clientId: process.env.CLIENT_ID,
@@ -10,7 +9,6 @@ const oktaJwtVerifier = new OktaJwtVerifier({
   }
 });
 
-// Authenticates access token
 function authenticationRequired(req, res, next) {
   const authHeader = req.headers.authorization || "";
 

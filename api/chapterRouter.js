@@ -3,6 +3,7 @@ const router = express.Router();
 const uploadToS3 = require("../middleware/uploadToS3.js");
 const chapterDB = require("../models/chapters-model.js");
 const reunionDB = require("../models/reunion-model");
+const userDB = require("../models/users-model")
 const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 const axios = require("axios");
@@ -11,6 +12,8 @@ const axios = require("axios");
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo")
 const adminCheck = require("../middleware/Admin")
+
+const sendEmail = require("../utils/sendEmail")
 
 
 // Return: all chapters
@@ -125,11 +128,22 @@ router.post("/:chapterId/register", authenticationRequired, userInfo, async (req
         oktaId,
         chapterId
       );
-
+      const user = await userDB.findById(oktaId);
+      const chapter = await chapterDB.findBy(chapterId);
+      const leaders = await chaptersVolunteersDB.findLeaders(chapterId);
+      const info={};
+      info.user = user
+      info.chapter = chapter
+    
+      leaders.map( e => {
+        info.leader = e
+        sendEmail("NEW_MEMBER", e.email, info)
+      })
+      
       res.status(201).json({
         "message": `You have successfully signed up for this chapter.`,
-        id: signedUp,
-      });
+        "id": signedUp,
+      })
     } else {
       res
         .status(400)
@@ -157,7 +171,6 @@ router.put("/:id/requestLeader", authenticationRequired, userInfo, async (req,re
       res.status(201).json({"Message": "Volunteer Successfully Requested to become leader"})
     })
     .catch(err => {
-      console.log(err)
       res.status(500).json({err, "Message": "Something went wrong and volunteer could not make the request right now"})
     })
     } else {

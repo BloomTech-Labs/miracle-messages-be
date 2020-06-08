@@ -2,7 +2,7 @@ const sgMail = require("@sendgrid/mail");
 
 // sendEmail returns a boolean reflecting the success status of sendgrid
 
-module.exports = function sendEmail(type, email,) {
+module.exports = function sendEmail(type, email, info) {
     let success = false;
     let subject;
     let bodyText;
@@ -26,8 +26,8 @@ module.exports = function sendEmail(type, email,) {
             break;
         // to chapter leader / Kevin – someone requesting to join chapter
         case "NEW_MEMBER":
-            subject = "(NAME HERE) wants to join your chapter"
-            bodyText = "CHANGE LATER - someone wants to join your chapter"
+            subject = `${info.user.name} wants to join ${info.chapter.title}`
+            bodyText = `Good day ${info.leader.name}, \n You have a pending request from ${info.user.name} to join ${info.chapter.title}. To accept this request please visit your dashboard at: `
             break;
         // if no case is provided, values are null and sendgrid won't fire
         default:
@@ -38,10 +38,11 @@ module.exports = function sendEmail(type, email,) {
 
     if (subject && bodyText) {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        console.log(process.env.SENDGRID_API_KEY)
         sgMail
         .send({
-            to: email ? email : "alex@karren.com",
-            from: "alex@karren.com",
+            to: email ,
+            from: "ronxcamacho@gmail.com",
             subject: `Miracle Map – ${subject}`,
             text: bodyText,
             html: `
