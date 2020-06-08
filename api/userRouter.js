@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const users = require("../models/users-model.js");
+const cvDB = require("../models/chapters-volunteers-model")
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
 const uploadToS3 = require("../middleware/uploadToS3.js");
 const authenticationRequired = require("../middleware/Okta");
@@ -14,8 +15,10 @@ router.get("/",  authenticationRequired, userInfo,(req, res) => {
     const oktaid = req.userInfo.sub
     if(oktaid){
         users.getUsers({"oktaid": oktaid})
-        .then(user => {
-            res.status(200).json({user})
+        .then(async (user) => {
+            user.leaderOf = await cvDB.findLeaderOf(oktaid)
+            console.log(user.leaderOf)
+            res.status(200).json(user)
         })
         .catch(err => res.status(201).json({"Error Message": err}))
     } else {

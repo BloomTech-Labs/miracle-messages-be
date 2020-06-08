@@ -1,15 +1,5 @@
 const db = require("../config/dbConfig");
 
-//given a chapter ID, find all volunteers assigned to the Chapter:
-// ✔
-// function findChapterVolunteers(id) {
-//   return db.raw(
-//     `SELECT c.id, cv.volunteersid, v.profile_img_url, v.name FROM chapters c
-//         INNER JOIN chapters_volunteers cv ON c.id = cv.chaptersid
-//         INNER JOIN volunteers v ON cv.volunteersid = v.oktaid
-//         WHERE c.id = ${id} AND  cv.approved = true`
-//   )
-// }
 async function findChapterVolunteers(chapterId) {
   return db("chapters_volunteers as CV")
     .select("V.name","profile_img_url", "V.email")
@@ -70,6 +60,15 @@ function findPendingChapterLeaders() {
   .join("volunteers as V", "CV.volunteersid", "V.oktaid")
   .join("chapters as C", "CV.chaptersid", "C.id")
   .where("requestedAdmin", true)
+  .catch(error => console.log(error))
+}
+
+function findLeaderOf(oktaId) {
+  return db('chapters_volunteers as CV')
+  .select("CV.chaptersid", "C.title as ChapterTitle", "C.city as ChapterCity", "C.state as ChapterState")
+  .join("chapters as C", "CV.chaptersid", "C.id")
+  .where("isAdmin", true)
+  .andWhere("volunteersid", oktaId)
   .catch(error => console.log(error))
 }
 
@@ -136,5 +135,6 @@ module.exports = {
   approveLeader,
   declineLeader,
   findLeaders,
-  memberCount
+  memberCount,
+  findLeaderOf
 };
