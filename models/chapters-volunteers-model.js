@@ -28,7 +28,13 @@ function findLeaders(chapterId) {
 
 function findPendingChapterVolunteers(id) {
   return db("chapters_volunteers as CV")
-    .select("V.name", "V.profile_img_url", "V.email", "V.bio")
+    .select(
+      "CV.volunteersid",
+      "V.name",
+      "V.profile_img_url",
+      "V.email",
+      "V.bio"
+    )
     .join("volunteers as V", "CV.volunteersid", "V.oktaid")
     .where("chaptersid", id)
     .andWhere("approved", false);
