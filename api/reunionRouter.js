@@ -28,7 +28,11 @@ router.get("/:chapterId", async (req, res) => {
   const chapterId = req.params.chapterId;
   try {
     const reunions = await reunionDB.findByChapterId(chapterId);
-    res.status(200).json(reunions);
+    const updatedReunions = reunions.map(async (e) => {
+      e.origin = await chapterDB.findOriginCord(e.chapterid);
+      return e;
+    });
+    Promise.all(updatedReunions).then((values) => res.status(200).json(values));
   } catch (error) {
     res.status(500).json({ Error: "Error getting the reunions", error });
   }
