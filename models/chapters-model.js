@@ -19,10 +19,7 @@ function findChapters(query) {
 }
 
 function findOriginCord(id) {
-  return db("chapters")
-    .select("longitude", "latitude")
-    .where({ id: id })
-    .first();
+  return db("chapters").select("longitude", "latitude").where("id", id).first();
 }
 function findPendingChapters() {
   return db("chapters").where("approved", false);

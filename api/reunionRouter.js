@@ -65,7 +65,12 @@ router.post(
         return res.data.features[0].geometry.coordinates;
       })
       .catch((err) => {
-        console.log("could not get lat & lng from mapbox", err);
+        res
+          .status(400)
+          .json({
+            Error: "Could not find coordinates with given city/state",
+            err,
+          });
       });
 
     newReunion.latitude = reunionCoordinates[1];
