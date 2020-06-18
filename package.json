@@ -7,7 +7,7 @@
     "test": "cross-env DB_ENV=testing jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js",
-    "transpose": "node ./utils/transpose.js"
+    "randomgeo": "node ./utils/randomGeo.js"
   },
   "jest": {
     "testEnvironment": "node"

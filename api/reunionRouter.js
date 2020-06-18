@@ -9,6 +9,8 @@ const userInfo = require("../middleware/userInfo");
 const adminCheck = require("../middleware/Admin");
 const axios = require("axios");
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
+const sendEmail = require("../utils/sendEmail");
+const randomGeo = require("../utils/randomGeo");
 
 //Get all reunions
 router.get("/", async (req, res) => {
@@ -55,7 +57,7 @@ router.post(
   authenticationRequired,
   userInfo,
   async (req, res) => {
-    const newReunion = req.body;
+    let newReunion = req.body;
     newReunion.chapterid = req.params.chapterid;
     newReunion.volunteersid = req.userInfo.sub;
 
@@ -72,9 +74,9 @@ router.post(
           err,
         });
       });
-
     newReunion.latitude = reunionCoordinates[1];
     newReunion.longitude = reunionCoordinates[0];
+    newReunion = randomGeo(newReunion, 2000);
 
     if (req.files && req.files.reunion_img) {
       const { reunion_img } = await req.files;
@@ -92,9 +94,11 @@ router.post(
     }
     try {
       const id = await reunionDB.addReunion(newReunion);
-      const user = await userDB.findById(volunteersid);
-      const chapter = await chapterDB.findBy(chapterid);
-      const leaders = await chaptersVolunteersDB.findLeaders(chapterid);
+      const user = await userDB.findById(req.userInfo.sub);
+      const chapter = await chapterDB.findBy(req.params.chapterid);
+      const leaders = await chaptersVolunteersDB.findLeaders(
+        req.params.chapterid
+      );
       const info = {};
       info.user = user;
       info.chapter = chapter;
@@ -102,7 +106,7 @@ router.post(
 
       leaders.map((e) => {
         info.leader = e;
-        sendEmail("NEW_MEMBER", e.email, info);
+        sendEmail("NEW_REUNION", e.email, info);
       });
       res.status(200).json(id);
     } catch (error) {

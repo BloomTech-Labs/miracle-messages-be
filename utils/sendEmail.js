@@ -17,8 +17,7 @@ module.exports = function sendEmail(type, email, info) {
     // to Kevin - reunion POST that needs to be approved
     case "NEW_REUNION":
       subject = `A reunion for ${info.reunion.title} is awaiting approval from ${info.user.name}`;
-      bodyText =
-        "Good day LEADER, \n You have a pending request from USER to publish a reunion for TITLE";
+      bodyText = `Good day ${info.leader.name}, \n You have a pending request from ${info.user.name} to publish a reunion for ${info.reunion.title}. To accept this request please visit your dashboard at:`;
       break;
     // to Super Admin - someone is requesting to become a chapter leader
     case "NEW_LEADER":
@@ -59,7 +58,7 @@ module.exports = function sendEmail(type, email, info) {
     sgMail
       .send({
         to: email,
-        from: "ronxcamacho@gmail.com",
+        from: "miraclemessagesdev@gmail.com",
         subject: `Miracle Messages – ${subject}`,
         text: bodyText,
         html: `
