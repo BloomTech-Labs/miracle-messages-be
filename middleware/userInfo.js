@@ -6,10 +6,10 @@ function userInfo(req, res, next) {
     .then((res) => {
       req.userInfo = res.data;
       next();
+
     })
     .catch((error) => {
       res.status(401).json({ Error: "Cannot Validate user", error });
     });
 }
-
 module.exports = userInfo;
