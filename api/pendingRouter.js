@@ -7,6 +7,7 @@ const usersDB = require("../models/users-model");
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo");
 const adminCheck = require("../middleware/Admin");
+const sendEmail = require("../utils/sendEmail");
 
 //see pending chapters
 router.get(

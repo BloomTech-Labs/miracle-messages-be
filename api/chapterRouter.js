@@ -191,7 +191,6 @@ router.put(
           const info = {};
           info.user = user;
           info.chapter = chapter;
-          console.log(leaders);
           leaders.map((e) => {
             info.leader = e;
             sendEmail("NEW_LEADER", e.email, info);

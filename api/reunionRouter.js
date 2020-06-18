@@ -2,11 +2,15 @@ const express = require("express");
 const router = express.Router();
 const chapterDB = require("../models/chapters-model");
 const reunionDB = require("../models/reunion-model.js");
+const userDB = require("../models/users-model");
+const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo");
 const adminCheck = require("../middleware/Admin");
 const axios = require("axios");
 const aws_link = "https://miraclemessagesimages.s3.amazonaws.com/";
+const sendEmail = require("../utils/sendEmail");
+const randomGeo = require("../utils/randomGeo");
 
 //Get all reunions
 router.get("/", async (req, res) => {
@@ -53,7 +57,7 @@ router.post(
   authenticationRequired,
   userInfo,
   async (req, res) => {
-    const newReunion = req.body;
+    let newReunion = req.body;
     newReunion.chapterid = req.params.chapterid;
     newReunion.volunteersid = req.userInfo.sub;
 
@@ -65,11 +69,14 @@ router.post(
         return res.data.features[0].geometry.coordinates;
       })
       .catch((err) => {
-        console.log("could not get lat & lng from mapbox", err);
+        res.status(400).json({
+          Error: "Could not find coordinates with given city/state",
+          err,
+        });
       });
-
     newReunion.latitude = reunionCoordinates[1];
     newReunion.longitude = reunionCoordinates[0];
+    newReunion = randomGeo(newReunion, 2000);
 
     if (req.files && req.files.reunion_img) {
       const { reunion_img } = await req.files;
@@ -87,7 +94,20 @@ router.post(
     }
     try {
       const id = await reunionDB.addReunion(newReunion);
+      const user = await userDB.findById(req.userInfo.sub);
+      const chapter = await chapterDB.findBy(req.params.chapterid);
+      const leaders = await chaptersVolunteersDB.findLeaders(
+        req.params.chapterid
+      );
+      const info = {};
+      info.user = user;
+      info.chapter = chapter;
+      info.reunion = newReunion;
 
+      leaders.map((e) => {
+        info.leader = e;
+        sendEmail("NEW_REUNION", e.email, info);
+      });
       res.status(200).json(id);
     } catch (error) {
       console.log("error", error);
