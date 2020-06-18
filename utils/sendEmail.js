@@ -16,8 +16,9 @@ module.exports = function sendEmail(type, email, info) {
       break;
     // to Kevin - reunion POST that needs to be approved
     case "NEW_REUNION":
-      subject = "A new reunion is awaiting your approval";
-      bodyText = "CHANGE LATER - a new chapter is awaiting your approval";
+      subject = `A reunion for ${info.reunion.title} is awaiting approval from ${info.user.name}`;
+      bodyText =
+        "Good day LEADER, \n You have a pending request from USER to publish a reunion for TITLE";
       break;
     // to Super Admin - someone is requesting to become a chapter leader
     case "NEW_LEADER":

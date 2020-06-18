@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const chapterDB = require("../models/chapters-model");
 const reunionDB = require("../models/reunion-model.js");
+const userDB = require("../models/users-model");
+const chaptersVolunteersDB = require("../models/chapters-volunteers-model");
 const authenticationRequired = require("../middleware/Okta");
 const userInfo = require("../middleware/userInfo");
 const adminCheck = require("../middleware/Admin");
@@ -65,12 +67,10 @@ router.post(
         return res.data.features[0].geometry.coordinates;
       })
       .catch((err) => {
-        res
-          .status(400)
-          .json({
-            Error: "Could not find coordinates with given city/state",
-            err,
-          });
+        res.status(400).json({
+          Error: "Could not find coordinates with given city/state",
+          err,
+        });
       });
 
     newReunion.latitude = reunionCoordinates[1];
@@ -92,7 +92,18 @@ router.post(
     }
     try {
       const id = await reunionDB.addReunion(newReunion);
+      const user = await userDB.findById(volunteersid);
+      const chapter = await chapterDB.findBy(chapterid);
+      const leaders = await chaptersVolunteersDB.findLeaders(chapterid);
+      const info = {};
+      info.user = user;
+      info.chapter = chapter;
+      info.reunion = newReunion;
 
+      leaders.map((e) => {
+        info.leader = e;
+        sendEmail("NEW_MEMBER", e.email, info);
+      });
       res.status(200).json(id);
     } catch (error) {
       console.log("error", error);
