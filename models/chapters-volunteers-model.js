@@ -61,6 +61,7 @@ function findPendingChapterLeaders() {
       "C.title as ChapterTitle",
       "C.city as ChapterCity",
       "C.state as ChapterState",
+      "V.oktaid",
       "V.name",
       "V.email",
       "V.profile_img_url",
