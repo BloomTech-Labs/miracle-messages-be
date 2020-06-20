@@ -54,7 +54,6 @@ module.exports = function sendEmail(type, email, info) {
 
   if (subject && bodyText) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    console.log(process.env.SENDGRID_API_KEY);
     sgMail
       .send({
         to: email,

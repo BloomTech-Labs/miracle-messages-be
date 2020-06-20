@@ -181,7 +181,45 @@ router.put(
       oktaId,
       chapterId
     );
-    if (volunteer.isAdmin === false && volunteer.approved === true) {
+    const leaders = await chaptersVolunteersDB.findLeaders(chapterId);
+    console.log(volunteer);
+    if (leaders.length === 0 && !volunteer) {
+      chaptersVolunteersDB
+        .assignChapterVolunteer(oktaId, chapterId)
+        .then((vol) => {
+          console.log("hello ");
+          chaptersVolunteersDB
+            .requestLeader(oktaId, chapterId)
+            .then(async (volunteer) => {
+              const user = await userDB.findById(oktaId);
+              const chapter = await chapterDB.findBy(chapterId);
+              const leaders = { name: "Ronald McIntyre" };
+              const info = {};
+              info.user = user;
+              info.chapter = chapter;
+              info.leader = leaders;
+              sendEmail("NEW_LEADER", "r.campbell.mcintyre@gmail.com", info);
+              res.status(201).json({
+                Message: "Volunteer Successfully Requested to become leader",
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json({
+                err,
+                Message:
+                  "Something went wrong and volunteer could not make the request right now",
+              });
+            });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            err,
+            Message:
+              "Something went wrong and volunteer could not make the request right now",
+          });
+        });
+    } else if (volunteer.isAdmin === false && volunteer.approved === true) {
       chaptersVolunteersDB
         .requestLeader(oktaId, chapterId)
         .then(async (volunteer) => {
