@@ -182,12 +182,10 @@ router.put(
       chapterId
     );
     const leaders = await chaptersVolunteersDB.findLeaders(chapterId);
-    console.log(volunteer);
     if (leaders.length === 0 && !volunteer) {
       chaptersVolunteersDB
         .assignChapterVolunteer(oktaId, chapterId)
         .then((vol) => {
-          console.log("hello ");
           chaptersVolunteersDB
             .requestLeader(oktaId, chapterId)
             .then(async (volunteer) => {
