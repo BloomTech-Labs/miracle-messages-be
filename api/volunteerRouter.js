@@ -50,6 +50,7 @@ router.delete(
   async (req, res) => {
     const chapterId = req.params.chapterid;
     const oktaId = req.body.oktaid;
+    console.log(oktaId, chapterId);
     try {
       const count = await chaptersVolunteersDB.removeSpecificChapterVolunteer(
         oktaId,
