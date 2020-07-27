@@ -7,7 +7,8 @@
     "test": "cross-env DB_ENV=testing jest --watch --verbose",
     "server": "nodemon index.js",
     "start": "node index.js",
-    "randomgeo": "node ./utils/randomGeo.js"
+    "randomgeo": "node ./utils/randomGeo.js",
+    "airtable": "node ./utils/airtable.js"
   },
   "jest": {
     "testEnvironment": "node"
@@ -27,6 +28,7 @@
     "@okta/jwt-verifier": "^1.0.0",
     "@okta/oidc-middleware": "^4.0.1",
     "@sendgrid/mail": "^7.1.1",
+    "airtable": "^0.8.1",
     "aws-sdk": "^2.678.0",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
@@ -37,6 +39,8 @@
     "knex": "^0.21.1",
     "knex-cleaner": "^1.3.0",
     "morgan": "^1.10.0",
+    "node-cron": "^2.0.3",
+    "node-schedule": "^1.3.2",
     "nodemailer": "^6.4.6",
     "pg": "^8.2.1",
     "pg-hstore": "^2.3.3",

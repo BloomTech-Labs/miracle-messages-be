@@ -100,7 +100,6 @@ router.post("/", authenticationRequired, userInfo, async (req, res) => {
       .then(async (chapter) => {
         const info = {};
         info.requester = await userDB.findById(req.userInfo.sub);
-
         info.chapter = newChapter;
         console.log(info.chapter);
         sendEmail("NEW_CHAPTER", "r.campbell.mcintyre@gmail.com", info);
