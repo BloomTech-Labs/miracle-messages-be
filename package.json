@@ -25,7 +25,7 @@
   "homepage": "https://github.com/labs-14-miracle-messages/Back-End#readme",
   "dependencies": {
     "@okta/jwt-verifier": "^1.0.0",
-    "@okta/oidc-middleware": "^4.0.1",
+    "@okta/oidc-middleware": "^5.0.0",
     "@sendgrid/mail": "^7.1.1",
     "aws-sdk": "^2.678.0",
     "axios": "^0.19.2",
